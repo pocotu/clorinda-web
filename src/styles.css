@@ -1,4 +1,6 @@
 /* Colegio Clorinda Matto de Turner — Global Styles */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Barlow:wght@300;400;500;600&display=swap');
+
 /* Bootstrap 5 is imported via angular.json */
 @import 'bootstrap-icons/font/bootstrap-icons.css';
 @import './responsive.css';
