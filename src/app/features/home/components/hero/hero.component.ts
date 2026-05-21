@@ -49,7 +49,9 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
+    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     // Fade-in on mount
     requestAnimationFrame(() => {
@@ -72,8 +74,12 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopAutoplay();
-    if (this.animFrameId !== null) cancelAnimationFrame(this.animFrameId);
-    if (this.mouseMoveHandler) document.removeEventListener('mousemove', this.mouseMoveHandler);
+    if (this.animFrameId !== null) {
+      cancelAnimationFrame(this.animFrameId);
+    }
+    if (this.mouseMoveHandler) {
+      document.removeEventListener('mousemove', this.mouseMoveHandler);
+    }
   }
 
   // ── Parallax ─────────────────────────────────────────────────────
@@ -104,7 +110,9 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private stopAutoplay(): void {
-    if (this.autoplayInterval) clearInterval(this.autoplayInterval);
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+    }
   }
 
   nextSlide(): void {
