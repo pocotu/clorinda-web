@@ -22,14 +22,14 @@ import { RouterLink } from '@angular/router';
 })
 export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
-  private cdr        = inject(ChangeDetectorRef);
-  private ngZone     = inject(NgZone);
+  private cdr = inject(ChangeDetectorRef);
+  private ngZone = inject(NgZone);
 
   @ViewChild('bgImg') bgImgRef!: ElementRef<HTMLImageElement>;
 
   // UI state
   contentVisible = false;
-  currentSlide   = 0;
+  currentSlide = 0;
   readonly totalSlides = 2;
 
   private autoplayInterval: ReturnType<typeof setInterval> | null = null;
@@ -60,7 +60,7 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
     // Mouse parallax — runs outside Angular to avoid unnecessary change detection
     this.ngZone.runOutsideAngular(() => {
       this.mouseMoveHandler = (e: MouseEvent) => {
-        const cx = window.innerWidth  / 2;
+        const cx = window.innerWidth / 2;
         const cy = window.innerHeight / 2;
         this.targetX = ((e.clientX - cx) / cx) * 18;
         this.targetY = ((e.clientY - cy) / cy) * 10;
@@ -73,7 +73,7 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.stopAutoplay();
     if (this.animFrameId !== null) cancelAnimationFrame(this.animFrameId);
-    if (this.mouseMoveHandler)    document.removeEventListener('mousemove', this.mouseMoveHandler);
+    if (this.mouseMoveHandler) document.removeEventListener('mousemove', this.mouseMoveHandler);
   }
 
   // ── Parallax ─────────────────────────────────────────────────────

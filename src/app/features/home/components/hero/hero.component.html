@@ -1,5 +1,4 @@
 <div class="hero-root" [class.slide2-active]="currentSlide === 1" #heroRoot>
-
   <!-- ── Fondo con imagen + parallax ── -->
   <div class="hero-bg-wrap" #heroBg>
     <img
@@ -33,15 +32,28 @@
 
   <!-- ── Contenido central ── -->
   <div class="hero-center" [class.visible]="contentVisible">
-
     <!-- Anillo de honor -->
     <div class="honor-ring">
-      <svg class="ring-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z"/>
+      <svg
+        class="ring-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
       </svg>
       <span>Institución Emblemática del Cusco</span>
-      <svg class="ring-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z"/>
+      <svg
+        class="ring-icon"
+        width="16"
+        height="16"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+        aria-hidden="true"
+      >
+        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
       </svg>
     </div>
 
@@ -60,11 +72,12 @@
 
   <!-- ── Bloque inferior ── -->
   <div class="hero-bottom" [class.visible]="contentVisible">
-
     <!-- Descripción -->
     <p class="hero-desc">
       Seis décadas formando generaciones con excelencia académica y valores.
-      <span class="desc-dim"> Un espacio digital seguro para toda nuestra comunidad educativa.</span>
+      <span class="desc-dim">
+        Un espacio digital seguro para toda nuestra comunidad educativa.</span
+      >
     </p>
 
     <!-- Acciones -->
@@ -72,19 +85,21 @@
       <button class="cta-primary" (click)="goToAsistencia()">
         Consultar asistencia
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path
+            d="M7.5 15L12.5 10L7.5 5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </svg>
       </button>
-
     </div>
-
   </div>
 
   <div class="hero-diamante-overlay" [class.active]="currentSlide === 1">
-
     <!-- Layout split: portrait atmospheric | editorial content -->
     <div class="dia-split">
-
       <!-- Left: Clorinda portrait — blends into the dark bg via CSS mask -->
       <div class="dia-portrait-col">
         <img
@@ -97,18 +112,21 @@
 
       <!-- Right: all text floats freely, no containers -->
       <div class="dia-content-col">
-
         <!-- Ambient watermark number -->
         <div class="dia-watermark" aria-hidden="true">60</div>
 
         <!-- Eyebrow -->
         <p class="dia-eyebrow">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+            />
           </svg>
           Celebración Especial · 60 Años
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+            />
           </svg>
         </p>
 
@@ -133,8 +151,8 @@
 
         <!-- Description -->
         <p class="dia-desc">
-          Seis décadas formando líderes, construyendo valores y dejando una
-          huella imborrable en la educación cusqueña.
+          Seis décadas formando líderes, construyendo valores y dejando una huella imborrable en la
+          educación cusqueña.
         </p>
 
         <!-- Achievement strip — horizontal, zero boxes -->
@@ -163,22 +181,31 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
   </div>
-
 
   <!-- ── Controles de navegación ── -->
   <button class="slide-btn slide-prev" (click)="prevSlide()" aria-label="Slide anterior">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path
+        d="M15 18L9 12L15 6"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
   </button>
   <button class="slide-btn slide-next" (click)="nextSlide()" aria-label="Siguiente slide">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-      <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path
+        d="M9 18L15 12L9 6"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
     </svg>
   </button>
 
@@ -193,7 +220,4 @@
       role="tab"
     ></button>
   </div>
-
-
-
 </div>
