@@ -60,4 +60,4 @@ jobs:
         run: pnpm run build
 
       - name: Run Unit Tests
-        run: pnpm test -- --watch=false --browsers=ChromeHeadless
+        run: pnpm exec ng test --watch=false --browsers=ChromeHeadless
