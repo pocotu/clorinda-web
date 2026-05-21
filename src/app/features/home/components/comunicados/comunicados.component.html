@@ -1,0 +1,186 @@
+<section class="comunicados">
+  <div class="comunicados-container">
+    <!-- Header -->
+    <div class="comunicados-header">
+      <h2 class="comunicados-title">Comunicados y Noticias</h2>
+      <p class="comunicados-subtitle">
+        Mantente informado sobre las últimas noticias y eventos de nuestra comunidad educativa
+      </p>
+    </div>
+
+    <!-- Filtros -->
+    <div class="comunicados-filters">
+      <button
+        class="filter-btn"
+        [class.active]="categoriaSeleccionada === 'todos'"
+        [disabled]="loading"
+        (click)="filtrarPorCategoria('todos')"
+      >
+        Todos
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="categoriaSeleccionada === 'academico'"
+        [disabled]="loading"
+        (click)="filtrarPorCategoria('academico')"
+      >
+        Académico
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="categoriaSeleccionada === 'deportivo'"
+        [disabled]="loading"
+        (click)="filtrarPorCategoria('deportivo')"
+      >
+        Deportivo
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="categoriaSeleccionada === 'cultural'"
+        [disabled]="loading"
+        (click)="filtrarPorCategoria('cultural')"
+      >
+        Cultural
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="categoriaSeleccionada === 'administrativo'"
+        [disabled]="loading"
+        (click)="filtrarPorCategoria('administrativo')"
+      >
+        Administrativo
+      </button>
+      <button
+        class="filter-btn"
+        [class.active]="categoriaSeleccionada === 'apafa'"
+        [disabled]="loading"
+        (click)="filtrarPorCategoria('apafa')"
+      >
+        APAFA
+      </button>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading) {
+      <div class="loading-state">
+        <div class="spinner"></div>
+        <p>Cargando comunicados...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (error && !loading) {
+      <div class="error-state">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+          <circle cx="32" cy="32" r="32" fill="#FEE2E2" />
+          <path d="M32 20v16m0 4h.01" stroke="#DC2626" stroke-width="3" stroke-linecap="round" />
+        </svg>
+        <p>{{ error }}</p>
+        <button class="btn-retry" (click)="cargarComunicados()">Reintentar</button>
+      </div>
+    }
+
+    <!-- Grid de Comunicados -->
+    @if (!loading && !error) {
+      <div class="comunicados-grid">
+        @for (comunicado of comunicadosFiltrados; track comunicado.id) {
+          <article class="comunicado-card" [class.destacado]="comunicado.destacado">
+            @if (comunicado.destacado) {
+              <div class="badge-destacado">Destacado</div>
+            }
+
+            <div class="card-header">
+              <span
+                class="card-categoria"
+                [style.background-color]="getCategoriaColor(comunicado.categoria)"
+              >
+                {{ comunicado.categoria }}
+              </span>
+              <span class="card-fecha">{{ formatearFecha(comunicado.fecha) }}</span>
+            </div>
+
+            @if (comunicado.imagen) {
+              <div class="card-image-container">
+                <img
+                  [src]="comunicado.imagen"
+                  [alt]="comunicado.titulo"
+                  class="card-image"
+                  style="width: 100%; height: 200px; object-fit: cover"
+                />
+              </div>
+            }
+
+            <div class="card-content">
+              <h3 class="card-title">{{ comunicado.titulo }}</h3>
+              <p class="card-descripcion">{{ comunicado.descripcion }}</p>
+            </div>
+
+            <div class="card-footer">
+              <span class="card-autor">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path
+                    d="M8 8a3 3 0 100-6 3 3 0 000 6zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+                  />
+                </svg>
+                {{ comunicado.autor }}
+              </span>
+              <button class="btn-leer-mas">
+                Leer más
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path
+                    d="M6 12L10 8L6 4"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </button>
+            </div>
+          </article>
+        }
+
+        @if (comunicadosFiltrados.length === 0) {
+          <div class="no-comunicados">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+              <circle cx="32" cy="32" r="32" fill="#F8F9FA" />
+              <path
+                d="M32 20v16m0 4h.01"
+                stroke="#6C757D"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+            </svg>
+            <p>No hay comunicados en esta categoría</p>
+          </div>
+        }
+      </div>
+
+      <!-- Ver más / Paginación -->
+      @if (hayMasComunicados && comunicadosFiltrados.length > 0) {
+        <div class="comunicados-action">
+          <button class="btn-ver-mas" (click)="cargarMas()" [disabled]="loading">
+            @if (loading) {
+              <span class="spinner-small"></span>
+              Cargando...
+            } @else {
+              Ver más comunicados
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path
+                  d="M7.5 15L12.5 10L7.5 5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            }
+          </button>
+          <p class="pagination-info">
+            Mostrando {{ comunicados.length }} de {{ total }} comunicados
+          </p>
+        </div>
+      }
+    }
+  </div>
+</section>

@@ -1,0 +1,190 @@
+<section class="exalumnas">
+  <div class="exalumnas-container">
+    <!-- Header -->
+    <div class="exalumnas-header">
+      <div class="header-badge">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 3L1 9L5 11.18V17.18L12 21L19 17.18V11.18L21 10.09V17H23V9L12 3ZM18.82 9L12 12.72L5.18 9L12 5.28L18.82 9ZM17 15.99L12 18.72L7 15.99V12.27L12 15L17 12.27V15.99Z"
+          />
+        </svg>
+        Legado
+      </div>
+      <h2 class="exalumnas-title">Exalumnas Destacadas</h2>
+      <p class="exalumnas-subtitle">
+        Orgullosas historias de éxito de nuestras egresadas que inspiran a las nuevas generaciones
+      </p>
+    </div>
+
+    <!-- Galería de Encuentros -->
+    <div class="galeria-encuentros">
+      <div class="encuentros-header">
+        <h3 class="encuentros-title">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M21 5C21 3.9 20.1 3 19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5ZM8.5 13.5L11 16.51L14.5 12L19 18H5L8.5 13.5Z"
+            />
+          </svg>
+          Encuentros y Reuniones
+        </h3>
+        <p class="encuentros-subtitle">Momentos especiales compartidos entre exalumnas</p>
+      </div>
+
+      <div class="fotos-grid">
+        <div class="foto-card">
+          <div class="foto-wrapper">
+            <img
+              src="assets/images/exalumnas/img_ex_alum.png"
+              alt="Encuentro de Exalumnas"
+              class="foto-encuentro"
+            />
+            <div class="foto-overlay">
+              <div class="foto-info">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M16 11C17.66 0 2.99-1.34 2.99-3S17.66 5 16 5C14.34 5 13 6.34 13 8S14.34 11 16 11ZM8 11C9.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8S6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z"
+                  />
+                </svg>
+                <span class="foto-caption">Encuentro de Generaciones</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="foto-card">
+          <div class="foto-wrapper">
+            <img
+              src="assets/images/exalumnas/img_exalum1.png"
+              alt="Reunión de Exalumnas"
+              class="foto-encuentro"
+            />
+            <div class="foto-overlay">
+              <div class="foto-info">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                  <path
+                    d="M16 11C17.66 0 2.99-1.34 2.99-3S17.66 5 16 5C14.34 5 13 6.34 13 8S14.34 11 16 11ZM8 11C9.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8S6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z"
+                  />
+                </svg>
+                <span class="foto-caption">Celebración Aniversario</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Carrusel de Exalumnas -->
+    <div class="exalumnas-carousel">
+      <button
+        class="carousel-btn prev"
+        (click)="anterior()"
+        [disabled]="!mostrarAnterior"
+        [class.disabled]="!mostrarAnterior"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path
+            d="M15 18L9 12L15 6"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+
+      <div class="exalumnas-grid">
+        @for (exalumna of exalumnasVisibles; track exalumna.id) {
+          <article class="exalumna-card">
+            <div class="card-image">
+              @if (exalumna.imagen) {
+                <img [src]="exalumna.imagen" [alt]="exalumna.nombre" />
+              } @else {
+                <div class="image-placeholder">
+                  <svg width="80" height="80" viewBox="0 0 80 80" fill="currentColor">
+                    <circle cx="40" cy="30" r="12" fill="#001A33" />
+                    <path d="M40 45C28 45 18 50 18 60V70H62V60C62 50 52 45 40 45Z" fill="#001A33" />
+                  </svg>
+                </div>
+              }
+              <div class="card-overlay">
+                <div class="promocion-badge">{{ exalumna.promocion }}</div>
+              </div>
+            </div>
+
+            <div class="card-content">
+              <h3 class="exalumna-nombre">{{ exalumna.nombre }}</h3>
+              <p class="exalumna-profesion">{{ exalumna.profesion }}</p>
+              <p class="exalumna-logro">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                  <path d="M8 1L10 5L14 6L11 9L12 14L8 11.5L4 14L5 9L2 6L6 5L8 1Z" />
+                </svg>
+                {{ exalumna.logro }}
+              </p>
+              <blockquote class="exalumna-frase">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  class="quote-icon"
+                >
+                  <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
+                </svg>
+                "{{ exalumna.frase }}"
+              </blockquote>
+            </div>
+          </article>
+        }
+      </div>
+
+      <button
+        class="carousel-btn next"
+        (click)="siguiente()"
+        [disabled]="!mostrarSiguiente"
+        [class.disabled]="!mostrarSiguiente"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path
+            d="M9 18L15 12L9 6"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Indicadores -->
+    <div class="exalumnas-indicators">
+      @for (exalumna of exalumnas; track exalumna.id; let i = $index) {
+        <button
+          class="indicator"
+          [class.active]="i === currentIndex"
+          (click)="currentIndex = i"
+        ></button>
+      }
+    </div>
+
+    <!-- CTA -->
+    <div class="exalumnas-cta">
+      <p>¿Eres exalumna de nuestro colegio?</p>
+      <button class="btn-registro">
+        Comparte tu historia
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path
+            d="M7.5 15L12.5 10L7.5 5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Background decorativo -->
+  <div class="exalumnas-background">
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+  </div>
+</section>

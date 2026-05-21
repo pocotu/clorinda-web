@@ -1,0 +1,31 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <nav class="sidebar-nav">
+    <ul class="nav flex-column">
+      @for (item of menuItems(); track item.route) {
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{
+              exact:
+                item.route === '/estudiantes' ||
+                item.route === '/asistencia/sesion' ||
+                item.route === '/asistencia/historial',
+            }"
+            (click)="onItemClick()"
+            [title]="item.label"
+          >
+            <i class="bi {{ item.icon }} nav-icon"></i>
+            <span class="nav-label" [class.d-none]="collapsed">{{ item.label }}</span>
+          </a>
+        </li>
+      }
+    </ul>
+  </nav>
+</aside>
+
+<!-- Overlay para móvil cuando sidebar está abierto -->
+@if (!collapsed) {
+  <div class="sidebar-overlay d-md-none" (click)="onItemClick()"></div>
+}

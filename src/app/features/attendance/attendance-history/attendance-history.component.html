@@ -1,0 +1,349 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">Historial de Asistencia</h2>
+
+      <!-- Filters Section -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h5 class="mb-0">Filtros</h5>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <!-- Grade Filter -->
+            <div class="col-md-2">
+              <label for="gradeFilter" class="form-label">Grado</label>
+              <select
+                id="gradeFilter"
+                class="form-select"
+                [(ngModel)]="selectedGrade"
+                (change)="applyFilters()"
+              >
+                <option [ngValue]="undefined">Todos</option>
+                <option *ngFor="let grade of grades" [value]="grade">{{ grade }}°</option>
+              </select>
+            </div>
+
+            <!-- Section Filter -->
+            <div class="col-md-2">
+              <label for="sectionFilter" class="form-label">Sección</label>
+              <select
+                id="sectionFilter"
+                class="form-select"
+                [(ngModel)]="selectedSection"
+                (change)="applyFilters()"
+              >
+                <option value="">Todas</option>
+                <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
+              </select>
+            </div>
+
+            <!-- Month Filter -->
+            <div class="col-md-3">
+              <label for="monthFilter" class="form-label">Mes</label>
+              <select
+                id="monthFilter"
+                class="form-select"
+                [(ngModel)]="selectedMonth"
+                (change)="applyFilters()"
+              >
+                <option [value]="undefined">Todos los meses</option>
+                <option *ngFor="let month of months" [value]="month.value">
+                  {{ month.label }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Year Filter -->
+            <div class="col-md-3">
+              <label for="yearFilter" class="form-label">Año</label>
+              <select
+                id="yearFilter"
+                class="form-select"
+                [(ngModel)]="selectedYear"
+                (change)="applyFilters()"
+              >
+                <option *ngFor="let year of years" [value]="year">{{ year }}</option>
+              </select>
+            </div>
+
+            <!-- Filter Actions -->
+            <div class="col-md-2 d-flex align-items-end">
+              <button type="button" class="btn btn-secondary w-100" (click)="clearFilters()">
+                <i class="bi bi-x-circle me-1"></i>Limpiar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Export Actions -->
+      <div class="d-flex justify-content-end mb-3">
+        <button
+          type="button"
+          class="btn btn-outline-success me-2"
+          (click)="exportToCSV()"
+          [disabled]="sessions().length === 0"
+        >
+          <i class="bi bi-file-earmark-spreadsheet me-2"></i>Exportar CSV
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline-primary"
+          (click)="exportToExcel()"
+          [disabled]="sessions().length === 0"
+        >
+          <i class="bi bi-file-earmark-excel me-2"></i>Exportar Excel
+        </button>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading()" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3">Cargando historial...</p>
+      </div>
+
+      <!-- Error State -->
+      <div *ngIf="error()" class="alert alert-danger" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>{{ error() }}
+      </div>
+
+      <!-- Results Table -->
+      <div *ngIf="!loading() && !error()" class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Resultados</h5>
+          <span class="badge bg-primary">{{ totalRecords() }} registros</span>
+        </div>
+        <div class="card-body">
+          <!-- Empty State -->
+          <div *ngIf="sessions().length === 0" class="text-center py-5">
+            <i class="bi bi-inbox display-1 text-muted"></i>
+            <p class="mt-3 text-muted">No se encontraron registros con los filtros seleccionados</p>
+          </div>
+
+          <!-- Table -->
+          <div *ngIf="sessions().length > 0" class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Turno</th>
+                  <th>Grado</th>
+                  <th>Sección</th>
+                  <th>Estado</th>
+                  <th>Usuario Cierre</th>
+                  <th>Cambios Post-Cierre</th>
+                  <th>Última Modificación</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let session of sessions()">
+                  <td>{{ formatDate(session.sessionDate) }}</td>
+                  <td>{{ formatShift(session.shift) }}</td>
+                  <td>{{ session.grade }}</td>
+                  <td>
+                    <span class="badge bg-info">{{ session.section }}</span>
+                  </td>
+                  <td>
+                    <span [class]="getStatusBadgeClass(session.status)">
+                      {{ formatStatus(session.status) }}
+                    </span>
+                  </td>
+                  <td>{{ session.closedBy?.username || '-' }}</td>
+                  <td>
+                    @if (
+                      session.postCloseEditCount !== undefined && session.postCloseEditCount > 0
+                    ) {
+                      <span class="badge bg-warning text-dark">{{
+                        session.postCloseEditCount
+                      }}</span>
+                    } @else {
+                      <span class="text-muted">-</span>
+                    }
+                  </td>
+                  <td>
+                    {{ session.lastModifiedAt ? formatDateTime(session.lastModifiedAt) : '-' }}
+                  </td>
+                  <td>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-outline-primary"
+                      (click)="viewDetail(session)"
+                    >
+                      <i class="bi bi-eye me-1"></i>Ver Detalle
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Controls -->
+          <div
+            *ngIf="sessions().length > 0"
+            class="d-flex justify-content-between align-items-center mt-4"
+          >
+            <!-- Page Size Selector -->
+            <div class="d-flex align-items-center">
+              <label for="pageSizeSelect" class="me-2 mb-0">Registros por página:</label>
+              <select
+                id="pageSizeSelect"
+                class="form-select form-select-sm"
+                style="width: auto"
+                [ngModel]="pageSize()"
+                (ngModelChange)="onPageSizeChange($event)"
+              >
+                <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+              </select>
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Navegación de páginas">
+              <ul class="pagination mb-0">
+                <li class="page-item" [class.disabled]="currentPage() === 1">
+                  <button
+                    class="page-link"
+                    (click)="previousPage()"
+                    [disabled]="currentPage() === 1"
+                  >
+                    Anterior
+                  </button>
+                </li>
+
+                <li
+                  *ngFor="let page of getPageNumbers()"
+                  class="page-item"
+                  [class.active]="page === currentPage()"
+                  [class.disabled]="page === -1"
+                >
+                  <button *ngIf="page !== -1" class="page-link" (click)="goToPage(page)">
+                    {{ page }}
+                  </button>
+                  <span *ngIf="page === -1" class="page-link">...</span>
+                </li>
+
+                <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+                  <button
+                    class="page-link"
+                    (click)="nextPage()"
+                    [disabled]="currentPage() === totalPages()"
+                  >
+                    Siguiente
+                  </button>
+                </li>
+              </ul>
+            </nav>
+
+            <!-- Page Info -->
+            <div class="text-muted">Página {{ currentPage() }} de {{ totalPages() }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal -->
+<div
+  class="modal fade"
+  [class.show]="showDetailModal()"
+  [style.display]="showDetailModal() ? 'block' : 'none'"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="detailModalLabel"
+  [attr.aria-hidden]="!showDetailModal()"
+>
+  <div class="modal-dialog modal-xl modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="detailModalLabel">
+          Detalle de Asistencia
+          <span *ngIf="selectedSession()" class="ms-2">
+            - {{ formatDate(selectedSession()!.sessionDate) }} -
+            {{ formatShift(selectedSession()!.shift) }} - Grado {{ selectedSession()!.grade }} -
+            Sección {{ selectedSession()!.section }}
+          </span>
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeDetailModal()"
+          aria-label="Cerrar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="selectedSession()" class="container-fluid">
+          <!-- Session Info -->
+          <div class="row mb-4">
+            <div class="col-md-3">
+              <strong>Fecha:</strong> {{ formatDate(selectedSession()!.sessionDate) }}
+            </div>
+            <div class="col-md-3">
+              <strong>Turno:</strong> {{ formatShift(selectedSession()!.shift) }}
+            </div>
+            <div class="col-md-2"><strong>Grado:</strong> {{ selectedSession()!.grade }}</div>
+            <div class="col-md-2"><strong>Sección:</strong> {{ selectedSession()!.section }}</div>
+            <div class="col-md-2">
+              <strong>Estado:</strong>
+              <span [class]="getStatusBadgeClass(selectedSession()!.status)">
+                {{ formatStatus(selectedSession()!.status) }}
+              </span>
+            </div>
+          </div>
+
+          <!-- Attendance Records -->
+          <div *ngIf="loadingRecords()" class="text-center py-4">
+            <div class="spinner-border text-primary" role="status"></div>
+            <p class="mt-2">Cargando registros...</p>
+          </div>
+
+          <div
+            *ngIf="!loadingRecords() && selectedSessionRecords().length === 0"
+            class="alert alert-info"
+            role="alert"
+          >
+            <i class="bi bi-info-circle me-2"></i>
+            No hay registros de asistencia en esta sesión.
+          </div>
+
+          <div
+            *ngIf="!loadingRecords() && selectedSessionRecords().length > 0"
+            class="table-responsive"
+          >
+            <table class="table table-bordered table-striped">
+              <thead class="table-light">
+                <tr>
+                  <th>Estudiante ID</th>
+                  <th>Estado</th>
+                  <th>Hora Entrada</th>
+                  <th>Permiso / Observación</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let record of selectedSessionRecords()">
+                  <td>{{ record.studentId }}</td>
+                  <td>
+                    <span [class]="getStatusBadgeClass(record.status)">
+                      {{ formatStatus(record.status) }}
+                    </span>
+                  </td>
+                  <td>{{ record.entryTime || '-' }}</td>
+                  <td>{{ record.permissionNote || record.observation || '-' }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeDetailModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div *ngIf="showDetailModal()" class="modal-backdrop fade show"></div>

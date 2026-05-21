@@ -1,0 +1,250 @@
+<div class="attendance-record-container">
+  <!-- Hero Header -->
+  <div class="attendance-hero">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <i class="bi bi-pencil-square"></i>
+        <span>EDICIÓN DE REGISTRO</span>
+      </div>
+      <h1 class="hero-title">
+        Registro de
+        <span class="title-highlight">Asistencia</span>
+      </h1>
+      <p class="hero-subtitle">{{ studentName }}</p>
+    </div>
+    <div class="hero-decoration"></div>
+  </div>
+
+  <div class="attendance-record-editor">
+    <!-- Warning for closed session -->
+    <div
+      *ngIf="isSessionClosed"
+      class="alert-modern"
+      [ngClass]="{
+        'alert-warning': isWithinJustificationWindow,
+        'alert-danger': !isWithinJustificationWindow,
+      }"
+      role="alert"
+    >
+      <div class="alert-icon">
+        <i
+          class="bi"
+          [ngClass]="{
+            'bi-exclamation-triangle-fill': isWithinJustificationWindow,
+            'bi-x-circle-fill': !isWithinJustificationWindow,
+          }"
+        ></i>
+      </div>
+      <div class="alert-content">
+        <strong>{{ isWithinJustificationWindow ? 'Advertencia' : 'Sesión Cerrada' }}</strong>
+        <p>{{ getWarningMessage() }}</p>
+      </div>
+    </div>
+
+    <!-- Error message -->
+    <div *ngIf="error" class="alert-modern alert-error" role="alert">
+      <div class="alert-icon">
+        <i class="bi bi-exclamation-circle-fill"></i>
+      </div>
+      <div class="alert-content">
+        <strong>Error</strong>
+        <p>{{ error }}</p>
+      </div>
+      <button type="button" class="alert-close" (click)="error = null">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Success message -->
+    <div *ngIf="successMessage" class="alert-modern alert-success" role="alert">
+      <div class="alert-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <div class="alert-content">
+        <strong>Éxito</strong>
+        <p>{{ successMessage }}</p>
+      </div>
+      <button type="button" class="alert-close" (click)="successMessage = null">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Form Card -->
+    <div class="form-card">
+      <form [formGroup]="recordForm" (ngSubmit)="saveRecord()">
+        <!-- Status -->
+        <div class="form-group">
+          <label for="status" class="form-label">
+            <i class="bi bi-clipboard-check"></i>
+            Estado <span class="required">*</span>
+          </label>
+          <select
+            id="status"
+            class="form-input"
+            formControlName="status"
+            [class.is-invalid]="
+              recordForm.get('status')?.invalid && recordForm.get('status')?.touched
+            "
+          >
+            <option *ngFor="let status of attendanceStatuses" [value]="status">
+              {{ getStatusLabel(status) }}
+            </option>
+          </select>
+          <div
+            class="field-error"
+            *ngIf="recordForm.get('status')?.invalid && recordForm.get('status')?.touched"
+          >
+            El estado es requerido
+          </div>
+        </div>
+
+        <!-- Entry Time (conditional) -->
+        <div class="form-group" *ngIf="shouldShowEntryTime()">
+          <label for="entryTime" class="form-label">
+            <i class="bi bi-clock"></i>
+            Hora de Entrada
+            <span class="label-hint">(Formato: HH:MM)</span>
+          </label>
+          <input
+            type="time"
+            id="entryTime"
+            class="form-input"
+            formControlName="entryTime"
+            [class.is-invalid]="hasFieldError('entryTime')"
+            placeholder="08:00"
+          />
+          <div class="field-error" *ngIf="hasFieldError('entryTime')">
+            {{ getFieldError('entryTime') }}
+          </div>
+          <small class="field-hint">
+            Ingrese la hora en formato 24 horas (00:00 - 23:59). La hora no puede ser futura.
+          </small>
+        </div>
+
+        <!-- Permission Note (conditional) -->
+        <div class="form-group" *ngIf="shouldShowPermissionNote()">
+          <label for="permissionNote" class="form-label">
+            <i class="bi bi-file-text"></i>
+            Nota de Permiso
+            <span class="label-hint">(Máximo 200 caracteres)</span>
+          </label>
+          <textarea
+            id="permissionNote"
+            class="form-input"
+            formControlName="permissionNote"
+            rows="2"
+            [class.is-invalid]="hasFieldError('permissionNote')"
+            placeholder="Ingrese el motivo del permiso..."
+          ></textarea>
+          <div class="field-error" *ngIf="hasFieldError('permissionNote')">
+            {{ getFieldError('permissionNote') }}
+          </div>
+          <small class="field-hint">
+            {{ recordForm.get('permissionNote')?.value?.length || 0 }} / 200 caracteres
+          </small>
+        </div>
+
+        <!-- Observation (always visible) -->
+        <div class="form-group">
+          <label for="observation" class="form-label">
+            <i class="bi bi-chat-left-text"></i>
+            Observación
+            <span class="label-hint">(Opcional, máximo 500 caracteres)</span>
+          </label>
+          <textarea
+            id="observation"
+            class="form-input"
+            formControlName="observation"
+            rows="3"
+            [class.is-invalid]="hasFieldError('observation')"
+            placeholder="Ingrese observaciones adicionales..."
+          ></textarea>
+          <div class="field-error" *ngIf="hasFieldError('observation')">
+            {{ getFieldError('observation') }}
+          </div>
+          <small class="field-hint">
+            {{ recordForm.get('observation')?.value?.length || 0 }} / 500 caracteres
+          </small>
+        </div>
+
+        <!-- Reason (for post-closure edits) -->
+        <div class="form-group" *ngIf="showReasonField">
+          <label for="reason" class="form-label">
+            <i class="bi bi-exclamation-diamond"></i>
+            Motivo de Edición Post-Cierre <span class="required">*</span>
+            <span class="label-hint">(Máximo 500 caracteres)</span>
+          </label>
+          <textarea
+            id="reason"
+            class="form-input"
+            formControlName="reason"
+            rows="3"
+            [class.is-invalid]="
+              recordForm.get('reason')?.invalid && recordForm.get('reason')?.touched
+            "
+            placeholder="Explique el motivo de la edición después del cierre..."
+          ></textarea>
+          <div
+            class="field-error"
+            *ngIf="recordForm.get('reason')?.invalid && recordForm.get('reason')?.touched"
+          >
+            <span *ngIf="recordForm.get('reason')?.hasError('required')">
+              El motivo es requerido para ediciones post-cierre
+            </span>
+            <span *ngIf="recordForm.get('reason')?.hasError('maxlength')">
+              El motivo no puede exceder 500 caracteres
+            </span>
+          </div>
+          <small class="field-hint">
+            {{ recordForm.get('reason')?.value?.length || 0 }} / 500 caracteres
+          </small>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="form-actions">
+          <button
+            type="button"
+            class="btn-secondary-action"
+            (click)="resetForm()"
+            [disabled]="loading || !canEdit"
+          >
+            <i class="bi bi-arrow-counterclockwise"></i>
+            <span>Restablecer</span>
+          </button>
+          <button
+            type="submit"
+            class="btn-primary-action"
+            [disabled]="loading || recordForm.invalid || !canEdit"
+          >
+            <span
+              *ngIf="loading"
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+            <i *ngIf="!loading" class="bi bi-save"></i>
+            <span>{{ loading ? 'Guardando...' : 'Guardar Cambios' }}</span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Cannot edit message -->
+    <div
+      *ngIf="!canEdit && isSessionClosed && !isWithinJustificationWindow"
+      class="alert-modern alert-info"
+      role="alert"
+    >
+      <div class="alert-icon">
+        <i class="bi bi-info-circle-fill"></i>
+      </div>
+      <div class="alert-content">
+        <strong>Edición No Disponible</strong>
+        <p>
+          No puede editar este registro porque el período de justificación ha expirado. Si necesita
+          realizar cambios, contacte a un administrador.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

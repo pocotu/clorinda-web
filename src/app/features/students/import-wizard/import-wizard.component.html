@@ -1,0 +1,487 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">
+            <i class="bi bi-file-earmark-arrow-up me-2"></i>
+            Importación de Estudiantes
+          </h4>
+        </div>
+
+        <div class="card-body">
+          <!-- Stepper -->
+          <div class="stepper mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              @for (step of [1, 2, 3, 4]; track step) {
+                <div
+                  class="stepper-item flex-fill"
+                  [class.active]="isStepActive(step)"
+                  [class.completed]="isStepCompleted(step)"
+                >
+                  <div class="stepper-circle">
+                    @if (isStepCompleted(step)) {
+                      <i class="bi bi-check-lg"></i>
+                    } @else {
+                      {{ step }}
+                    }
+                  </div>
+                  <div class="stepper-label">{{ getStepTitle(step) }}</div>
+                </div>
+                @if (step < 4) {
+                  <div class="stepper-line" [class.completed]="isStepCompleted(step + 1)"></div>
+                }
+              }
+            </div>
+          </div>
+
+          <!-- Step 1: Upload -->
+          @if (currentStep === 1) {
+            <div class="step-content">
+              <h5 class="mb-3">Paso 1: Subir Archivos</h5>
+              <p class="text-muted">
+                Seleccione uno o más archivos Excel (.xlsx) o CSV (.csv) para importar estudiantes.
+              </p>
+
+              <!-- Drag & Drop Zone -->
+              <div
+                class="drop-zone mb-3"
+                [class.dragging]="isDragging"
+                (dragover)="onDragOver($event)"
+                (dragleave)="onDragLeave($event)"
+                (drop)="onDrop($event)"
+              >
+                <div class="drop-zone-content text-center">
+                  <i class="bi bi-cloud-arrow-up display-1 text-muted mb-3"></i>
+                  <p class="mb-2">Arrastre archivos aquí o haga clic para seleccionar</p>
+                  <p class="text-muted small">
+                    Formatos aceptados: .xlsx, .csv (máximo 10MB por archivo)
+                  </p>
+                  <input
+                    type="file"
+                    id="fileInput"
+                    class="d-none"
+                    multiple
+                    accept=".xlsx,.csv"
+                    (change)="onFileSelected($event)"
+                  />
+                  <label for="fileInput" class="btn btn-outline-primary">
+                    <i class="bi bi-folder2-open me-2"></i>
+                    Seleccionar Archivos
+                  </label>
+                </div>
+              </div>
+
+              <!-- Error Alert -->
+              @if (uploadError) {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ uploadError }}
+                  <button type="button" class="btn-close" (click)="uploadError = null"></button>
+                </div>
+              }
+
+              <!-- Selected Files List -->
+              @if (selectedFiles.length > 0) {
+                <div class="selected-files mb-3">
+                  <h6 class="mb-2">Archivos Seleccionados ({{ selectedFiles.length }})</h6>
+                  <div class="list-group">
+                    @for (file of selectedFiles; track file.id) {
+                      <div
+                        class="list-group-item d-flex justify-content-between align-items-center"
+                      >
+                        <div class="d-flex align-items-center">
+                          <i class="bi bi-file-earmark-excel text-success me-2 fs-4"></i>
+                          <div>
+                            <div class="fw-medium">{{ file.name }}</div>
+                            <small class="text-muted">{{ formatFileSize(file.size) }}</small>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="removeFile(file.id)"
+                          [disabled]="uploading"
+                        >
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
+                    }
+                  </div>
+                </div>
+              }
+
+              <!-- Navigation Buttons -->
+              <div class="d-flex justify-content-between mt-4">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="cancelWizard()"
+                  [disabled]="uploading"
+                >
+                  <i class="bi bi-x-circle me-2"></i>
+                  Cancelar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="goNext()"
+                  [disabled]="!canGoNext()"
+                >
+                  @if (uploading) {
+                    <span class="spinner-border spinner-border-sm me-2"></span>
+                    Subiendo...
+                  } @else {
+                    {{ getNextButtonLabel() }}
+                    <i class="bi {{ getNextButtonIcon() }} ms-2"></i>
+                  }
+                </button>
+              </div>
+            </div>
+          }
+
+          <!-- Step 2: Validate -->
+          @if (currentStep === 2) {
+            <div class="step-content">
+              <h5 class="mb-3">Paso 2: Validación</h5>
+
+              @if (validating) {
+                <div class="text-center py-5">
+                  <div
+                    class="spinner-border text-primary mb-3"
+                    style="width: 3rem; height: 3rem"
+                  ></div>
+                  <p class="text-muted">Validando archivos, por favor espere...</p>
+                </div>
+              }
+
+              @if (validationError) {
+                <div class="alert alert-danger">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ validationError }}
+                </div>
+              }
+
+              @if (validationResult && !validating) {
+                <div class="validation-summary">
+                  <div class="row g-3 mb-4">
+                    <div class="col-md-3">
+                      <div class="card bg-light">
+                        <div class="card-body text-center">
+                          <h3 class="mb-0">{{ validationResult.summary.totalRows }}</h3>
+                          <small class="text-muted">Total Filas</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-success text-white">
+                        <div class="card-body text-center">
+                          <h3 class="mb-0">{{ validationResult.summary.validRows }}</h3>
+                          <small>Válidas</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-warning text-dark">
+                        <div class="card-body text-center">
+                          <h3 class="mb-0">{{ validationResult.summary.warnings }}</h3>
+                          <small>Advertencias</small>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="card bg-danger text-white">
+                        <div class="card-body text-center">
+                          <h3 class="mb-0">{{ validationResult.summary.errors }}</h3>
+                          <small>Errores</small>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  @if (!validationResult.canConfirm) {
+                    <div class="alert alert-warning">
+                      <i class="bi bi-exclamation-triangle me-2"></i>
+                      <strong>No se puede continuar:</strong> Hay errores críticos que deben ser
+                      corregidos antes de importar.
+                    </div>
+                  } @else {
+                    <div class="alert alert-success">
+                      <i class="bi bi-check-circle me-2"></i>
+                      <strong>Validación exitosa:</strong> Los archivos están listos para importar.
+                    </div>
+                  }
+                </div>
+              }
+
+              <!-- Navigation Buttons -->
+              <div class="d-flex justify-content-between mt-4">
+                <button
+                  type="button"
+                  class="btn btn-outline-secondary"
+                  (click)="goPrevious()"
+                  [disabled]="!canGoPrevious()"
+                >
+                  <i class="bi bi-arrow-left me-2"></i>
+                  Anterior
+                </button>
+                <div>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger me-2"
+                    (click)="cancelWizard()"
+                    [disabled]="validating"
+                  >
+                    <i class="bi bi-x-circle me-2"></i>
+                    Cancelar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="goNext()"
+                    [disabled]="!canGoNext()"
+                  >
+                    {{ getNextButtonLabel() }}
+                    <i class="bi {{ getNextButtonIcon() }} ms-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+
+          <!-- Step 3: Preview -->
+          @if (currentStep === 3) {
+            <div class="step-content">
+              <h5 class="mb-3">Paso 3: Previsualización de Errores</h5>
+
+              @if (validationResult) {
+                <!-- Filters -->
+                <div class="row g-3 mb-3">
+                  <div class="col-md-4">
+                    <label class="form-label">Filtrar por Severidad</label>
+                    <select
+                      class="form-select"
+                      [(ngModel)]="selectedSeverityFilter"
+                      (change)="applyFilters()"
+                    >
+                      <option value="ALL">Todos</option>
+                      <option [value]="IssueSeverity.ERROR">Errores</option>
+                      <option [value]="IssueSeverity.WARNING">Advertencias</option>
+                    </select>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label">Filtrar por Archivo</label>
+                    <select
+                      class="form-select"
+                      [(ngModel)]="selectedFileFilter"
+                      (change)="applyFilters()"
+                    >
+                      <option value="ALL">Todos los archivos</option>
+                      @for (file of getAvailableFiles(); track file.fileId) {
+                        <option [value]="file.fileId">{{ file.fileName }}</option>
+                      }
+                    </select>
+                  </div>
+                  <div class="col-md-4 d-flex align-items-end">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary w-100"
+                      (click)="downloadErrorReport()"
+                    >
+                      <i class="bi bi-download me-2"></i>
+                      Descargar Reporte
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Issues Table -->
+                @if (filteredIssues.length > 0) {
+                  <div class="table-responsive mb-3">
+                    <table class="table table-hover">
+                      <thead class="table-light">
+                        <tr>
+                          <th>Archivo</th>
+                          <th>Hoja</th>
+                          <th>Fila</th>
+                          <th>Severidad</th>
+                          <th>Mensaje</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        @for (issue of getPaginatedIssues(); track issue.id) {
+                          <tr>
+                            <td>
+                              <small>{{
+                                getFileName(
+                                  selectedFileFilter === 'ALL'
+                                    ? validationResult.files[0]?.fileId || ''
+                                    : selectedFileFilter
+                                )
+                              }}</small>
+                            </td>
+                            <td>{{ issue.sheetName }}</td>
+                            <td>{{ issue.rowNumber }}</td>
+                            <td>
+                              <span [class]="getSeverityBadgeClass(issue.severity)">
+                                {{ issue.severity }}
+                              </span>
+                            </td>
+                            <td>{{ issue.message }}</td>
+                          </tr>
+                        }
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!-- Pagination -->
+                  @if (getTotalPages() > 1) {
+                    <nav>
+                      <ul class="pagination justify-content-center">
+                        <li class="page-item" [class.disabled]="currentPage === 1">
+                          <button class="page-link" (click)="previousPage()">Anterior</button>
+                        </li>
+                        <li class="page-item active">
+                          <span class="page-link">{{ currentPage }} de {{ getTotalPages() }}</span>
+                        </li>
+                        <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                          <button class="page-link" (click)="nextPage()">Siguiente</button>
+                        </li>
+                      </ul>
+                    </nav>
+                  }
+                } @else {
+                  <div class="alert alert-info">
+                    <i class="bi bi-info-circle me-2"></i>
+                    No hay errores o advertencias con los filtros seleccionados.
+                  </div>
+                }
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-between mt-4">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary"
+                    (click)="goPrevious()"
+                    [disabled]="!canGoPrevious()"
+                  >
+                    <i class="bi bi-arrow-left me-2"></i>
+                    Anterior
+                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger me-2"
+                      (click)="cancelWizard()"
+                    >
+                      <i class="bi bi-x-circle me-2"></i>
+                      Cancelar
+                    </button>
+                    @if (canConfirmImport()) {
+                      <button
+                        type="button"
+                        class="btn btn-success"
+                        (click)="goNext()"
+                        [disabled]="!canGoNext()"
+                      >
+                        <i class="bi {{ getNextButtonIcon() }} me-2"></i>
+                        {{ getNextButtonLabel() }}
+                      </button>
+                    } @else {
+                      <button type="button" class="btn btn-secondary" (click)="startNewImport()">
+                        <i class="bi bi-arrow-counterclockwise me-2"></i>
+                        Reintentar con Otros Archivos
+                      </button>
+                    }
+                  </div>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Step 4: Confirm -->
+          @if (currentStep === 4) {
+            <div class="step-content">
+              <h5 class="mb-3">Paso 4: Confirmación</h5>
+
+              @if (confirming) {
+                <div class="text-center py-5">
+                  <div
+                    class="spinner-border text-success mb-3"
+                    style="width: 3rem; height: 3rem"
+                  ></div>
+                  <p class="text-muted">Importando estudiantes, por favor espere...</p>
+                  <p class="text-muted small">
+                    Este proceso puede tomar varios minutos dependiendo del tamaño de los archivos.
+                  </p>
+                </div>
+              }
+
+              @if (confirmError) {
+                <div class="alert alert-danger">
+                  <i class="bi bi-exclamation-triangle me-2"></i>
+                  {{ confirmError }}
+                </div>
+                <div class="d-flex justify-content-center">
+                  <button type="button" class="btn btn-primary" (click)="startNewImport()">
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>
+                    Nueva Importación
+                  </button>
+                </div>
+              }
+
+              @if (importResult && !confirming) {
+                <div class="alert alert-success mb-4">
+                  <i class="bi bi-check-circle me-2"></i>
+                  <strong>¡Importación completada exitosamente!</strong>
+                </div>
+
+                <div class="row g-3 mb-4">
+                  <div class="col-md-4">
+                    <div class="card bg-light">
+                      <div class="card-body text-center">
+                        <h3 class="mb-0">{{ importResult.summary.totalRows }}</h3>
+                        <small class="text-muted">Total Procesadas</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card bg-success text-white">
+                      <div class="card-body text-center">
+                        <h3 class="mb-0">{{ importResult.summary.inserted }}</h3>
+                        <small>Insertados</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card bg-danger text-white">
+                      <div class="card-body text-center">
+                        <h3 class="mb-0">{{ importResult.summary.rejected }}</h3>
+                        <small>Rechazados</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-end mt-4">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary me-2"
+                    (click)="startNewImport()"
+                  >
+                    <i class="bi bi-arrow-counterclockwise me-2"></i>
+                    Nueva Importación
+                  </button>
+                  <button type="button" class="btn btn-primary" (click)="goToStudentList()">
+                    <i class="bi bi-list-ul me-2"></i>
+                    Ver Lista de Estudiantes
+                  </button>
+                </div>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<nav class="navbar navbar-expand navbar-dark bg-primary fixed-top">
+  <div class="container-fluid">
+    <!-- Botón hamburguesa para sidebar -->
+    <button
+      class="btn btn-link text-white me-3"
+      type="button"
+      (click)="onToggleSidebar()"
+      aria-label="Toggle sidebar"
+    >
+      <i class="bi bi-list fs-4"></i>
+    </button>
+
+    <!-- Logo y nombre del colegio -->
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img
+        src="/assets/logo-clorinda.png"
+        alt="Logo Clorinda Matto de Turner"
+        height="40"
+        class="me-2"
+        onerror="this.style.display = 'none'"
+      />
+      <span class="d-none d-md-inline">I.E. Clorinda Matto de Turner</span>
+      <span class="d-inline d-md-none">Clorinda Matto</span>
+    </a>
+
+    <!-- Menú de usuario -->
+    <div class="ms-auto">
+      <div class="dropdown" (clickOutside)="closeUserMenu()">
+        <button
+          class="btn btn-link text-white dropdown-toggle d-flex align-items-center"
+          type="button"
+          (click)="toggleUserMenu()"
+          [attr.aria-expanded]="userMenuOpen"
+        >
+          <i class="bi bi-person-circle fs-5 me-2"></i>
+          <span class="d-none d-sm-inline">{{ currentUser?.username }}</span>
+        </button>
+
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="userMenuOpen">
+          <li>
+            <div class="dropdown-header">
+              <div class="fw-bold">{{ currentUser?.username }}</div>
+              <small class="text-muted">{{ roleName }}</small>
+            </div>
+          </li>
+          <li><hr class="dropdown-divider" /></li>
+          <li>
+            <button class="dropdown-item" type="button" (click)="logout()">
+              <i class="bi bi-box-arrow-right me-2"></i>
+              Cerrar Sesión
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

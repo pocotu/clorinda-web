@@ -1,0 +1,206 @@
+<div class="query-hero">
+  <h2><i class="bi bi-search me-2"></i>Consulta de Asistencia</h2>
+  <p>Ingresa el código de estudiante para consultar la asistencia</p>
+</div>
+
+<div class="container pb-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <!-- Query Form -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <form [formGroup]="queryForm" (ngSubmit)="onSubmit()">
+            <!-- Student Code Input -->
+            <div class="mb-3">
+              <label for="studentCode" class="form-label">
+                Código de Estudiante <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                id="studentCode"
+                formControlName="studentCode"
+                class="form-control"
+                [class.is-invalid]="hasError('studentCode')"
+                placeholder="Ejemplo: 20240001"
+                maxlength="8"
+              />
+              <div class="form-text">Formato: YYYYNNNN (año de ingreso + 4 dígitos)</div>
+              @if (hasError('studentCode')) {
+                <div class="invalid-feedback d-block">
+                  {{ getStudentCodeError() }}
+                </div>
+              }
+            </div>
+
+            <!-- CAPTCHA -->
+            <div class="mb-3">
+              <div class="form-label">Verificación <span class="text-danger">*</span></div>
+              <div id="recaptcha-container" class="d-flex justify-content-center"></div>
+              @if (!captchaReady()) {
+                <div class="text-center text-muted mt-2">
+                  <small>Cargando verificación...</small>
+                </div>
+              }
+            </div>
+
+            <!-- Error Message -->
+            @if (errorMessage()) {
+              <div class="alert alert-danger" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                {{ errorMessage() }}
+              </div>
+            }
+
+            <!-- Submit Button -->
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="!canSubmit()">
+                @if (isLoading()) {
+                  <span
+                    class="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Consultando...
+                } @else {
+                  <i class="bi bi-search me-2"></i>
+                  Consultar Asistencia
+                }
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Results -->
+      @if (result()) {
+        <div class="card shadow-sm">
+          <div class="card-body">
+            <!-- Student Info -->
+            <div class="mb-4">
+              <h5 class="card-title mb-3">Información del Estudiante</h5>
+              <div class="row">
+                <div class="col-sm-6 mb-2">
+                  <strong>Código:</strong>
+                  <span class="ms-2">{{ result()!.studentCode }}</span>
+                </div>
+                <div class="col-sm-6 mb-2">
+                  <strong>Nombre:</strong>
+                  <span class="ms-2">{{ result()!.displayName }}</span>
+                </div>
+              </div>
+            </div>
+
+            <hr />
+
+            <!-- Today's Attendance -->
+            <div class="mb-4">
+              <h5 class="card-title mb-3">Asistencia de Hoy</h5>
+              <div class="d-flex align-items-center mb-2">
+                <strong class="me-2">Estado:</strong>
+                <span [class]="getStatusBadgeClass(result()!.today.status)">
+                  {{ getStatusLabel(result()!.today.status) }}
+                </span>
+              </div>
+              @if (result()!.today.entryTime) {
+                <div class="mb-2">
+                  <strong>Hora de Entrada:</strong>
+                  <span class="ms-2">{{ result()!.today.entryTime }}</span>
+                </div>
+              }
+              @if (result()!.today.permission) {
+                <div class="alert alert-info mb-0 mt-2">
+                  <i class="bi bi-info-circle me-2"></i>
+                  El estudiante tiene permiso registrado
+                </div>
+              }
+            </div>
+
+            <hr />
+
+            <!-- Monthly Summary -->
+            <div>
+              <h5 class="card-title mb-3">Resumen Mensual - {{ result()!.month }}</h5>
+
+              <!-- Summary Cards -->
+              <div class="row g-3 mb-3">
+                <div class="col-6 col-md-3">
+                  <div class="card bg-success text-white">
+                    <div class="card-body text-center p-2">
+                      <div class="fs-4 fw-bold">{{ result()!.monthlySummary.presentes }}</div>
+                      <div class="small">Presentes</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card bg-warning text-dark">
+                    <div class="card-body text-center p-2">
+                      <div class="fs-4 fw-bold">{{ result()!.monthlySummary.tardanzas }}</div>
+                      <div class="small">Tardanzas</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card bg-danger text-white">
+                    <div class="card-body text-center p-2">
+                      <div class="fs-4 fw-bold">{{ result()!.monthlySummary.faltas }}</div>
+                      <div class="small">Faltas</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
+                  <div class="card bg-info text-white">
+                    <div class="card-body text-center p-2">
+                      <div class="fs-4 fw-bold">{{ result()!.monthlySummary.conPermiso }}</div>
+                      <div class="small">Con Permiso</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Chart Visualization -->
+              <div class="card mb-3">
+                <div class="card-body">
+                  <canvas
+                    #attendanceChart
+                    role="img"
+                    aria-label="Gráfico de barras mostrando el resumen de asistencia mensual"
+                  ></canvas>
+                </div>
+              </div>
+
+              <!-- Percentage -->
+              <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                  <div class="fs-2 fw-bold">
+                    {{ formatPercentage(result()!.monthlySummary.percentage) }}%
+                  </div>
+                  <div>Porcentaje de Asistencia</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Query Button -->
+            <div class="d-grid gap-2 mt-4">
+              <button type="button" class="btn btn-outline-primary" (click)="reset()">
+                <i class="bi bi-arrow-clockwise me-2"></i>
+                Nueva Consulta
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Info Notice -->
+      <div class="alert alert-info mt-4" role="alert">
+        <h6 class="alert-heading">
+          <i class="bi bi-info-circle me-2"></i>
+          Información Importante
+        </h6>
+        <ul class="mb-0 small">
+          <li>Solo puedes realizar 5 consultas por hora desde tu dispositivo</li>
+          <li>Los datos mostrados son solo para fines informativos</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,623 @@
+/* Hero Section */
+.nosotros-hero {
+  background: #001a33;
+  color: white;
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+  height: 360px;
+}
+
+.nosotros-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.hero-slider {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-slider-track {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  animation: slider-tren 90s linear infinite;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+}
+
+.hero-slide {
+  position: relative;
+  flex: 0 0 auto;
+  width: 420px;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  image-rendering: auto;
+  image-rendering: -webkit-optimize-contrast;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+@keyframes slider-tren {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.slider-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 58, 107, 0.1) 0%,
+    rgba(26, 74, 123, 0.1) 50%,
+    rgba(10, 58, 107, 0.14) 100%
+  );
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.5rem 1.25rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hero-badge svg {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.container-full {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.page-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
+}
+
+.page-subtitle {
+  font-size: 1.3rem;
+  opacity: 0.95;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Misión y Visión */
+.content-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.mission-vision {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.mission-card,
+.vision-card {
+  background: white;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-card::before,
+.vision-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #001a33 0%, #1a1a2e 100%);
+}
+
+.vision-card::before {
+  background: linear-gradient(90deg, #001a33 0%, #1a1a2e 100%);
+}
+
+.mission-card:hover,
+.vision-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mission-icon {
+  background: linear-gradient(135deg, #001a33 0%, #1a1a2e 100%);
+}
+
+.vision-icon {
+  background: linear-gradient(135deg, #001a33 0%, #1a1a2e 100%);
+}
+
+.mission-card h2,
+.vision-card h2 {
+  font-size: 1.8rem;
+  color: #001a33;
+  margin: 0;
+  font-weight: 700;
+}
+
+.mission-card p,
+.vision-card p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #495057;
+  margin: 0;
+  text-align: justify;
+}
+
+/* Historia e Himno Integrados */
+.historia-himno-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+  position: relative;
+}
+
+.historia-himno-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.historia-block {
+  background: white;
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+  position: relative;
+}
+
+.block-decoracion {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  opacity: 0.05;
+}
+
+.block-title {
+  font-size: 2.2rem;
+  color: #001a33;
+  margin: 0 0 2rem 0;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.title-icon {
+  font-size: 2rem;
+}
+
+.historia-content {
+  position: relative;
+  z-index: 1;
+}
+
+.historia-intro {
+  font-size: 1.15rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.historia-content p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #495057;
+  margin-bottom: 1.5rem;
+  text-align: justify;
+}
+
+.historia-stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e9ecef;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #001a33;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: #6c757d;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Himno Block */
+.himno-block {
+  background: linear-gradient(135deg, #001a33 0%, #1a4a7b 100%);
+  padding: 3rem;
+  border-radius: 20px;
+  color: white;
+  box-shadow: 0 10px 40px rgba(10, 58, 107, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.himno-block::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.himno-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.himno-icon {
+  width: 70px;
+  height: 70px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.himno-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: 1px;
+}
+
+.himno-dedicatoria {
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin: 0;
+  font-style: italic;
+}
+
+.himno-content {
+  position: relative;
+  z-index: 1;
+}
+
+.himno-parte {
+  margin-bottom: 2rem;
+}
+
+.himno-parte.coro,
+.himno-parte.estrofa {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border-left: 4px solid rgba(255, 255, 255, 0.4);
+}
+
+.parte-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 1rem;
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.himno-verso {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: white;
+  margin: 0.4rem 0;
+  font-weight: 400;
+}
+
+.himno-autor {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.himno-autor strong {
+  font-weight: 700;
+}
+
+/* Principios Section */
+.valores-section {
+  padding: 5rem 2rem;
+  background: linear-gradient(to bottom, #f8f9fa 0%, #ffffff 100%);
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #001a33;
+  margin: 0 0 1rem 0;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.valores-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.valor-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  border-top: 4px solid #001a33;
+}
+
+.valor-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.principio-numero {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #001a33 0%, #1a4a7b 100%);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.valor-card h3 {
+  font-size: 1.4rem;
+  color: #001a33;
+  margin: 0 0 1rem 0;
+  font-weight: 700;
+  padding-right: 3rem;
+}
+
+.valor-card p {
+  color: #6c757d;
+  line-height: 1.7;
+  margin: 0;
+  font-size: 0.95rem;
+  text-align: justify;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+
+  .page-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .mission-vision {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .historia-himno-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+
+  .section-title {
+    font-size: 2rem;
+  }
+
+  .valores-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .nosotros-hero {
+    height: 300px;
+  }
+
+  .hero-slide {
+    width: 320px;
+  }
+
+  .page-title {
+    font-size: 2rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
+  }
+
+  .hero-badge {
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .content-section,
+  .historia-himno-section,
+  .valores-section {
+    padding: 3rem 1.5rem;
+  }
+
+  .mission-card,
+  .vision-card,
+  .historia-block,
+  .himno-block {
+    padding: 2rem;
+  }
+
+  .block-title {
+    font-size: 1.8rem;
+  }
+
+  .himno-title {
+    font-size: 1.5rem;
+  }
+
+  .himno-dedicatoria {
+    font-size: 1rem;
+  }
+
+  .historia-stats {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .stat-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .container,
+  .container-full {
+    padding: 0 1rem;
+  }
+
+  .nosotros-hero {
+    height: 260px;
+  }
+
+  .hero-slide {
+    width: 260px;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+  }
+
+  .mission-card h2,
+  .vision-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .block-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .historia-stats {
+    flex-direction: row;
+  }
+
+  .himno-icon {
+    width: 60px;
+    height: 60px;
+  }
+}

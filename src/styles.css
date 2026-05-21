@@ -1,0 +1,324 @@
+/* Colegio Clorinda Matto de Turner — Global Styles */
+/* Bootstrap 5 is imported via angular.json */
+@import 'bootstrap-icons/font/bootstrap-icons.css';
+@import './responsive.css';
+
+/* ================================================================
+   DESIGN TOKENS — I.E. Emblemática Clorinda Matto de Turner
+   Fuente de verdad única. NUNCA hardcodear colores fuera de aquí.
+   ================================================================ */
+:root {
+  /* Paleta primaria — Azul marino institucional profundo */
+  --color-primary: #001f3f;
+  --color-primary-dark: #001429;
+  --color-primary-light: #003d7a;
+  --color-primary-xlight: #e6eef5;
+
+  /* Paleta secundaria — Azul claro institucional */
+  --color-secondary: #4a9ee0;
+  --color-secondary-mid: #3b8fd1;
+  --color-secondary-light: #6bb3e8;
+  --color-secondary-xlight: #e8f4fc;
+
+  /* Paleta dorada — Para hero y elementos destacados */
+  --color-gold: #d4af37;
+  --color-gold-mid: #c19b2a;
+  --color-gold-light: #e5c968;
+  --color-gold-xlight: #faf6e8;
+
+  /* Paleta terciaria — Gris sofisticado */
+  --color-tertiary: #e5e4e2;
+  --color-tertiary-dark: #b8b7b5;
+  --color-tertiary-light: #f5f5f3;
+
+  /* Degradados institucionales */
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  --gradient-brand-h: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--color-primary-dark) 0%,
+    var(--color-primary) 100%
+  );
+  --gradient-secondary: linear-gradient(
+    135deg,
+    var(--color-secondary-mid) 0%,
+    var(--color-secondary) 100%
+  );
+  --gradient-gold: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+  --gradient-sidebar: linear-gradient(
+    180deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 100%
+  );
+  --gradient-navbar: linear-gradient(
+    90deg,
+    var(--color-primary) 0%,
+    var(--color-primary-light) 100%
+  );
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    #002952 50%,
+    var(--color-primary-light) 100%
+  );
+
+  /* Texto */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #475569;
+  --color-text-muted: #94a3b8;
+  --color-text-inverse: #ffffff;
+  --color-text-gold: var(--color-secondary);
+
+  /* Fondos */
+  --color-bg-app: #f0f4f8;
+  --color-bg-surface: #ffffff;
+  --color-bg-muted: #f8fafc;
+  --color-bg-dark: var(--color-primary);
+
+  /* Bordes */
+  --color-border: #dce4ed;
+  --color-border-focus: var(--color-secondary);
+  --color-border-gold: var(--color-secondary);
+
+  /* Estados funcionales */
+  --color-success: #16a34a;
+  --color-warning: #d97706;
+  --color-danger: #dc2626;
+  --color-info: var(--color-primary-light);
+
+  /* Sombras con tinte institucional */
+  --shadow-primary: 0 4px 14px rgba(0, 31, 63, 0.3);
+  --shadow-secondary: 0 4px 14px rgba(74, 158, 224, 0.35);
+  --shadow-gold: 0 8px 30px rgba(74, 158, 224, 0.45);
+  --shadow-card: 0 2px 8px rgba(0, 31, 63, 0.08);
+  --shadow-card-hover: 0 8px 24px rgba(0, 31, 63, 0.14);
+
+  /* Radios */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-pill: 999px;
+
+  /* Bootstrap overrides — apuntan a los tokens */
+  --bs-primary: var(--color-primary);
+  --bs-primary-rgb: 0, 31, 63;
+  --bs-secondary: var(--color-secondary);
+  --bs-secondary-rgb: 74, 158, 224;
+  --bs-success: var(--color-success);
+  --bs-warning: var(--color-warning);
+  --bs-danger: var(--color-danger);
+  --bs-info: var(--color-info);
+  --bs-link-color: var(--color-secondary);
+  --bs-link-hover-color: var(--color-secondary-mid);
+  --bs-border-color: var(--color-border);
+}
+
+/* ================================================================
+   BASE
+   ================================================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-surface);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ================================================================
+   LAYOUT
+   ================================================================ */
+.main-content {
+  min-height: calc(100vh - 70px - 300px);
+}
+
+/* Public layout: main ocupa exactamente el espacio entre navbar y footer.
+   navbar ≈ 80px, footer ≈ 300px → main = 100vh - 80 - 300 */
+.public-layout-main {
+  min-height: calc(100vh - 80px - 300px);
+  display: flex;
+  flex-direction: column;
+}
+
+.public-layout-main > *:not(router-outlet) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ================================================================
+   UTILIDADES INSTITUCIONALES
+   ================================================================ */
+.bg-brand {
+  background: var(--gradient-brand) !important;
+}
+.bg-primary-inst {
+  background-color: var(--color-primary) !important;
+}
+.bg-secondary-inst {
+  background-color: var(--color-secondary) !important;
+}
+.bg-primary-xlight {
+  background-color: var(--color-primary-xlight) !important;
+}
+
+.text-primary-inst {
+  color: var(--color-primary) !important;
+}
+.text-secondary-inst {
+  color: var(--color-secondary) !important;
+}
+.text-inverse {
+  color: var(--color-text-inverse) !important;
+}
+
+.border-primary-inst {
+  border-color: var(--color-primary) !important;
+}
+
+/* Alias backward-compat */
+.bg-institutional-primary {
+  background-color: var(--color-primary) !important;
+}
+.bg-institutional-secondary {
+  background-color: var(--color-secondary) !important;
+}
+.text-institutional-primary {
+  color: var(--color-primary) !important;
+}
+.text-institutional-secondary {
+  color: var(--color-secondary) !important;
+}
+
+/* ================================================================
+   COMPONENTES SHARED
+   ================================================================ */
+.container-institutional {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.card-institutional {
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.card-institutional:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.badge-institutional {
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  padding: 0.35em 0.65em;
+  font-size: 0.875em;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 200px;
+}
+
+/* ================================================================
+   BOTONES GLOBALES
+   ================================================================ */
+.btn-inst-primary {
+  background: var(--gradient-primary);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-primary);
+}
+.btn-inst-primary:hover:not(:disabled) {
+  filter: brightness(1.06);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(74, 158, 224, 0.4);
+}
+
+.btn-inst-secondary {
+  background: var(--color-secondary);
+  color: var(--color-text-inverse);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-secondary);
+}
+.btn-inst-secondary:hover:not(:disabled) {
+  background: var(--color-secondary-mid);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
+}
+
+/* ================================================================
+   ACCESIBILIDAD
+   ================================================================ */
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.bi {
+  display: inline-block;
+  vertical-align: -0.125em;
+}
+
+/* ================================================================
+   RESPONSIVE TYPOGRAPHY
+   ================================================================ */
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+@media (max-width: 576px) {
+  html {
+    font-size: 14px;
+  }
+}

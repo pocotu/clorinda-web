@@ -1,0 +1,326 @@
+<div class="students-container">
+  <!-- Hero Header with Gradient -->
+  <div class="students-hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Padrón de
+        <span class="title-highlight">Estudiantes</span>
+      </h1>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-hero-primary" (click)="openCreateModal()">
+        <i class="bi bi-plus-lg"></i>
+        <span>Nuevo Estudiante</span>
+      </button>
+    </div>
+    <div class="hero-decoration"></div>
+  </div>
+
+  <!-- Advanced Filters Card -->
+  <div class="filters-card">
+    <div class="filters-header">
+      <div class="filters-title">
+        <i class="bi bi-funnel-fill"></i>
+        <span>Filtros de Búsqueda</span>
+      </div>
+      <button type="button" class="btn-filter-clear" (click)="clearFilters()">
+        <i class="bi bi-arrow-counterclockwise"></i>
+        <span>Limpiar</span>
+      </button>
+    </div>
+
+    <form [formGroup]="filterForm" class="filters-form">
+      <div class="filter-group filter-search">
+        <label for="search" class="filter-label">
+          <i class="bi bi-search"></i>
+          Búsqueda General
+        </label>
+        <input
+          type="text"
+          class="filter-input"
+          id="search"
+          formControlName="search"
+          placeholder="Código · Nombre · DNI"
+        />
+        <span class="filter-hint">Ingrese código de estudiante, nombre completo o DNI</span>
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="grade" class="filter-label">
+            <i class="bi bi-123"></i>
+            Grado
+          </label>
+          <select class="filter-select" id="grade" formControlName="grade">
+            <option value="">Todos los grados</option>
+            <option *ngFor="let grade of grades" [value]="grade">{{ grade }}° Grado</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="section" class="filter-label">
+            <i class="bi bi-grid-3x3-gap-fill"></i>
+            Sección
+          </label>
+          <select class="filter-select" id="section" formControlName="section">
+            <option value="">Todas las secciones</option>
+            <option *ngFor="let section of sections" [value]="section">
+              Sección {{ section }}
+            </option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="isActive" class="filter-label">
+            <i class="bi bi-toggle-on"></i>
+            Estado
+          </label>
+          <select class="filter-select" id="isActive" formControlName="isActive">
+            <option value="">Todos los estados</option>
+            <option value="true">✓ Activo</option>
+            <option value="false">✕ Inactivo</option>
+          </select>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Error Alert -->
+  <div *ngIf="error" class="alert-modern alert-error">
+    <div class="alert-icon">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="alert-content">
+      <strong>Error</strong>
+      <p>{{ error }}</p>
+    </div>
+    <button type="button" class="alert-close" (click)="error = null">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+
+  <!-- Results Table -->
+  <div class="results-container" *ngIf="hasSearched">
+    <div class="results-header">
+      <div class="results-info">
+        <h3 class="results-title">Resultados de Búsqueda</h3>
+        <div class="results-count">
+          <span class="count-number">{{ pagination.total }}</span>
+          <span class="count-label">estudiantes encontrados</span>
+        </div>
+      </div>
+      <div class="results-actions">
+        <button class="btn-export" (click)="exportToCSV()">
+          <i class="bi bi-download"></i>
+          <span>Exportar CSV</span>
+        </button>
+      </div>
+    </div>
+    <div class="results-body">
+      <!-- Loading State -->
+      <div *ngIf="loading" class="state-loading">
+        <div class="loading-spinner"></div>
+        <p class="loading-text">Cargando estudiantes...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!loading && students.length === 0" class="state-empty">
+        <div class="empty-icon">
+          <i class="bi bi-inbox"></i>
+        </div>
+        <h4 class="empty-title">No se encontraron estudiantes</h4>
+        <p class="empty-text">Intente ajustar los filtros de búsqueda o cree un nuevo estudiante</p>
+        <button class="btn-empty-action" (click)="openCreateModal()">
+          <i class="bi bi-plus-lg"></i>
+          Crear Primer Estudiante
+        </button>
+      </div>
+
+      <!-- Students Table -->
+      <div *ngIf="!loading && students.length > 0" class="students-table-wrapper">
+        <table class="students-table">
+          <thead>
+            <tr>
+              <th class="th-code">Código</th>
+              <th class="th-dni">DNI</th>
+              <th class="th-name">Nombre Completo</th>
+              <th class="th-grade">Grado</th>
+              <th class="th-section">Sección</th>
+              <th class="th-status">Estado</th>
+              <th class="th-actions">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of students" class="student-row">
+              <td class="td-code">
+                <span class="code-badge">{{ student.studentCode }}</span>
+              </td>
+              <td class="td-dni">
+                <span *ngIf="student.dni" class="dni-text">{{ student.dni }}</span>
+                <span *ngIf="!student.dni" class="dni-empty">—</span>
+              </td>
+              <td class="td-name">
+                <div class="name-cell">
+                  <span class="name-text">{{ getStudentFullName(student) }}</span>
+                </div>
+              </td>
+              <td class="td-grade">
+                <span *ngIf="getCurrentEnrollment(student) as enrollment" class="grade-badge">
+                  {{ enrollment.grade }}°
+                </span>
+                <span *ngIf="!getCurrentEnrollment(student)" class="grade-empty">—</span>
+              </td>
+              <td class="td-section">
+                <span *ngIf="getCurrentEnrollment(student) as enrollment" class="section-badge">
+                  {{ enrollment.section }}
+                </span>
+                <span *ngIf="!getCurrentEnrollment(student)" class="section-empty">—</span>
+              </td>
+              <td class="td-status">
+                <span [class]="student.isActive ? 'status-active' : 'status-inactive'">
+                  <i
+                    [class]="student.isActive ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"
+                  ></i>
+                  {{ getStatusLabel(student.isActive) }}
+                </span>
+              </td>
+              <td class="td-actions">
+                <div class="action-buttons">
+                  <button
+                    type="button"
+                    class="btn-action btn-edit"
+                    (click)="openEditModal(student)"
+                    title="Editar estudiante"
+                  >
+                    <i class="bi bi-pencil-fill"></i>
+                  </button>
+                  <button
+                    type="button"
+                    [class]="
+                      student.isActive ? 'btn-action btn-deactivate' : 'btn-action btn-activate'
+                    "
+                    (click)="toggleStudentStatus(student)"
+                    [title]="student.isActive ? 'Desactivar estudiante' : 'Activar estudiante'"
+                  >
+                    <i [class]="student.isActive ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"></i>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Modern Pagination -->
+    <div *ngIf="!loading && students.length > 0" class="pagination-container">
+      <div class="pagination-info">
+        <label for="pageSize" class="pagination-label">Mostrar:</label>
+        <select
+          class="pagination-select"
+          id="pageSize"
+          [value]="pagination.pageSize"
+          (change)="onPageSizeChange($event)"
+        >
+          <option *ngFor="let size of pageSizeOptions" [value]="size">{{ size }} filas</option>
+        </select>
+      </div>
+
+      <nav class="pagination-nav" aria-label="Paginación de estudiantes">
+        <button
+          class="pagination-btn pagination-prev"
+          [disabled]="pagination.page === 1"
+          (click)="previousPage()"
+        >
+          <i class="bi bi-chevron-left"></i>
+          <span>Anterior</span>
+        </button>
+
+        <div class="pagination-pages">
+          <button
+            *ngFor="let page of getPageNumbers()"
+            class="pagination-page"
+            [class.active]="page === pagination.page"
+            (click)="goToPage(page)"
+          >
+            {{ page }}
+          </button>
+        </div>
+
+        <button
+          class="pagination-btn pagination-next"
+          [disabled]="pagination.page === pagination.totalPages"
+          (click)="nextPage()"
+        >
+          <span>Siguiente</span>
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </nav>
+
+      <div class="pagination-summary">
+        <span class="summary-text">
+          {{ (pagination.page - 1) * pagination.pageSize + 1 }}–{{
+            Math.min(pagination.page * pagination.pageSize, pagination.total)
+          }}
+        </span>
+        <span class="summary-divider">de</span>
+        <span class="summary-total">{{ pagination.total }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create Student Modal Placeholder -->
+<!-- TODO: Implement in task 17.3.2 -->
+<div
+  *ngIf="showCreateModal"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Nuevo Estudiante</h5>
+        <button type="button" class="btn-close" (click)="closeCreateModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">
+          El formulario de creación de estudiantes se implementará en la tarea 17.3.2
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeCreateModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Student Modal Placeholder -->
+<!-- TODO: Implement in task 17.3.2 -->
+<div
+  *ngIf="showEditModal"
+  class="modal fade show d-block"
+  tabindex="-1"
+  style="background-color: rgba(0, 0, 0, 0.5)"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Editar Estudiante</h5>
+        <button type="button" class="btn-close" (click)="closeEditModal()"></button>
+      </div>
+      <div class="modal-body">
+        <p class="text-muted">
+          El formulario de edición de estudiantes se implementará en la tarea 17.3.2
+        </p>
+        <p *ngIf="selectedStudent">
+          <strong>Estudiante seleccionado:</strong> {{ getStudentFullName(selectedStudent) }}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

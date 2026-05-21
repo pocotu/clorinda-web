@@ -1,0 +1,286 @@
+<div class="import-preview-container">
+  <!-- Summary Cards -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <div class="card border-primary">
+        <div class="card-body text-center">
+          <h4 class="mb-0 text-primary">{{ getSummary().total }}</h4>
+          <small class="text-muted">Total de Problemas</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-danger">
+        <div class="card-body text-center">
+          <h4 class="mb-0 text-danger">{{ getSummary().errors }}</h4>
+          <small class="text-muted">Errores Críticos</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card border-warning">
+        <div class="card-body text-center">
+          <h4 class="mb-0 text-warning">{{ getSummary().warnings }}</h4>
+          <small class="text-muted">Advertencias</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters and Search -->
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-3">
+        <!-- Severity Filter -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">
+            <i class="bi bi-funnel me-1"></i>
+            Severidad
+          </label>
+          <select
+            class="form-select"
+            [(ngModel)]="selectedSeverityFilter"
+            (change)="applyFilters()"
+          >
+            <option value="ALL">Todos</option>
+            <option [value]="IssueSeverity.ERROR">
+              <i class="bi bi-x-circle-fill"></i> Errores
+            </option>
+            <option [value]="IssueSeverity.WARNING">
+              <i class="bi bi-exclamation-triangle-fill"></i> Advertencias
+            </option>
+          </select>
+        </div>
+
+        <!-- File Filter -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">
+            <i class="bi bi-file-earmark me-1"></i>
+            Archivo
+          </label>
+          <select class="form-select" [(ngModel)]="selectedFileFilter" (change)="applyFilters()">
+            <option value="ALL">Todos los archivos</option>
+            @for (file of files; track file.fileId) {
+              <option [value]="file.fileId">{{ file.fileName }}</option>
+            }
+          </select>
+        </div>
+
+        <!-- Search -->
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">
+            <i class="bi bi-search me-1"></i>
+            Buscar
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Buscar por código, mensaje o hoja..."
+            [(ngModel)]="searchTerm"
+            (input)="applyFilters()"
+          />
+        </div>
+
+        <!-- Actions -->
+        <div class="col-md-2 d-flex align-items-end">
+          <div class="btn-group w-100">
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="resetFilters()"
+              title="Limpiar filtros"
+            >
+              <i class="bi bi-x-circle"></i>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-primary"
+              (click)="exportFilteredToCSV()"
+              title="Exportar filtrados"
+            >
+              <i class="bi bi-download"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Issues Table -->
+  @if (filteredIssues.length > 0) {
+    <div class="card">
+      <div class="card-body p-0">
+        <div class="table-responsive">
+          <table class="table table-hover table-striped mb-0">
+            <thead class="table-light sticky-top">
+              <tr>
+                <th style="width: 40px"></th>
+                <th style="width: 200px">Archivo</th>
+                <th style="width: 120px">Hoja</th>
+                <th style="width: 80px">Fila</th>
+                <th style="width: 120px">Severidad</th>
+                <th style="width: 150px">Código</th>
+                <th>Mensaje</th>
+                <th style="width: 80px">Detalles</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (issue of getPaginatedIssues(); track issue.id) {
+                <!-- Main Row -->
+                <tr
+                  [class.table-danger]="issue.severity === IssueSeverity.ERROR"
+                  [class.table-warning]="issue.severity === IssueSeverity.WARNING"
+                >
+                  <td class="text-center">
+                    <i
+                      [class]="getSeverityIcon(issue.severity)"
+                      [class.text-danger]="issue.severity === IssueSeverity.ERROR"
+                      [class.text-warning]="issue.severity === IssueSeverity.WARNING"
+                    >
+                    </i>
+                  </td>
+                  <td>
+                    <small class="text-muted">
+                      <i class="bi bi-file-earmark-excel me-1"></i>
+                      {{
+                        selectedFileFilter === 'ALL' ? 'Múltiples' : getFileName(selectedFileFilter)
+                      }}
+                    </small>
+                  </td>
+                  <td>
+                    <span class="badge bg-secondary">{{ issue.sheetName }}</span>
+                  </td>
+                  <td class="text-center">
+                    <strong>{{ issue.rowNumber }}</strong>
+                  </td>
+                  <td>
+                    <span [class]="getSeverityBadgeClass(issue.severity)">
+                      {{ issue.severity }}
+                    </span>
+                  </td>
+                  <td>
+                    <code class="text-primary">{{ issue.code }}</code>
+                  </td>
+                  <td>
+                    <span class="text-break">{{ issue.message }}</span>
+                  </td>
+                  <td class="text-center">
+                    @if (issue.payload) {
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-info"
+                        (click)="toggleRowExpansion(issue.id)"
+                        title="Ver detalles"
+                      >
+                        <i
+                          [class]="
+                            isRowExpanded(issue.id) ? 'bi bi-chevron-up' : 'bi bi-chevron-down'
+                          "
+                        ></i>
+                      </button>
+                    } @else {
+                      <span class="text-muted">-</span>
+                    }
+                  </td>
+                </tr>
+
+                <!-- Expanded Row for Payload -->
+                @if (isRowExpanded(issue.id) && issue.payload) {
+                  <tr class="expanded-row">
+                    <td colspan="8" class="bg-light">
+                      <div class="p-3">
+                        <h6 class="mb-2">
+                          <i class="bi bi-code-square me-2"></i>
+                          Detalles del Payload
+                        </h6>
+                        <pre
+                          class="bg-white border rounded p-3 mb-0"
+                        ><code>{{ formatPayload(issue.payload) }}</code></pre>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      @if (getTotalPages() > 1) {
+        <div class="card-footer bg-light">
+          <nav aria-label="Paginación de errores">
+            <ul class="pagination justify-content-center mb-0">
+              <!-- Previous Button -->
+              <li class="page-item" [class.disabled]="currentPage === 1">
+                <button class="page-link" (click)="previousPage()" [disabled]="currentPage === 1">
+                  <i class="bi bi-chevron-left"></i>
+                  Anterior
+                </button>
+              </li>
+
+              <!-- Page Numbers -->
+              @for (page of getPageNumbers(); track page) {
+                <li class="page-item" [class.active]="currentPage === page">
+                  <button class="page-link" (click)="goToPage(page)">
+                    {{ page }}
+                  </button>
+                </li>
+              }
+
+              <!-- Next Button -->
+              <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
+                <button
+                  class="page-link"
+                  (click)="nextPage()"
+                  [disabled]="currentPage === getTotalPages()"
+                >
+                  Siguiente
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </li>
+            </ul>
+          </nav>
+
+          <!-- Page Info -->
+          <div class="text-center mt-2">
+            <small class="text-muted">
+              Mostrando {{ (currentPage - 1) * pageSize + 1 }} -
+              {{ Math.min(currentPage * pageSize, filteredIssues.length) }}
+              de {{ filteredIssues.length }} problemas
+            </small>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <!-- No Issues Found -->
+    <div class="card">
+      <div class="card-body text-center py-5">
+        <i class="bi bi-check-circle text-success display-1 mb-3"></i>
+        <h5 class="text-muted">No se encontraron problemas</h5>
+        <p class="text-muted">
+          @if (searchTerm || selectedSeverityFilter !== 'ALL' || selectedFileFilter !== 'ALL') {
+            No hay problemas que coincidan con los filtros seleccionados.
+          } @else {
+            ¡Excelente! No hay errores ni advertencias en la validación.
+          }
+        </p>
+        @if (searchTerm || selectedSeverityFilter !== 'ALL' || selectedFileFilter !== 'ALL') {
+          <button type="button" class="btn btn-outline-primary" (click)="resetFilters()">
+            <i class="bi bi-x-circle me-2"></i>
+            Limpiar Filtros
+          </button>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Download Full Report Button -->
+  <div class="d-flex justify-content-end mt-3">
+    <button type="button" class="btn btn-outline-secondary" (click)="onDownloadReport()">
+      <i class="bi bi-download me-2"></i>
+      Descargar Reporte Completo
+    </button>
+  </div>
+</div>

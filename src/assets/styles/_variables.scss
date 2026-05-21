@@ -1,0 +1,93 @@
+// ================================================================
+// DESIGN TOKENS — I.E. Emblemática Clorinda Matto de Turner
+// Fuente de verdad SCSS. Refleja los mismos valores que :root en styles.css
+// ================================================================
+
+// Paleta primaria — Azul cielo institucional
+$color-primary: #4a9ee0;
+$color-primary-dark: #2e7fc4;
+$color-primary-light: #a8d4f5;
+$color-primary-xlight: #e8f4fd;
+
+// Paleta secundaria — Azul marino institucional
+$color-secondary: #001a33;
+$color-secondary-mid: #0a3a6b;
+$color-secondary-light: #1a5fa8;
+
+// Texto
+$color-text-primary: #0f172a;
+$color-text-secondary: #475569;
+$color-text-muted: #94a3b8;
+$color-text-inverse: #ffffff;
+
+// Fondos
+$color-bg-app: #f0f4f8;
+$color-bg-surface: #ffffff;
+$color-bg-muted: #f8fafc;
+
+// Bordes
+$color-border: #dce4ed;
+$color-border-focus: $color-primary;
+
+// Estados funcionales
+$color-success: #16a34a;
+$color-warning: #d97706;
+$color-danger: #dc2626;
+
+// Sombras
+$shadow-primary: 0 4px 14px rgba(74, 158, 224, 0.3);
+$shadow-secondary: 0 4px 14px rgba(0, 26, 51, 0.25);
+$shadow-card: 0 2px 8px rgba(0, 26, 51, 0.08);
+$shadow-card-hover: 0 8px 24px rgba(0, 26, 51, 0.14);
+
+// Radios
+$radius-sm: 6px;
+$radius-md: 10px;
+$radius-lg: 16px;
+$radius-pill: 999px;
+
+// Degradados
+$gradient-brand: linear-gradient(135deg, #{$color-secondary} 0%, #{$color-primary} 100%);
+$gradient-brand-h: linear-gradient(90deg, #{$color-secondary} 0%, #{$color-primary} 100%);
+$gradient-primary: linear-gradient(135deg, #{$color-primary-dark} 0%, #{$color-primary} 100%);
+$gradient-sidebar: linear-gradient(180deg, #{$color-secondary} 0%, #{$color-secondary-mid} 100%);
+
+// Tipografía
+$font-family-base:
+  'Inter',
+  -apple-system,
+  BlinkMacSystemFont,
+  'Segoe UI',
+  Roboto,
+  sans-serif;
+$font-size-base: 16px;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// Espaciado
+$spacing-xs: 0.5rem; //  8px
+$spacing-sm: 1rem; // 16px
+$spacing-md: 1.5rem; // 24px
+$spacing-lg: 2rem; // 32px
+$spacing-xl: 3rem; // 48px
+$spacing-xxl: 4rem; // 64px
+
+// Layout
+$navbar-height: 70px;
+$footer-height: 300px;
+$container-max-width: 1200px;
+$border-radius: $radius-md;
+$box-shadow: $shadow-card;
+$box-shadow-hover: $shadow-card-hover;
+
+// Breakpoints
+$breakpoint-xs: 576px;
+$breakpoint-sm: 768px;
+$breakpoint-md: 992px;
+$breakpoint-lg: 1200px;
+$breakpoint-xl: 1400px;
+
+// Transiciones
+$transition-base: all 0.3s ease;
+$transition-fast: all 0.15s ease;

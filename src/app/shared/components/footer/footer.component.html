@@ -1,0 +1,74 @@
+<footer class="footer">
+  <div class="footer-container">
+    <div class="footer-content">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <div class="logo-circle">
+            <img
+              src="/assets/images/img_diamantes.png"
+              alt="Logo Clorinda Matto de Turner"
+              class="footer-logo-image"
+              loading="lazy"
+            />
+          </div>
+          <h5 class="footer-title">I.E. Emblemática Clorinda Matto de Turner</h5>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h6 class="section-title">Contacto</h6>
+        <ul class="footer-contact">
+          <li>
+            <i class="bi bi-geo-alt-fill"></i>
+            <span>{{ contactInfo.direccion }}</span>
+          </li>
+          <li>
+            <i class="bi bi-telephone-fill"></i>
+            <span>{{ contactInfo.telefono }}</span>
+          </li>
+          <li>
+            <i class="bi bi-envelope-fill"></i>
+            <span>{{ contactInfo.email }}</span>
+          </li>
+          <li>
+            <i class="bi bi-clock-fill"></i>
+            <span>{{ contactInfo.horario }}</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="footer-section">
+        <h6 class="section-title">Síguenos</h6>
+        <div class="social-links">
+          @for (social of socialLinks; track social.name) {
+            <a
+              [href]="social.url"
+              target="_blank"
+              rel="noopener"
+              [attr.aria-label]="social.name"
+              class="social-link"
+            >
+              @switch (social.icon) {
+                @case ('facebook') {
+                  <i class="bi bi-facebook"></i>
+                }
+                @case ('instagram') {
+                  <i class="bi bi-instagram"></i>
+                }
+                @case ('youtube') {
+                  <i class="bi bi-youtube"></i>
+                }
+              }
+            </a>
+          }
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p class="copyright">
+        © {{ currentYear }} Colegio Clorinda Matto de Turner. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</footer>

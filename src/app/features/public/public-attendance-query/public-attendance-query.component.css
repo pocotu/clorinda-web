@@ -1,0 +1,256 @@
+/* Public Attendance Query — usa tokens de styles.css */
+
+/* ── Hero de cabecera ── */
+.query-hero {
+  background-color: var(--color-secondary);
+  color: var(--color-text-inverse);
+  padding: 2rem 0 1.5rem;
+  text-align: center;
+}
+
+.query-hero h2 {
+  font-weight: 700;
+  font-size: 1.75rem;
+  margin-bottom: 0.4rem;
+  color: var(--color-text-inverse);
+}
+
+.query-hero p {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* ── Layout ── */
+.container {
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+}
+
+/* ── Cards ── */
+.card {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+}
+
+.card-title {
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+/* Header de card de formulario */
+.query-form-card .card-header {
+  background: var(--color-secondary);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  font-weight: 600;
+  padding: 0.85rem 1.25rem;
+  border-bottom: none;
+}
+
+/* ── Formulario ── */
+.form-label {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.form-control {
+  border-color: var(--color-border);
+  border-radius: var(--radius-sm);
+  min-height: 44px;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+}
+
+.form-control:focus {
+  border-color: var(--color-border-focus);
+  box-shadow: 0 0 0 3px rgba(74, 158, 224, 0.15);
+}
+
+.form-text {
+  font-size: 0.82rem;
+  color: var(--color-text-muted);
+}
+
+/* ── CAPTCHA ── */
+#recaptcha-container {
+  min-height: 78px;
+}
+
+/* ── Botón consultar — color sólido ── */
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(74, 158, 224, 0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+}
+
+/* ── Botón nueva consulta ── */
+.btn-outline-primary {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
+}
+
+/* ── Badges ── */
+.badge {
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* ── Tarjetas de resumen ── */
+.card.bg-success {
+  background-color: var(--color-success) !important;
+  border: none;
+}
+.card.bg-warning {
+  background-color: var(--color-warning) !important;
+  border: none;
+  color: #fff;
+}
+.card.bg-danger {
+  background-color: var(--color-danger) !important;
+  border: none;
+}
+.card.bg-info {
+  background-color: var(--color-secondary-light) !important;
+  border: none;
+}
+.card.bg-primary {
+  background-color: var(--color-secondary) !important;
+  border: none;
+}
+
+.card.bg-success .card-body,
+.card.bg-warning .card-body,
+.card.bg-danger .card-body,
+.card.bg-info .card-body,
+.card.bg-primary .card-body {
+  padding: 1rem;
+}
+
+/* ── Separador ── */
+hr {
+  border-color: var(--color-border);
+  opacity: 1;
+}
+
+/* ── Alerts ── */
+.alert {
+  border-radius: var(--radius-sm);
+}
+
+.alert-danger {
+  background-color: #fef2f2;
+  border-color: #fee2e2;
+  color: #991b1b;
+}
+
+.alert-info {
+  background-color: var(--color-primary-xlight);
+  border-color: var(--color-primary-light);
+  color: var(--color-secondary);
+}
+
+.alert-heading {
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+.alert ul {
+  padding-left: 1.25rem;
+}
+.alert li {
+  margin-bottom: 0.25rem;
+}
+
+/* ── Invalid feedback ── */
+.invalid-feedback {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  color: var(--color-danger);
+}
+
+/* ── Spinner ── */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* ── Shadow override ── */
+.shadow-sm {
+  box-shadow: var(--shadow-card) !important;
+}
+
+/* ── Responsive ── */
+@media (max-width: 576px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .card-body {
+    padding: 1rem;
+  }
+  .btn-lg {
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+  }
+  .fs-2 {
+    font-size: 1.75rem !important;
+  }
+  .fs-4 {
+    font-size: 1.25rem !important;
+  }
+  .query-hero {
+    padding: 1.5rem 1rem 1rem;
+  }
+  .query-hero h2 {
+    font-size: 1.4rem;
+  }
+}
+
+/* Animation */
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}

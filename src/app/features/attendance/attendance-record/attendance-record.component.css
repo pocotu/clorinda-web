@@ -1,0 +1,506 @@
+/* ================================================================
+   ATTENDANCE RECORD COMPONENT — EDITORIAL/MAGAZINE AESTHETIC
+   I.E. Clorinda Matto de Turner
+   ================================================================ */
+
+/* Container */
+.attendance-record-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fd 100%);
+  padding: 0;
+}
+
+/* ================================================================
+   HERO HEADER
+   ================================================================ */
+.attendance-hero {
+  position: relative;
+  background: var(--gradient-brand);
+  padding: 2rem 1.5rem 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 26, 51, 0.15);
+  margin: 0 -0.5rem;
+}
+
+.attendance-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(168, 212, 245, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: float 20s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  50% {
+    transform: translate(-30px, 30px) rotate(5deg);
+  }
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 0.375rem 1rem;
+  border-radius: 50px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.hero-title {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 800;
+  color: white;
+  line-height: 1.1;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.title-highlight {
+  display: inline-block;
+  background: linear-gradient(135deg, #a8d4f5 0%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.125rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+  margin: 0;
+}
+
+.hero-decoration {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fd 100%);
+  clip-path: polygon(0 50%, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ================================================================
+   MAIN EDITOR
+   ================================================================ */
+.attendance-record-editor {
+  max-width: 800px;
+  margin: -1.5rem auto 2rem;
+  padding: 0 0.5rem;
+}
+
+/* ================================================================
+   ALERTS — Modern & Contextual
+   ================================================================ */
+.alert-modern {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.alert-warning {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  border-left: 4px solid #ffc107;
+}
+
+.alert-danger {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left: 4px solid var(--color-danger);
+}
+
+.alert-success {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-left: 4px solid var(--color-success);
+}
+
+.alert-info {
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-left: 4px solid var(--color-info);
+}
+
+.alert-error {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-left: 4px solid var(--color-danger);
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 50%;
+  font-size: 1.25rem;
+}
+
+.alert-warning .alert-icon {
+  color: #ffc107;
+}
+.alert-danger .alert-icon,
+.alert-error .alert-icon {
+  color: var(--color-danger);
+}
+.alert-success .alert-icon {
+  color: var(--color-success);
+}
+.alert-info .alert-icon {
+  color: var(--color-info);
+}
+
+.alert-content {
+  flex: 1;
+}
+
+.alert-content strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.alert-warning .alert-content strong {
+  color: #856404;
+}
+.alert-danger .alert-content strong,
+.alert-error .alert-content strong {
+  color: #991b1b;
+}
+.alert-success .alert-content strong {
+  color: #065f46;
+}
+.alert-info .alert-content strong {
+  color: #075985;
+}
+
+.alert-content p {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+.alert-warning .alert-content p {
+  color: #856404;
+}
+.alert-danger .alert-content p,
+.alert-error .alert-content p {
+  color: #991b1b;
+}
+.alert-success .alert-content p {
+  color: #065f46;
+}
+.alert-info .alert-content p {
+  color: #075985;
+}
+
+.alert-close {
+  flex-shrink: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  font-size: 1rem;
+}
+
+.alert-warning .alert-close {
+  color: #856404;
+}
+.alert-danger .alert-close,
+.alert-error .alert-close {
+  color: #991b1b;
+}
+.alert-success .alert-close {
+  color: #065f46;
+}
+.alert-info .alert-close {
+  color: #075985;
+}
+
+.alert-close:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* ================================================================
+   FORM CARD
+   ================================================================ */
+.form-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 16px rgba(0, 26, 51, 0.08);
+  margin-bottom: 1.5rem;
+}
+
+/* ================================================================
+   FORM ELEMENTS
+   ================================================================ */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.5rem;
+}
+
+.form-label i {
+  color: var(--color-primary);
+  font-size: 1rem;
+}
+
+.required {
+  color: var(--color-danger);
+  font-weight: 700;
+}
+
+.label-hint {
+  font-weight: 400;
+  font-size: 0.75rem;
+  text-transform: none;
+  color: var(--color-text-muted);
+  letter-spacing: normal;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: var(--color-text-primary);
+  background: white;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-xlight);
+}
+
+.form-input.is-invalid {
+  border-color: var(--color-danger);
+}
+
+.form-input.is-invalid:focus {
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+}
+
+.form-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+textarea.form-input {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+select.form-input {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23475569' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.field-error {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.8125rem;
+  color: var(--color-danger);
+  font-weight: 500;
+}
+
+.field-hint {
+  display: block;
+  margin-top: 0.375rem;
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* ================================================================
+   FORM ACTIONS
+   ================================================================ */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--color-border);
+}
+
+.btn-primary-action,
+.btn-secondary-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-primary-action {
+  background: var(--gradient-primary);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-primary-action:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(74, 158, 224, 0.4);
+}
+
+.btn-primary-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-secondary-action {
+  background: white;
+  color: var(--color-text-secondary);
+  border: 2px solid var(--color-border);
+}
+
+.btn-secondary-action:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background: var(--color-primary-xlight);
+}
+
+.btn-secondary-action:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary-action i,
+.btn-secondary-action i {
+  font-size: 1rem;
+}
+
+/* Spinner */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+  border-width: 0.15em;
+}
+
+/* ================================================================
+   RESPONSIVE DESIGN
+   ================================================================ */
+@media (max-width: 768px) {
+  .attendance-hero {
+    padding: 1.5rem 1rem;
+  }
+
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+
+  .form-card {
+    padding: 1.5rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+  }
+
+  .btn-primary-action,
+  .btn-secondary-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .attendance-record-editor {
+    padding: 0 0.25rem;
+  }
+
+  .form-card {
+    padding: 1.25rem;
+    border-radius: 8px;
+  }
+
+  .alert-modern {
+    padding: 1rem;
+  }
+}
+
+/* ================================================================
+   ACCESSIBILITY
+   ================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: 2px;
+}

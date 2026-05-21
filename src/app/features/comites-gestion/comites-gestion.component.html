@@ -1,0 +1,124 @@
+<section class="comites-hero">
+  <div class="container">
+    <div class="hero-content">
+      <span class="hero-badge">Organización Institucional</span>
+      <h1 class="page-title">Comités de Gestión</h1>
+      <p class="page-subtitle">
+        Estructura organizativa dedicada a garantizar la excelencia educativa y el desarrollo
+        integral de nuestra comunidad
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="comites-section">
+  <div class="container">
+    <!-- Navegación de Tabs Rediseñada -->
+    <div class="tabs-navigation">
+      @for (comite of comites; track comite.id; let i = $index) {
+        <button
+          class="tab-btn"
+          [class.active]="comiteSeleccionado?.id === comite.id"
+          (click)="seleccionarComite(comite)"
+        >
+          <span class="tab-number">{{ i + 1 }}</span>
+          <span class="tab-label">{{ comite.nombre }}</span>
+          <span class="tab-indicator"></span>
+        </button>
+      }
+    </div>
+
+    <!-- Contenido del Comité Seleccionado -->
+    @if (comiteSeleccionado) {
+      <div class="comite-content">
+        <!-- Header Rediseñado -->
+        <div class="content-header">
+          <div class="header-text">
+            <h2 class="comite-title">{{ comiteSeleccionado.nombre }}</h2>
+            <p class="comite-description">{{ comiteSeleccionado.descripcion }}</p>
+          </div>
+        </div>
+
+        <!-- Contenido en Grid (Funciones e Integrantes) -->
+        <div class="content-grid">
+          <!-- Funciones -->
+          <div class="detail-section">
+            <div class="section-header">
+              <h3 class="section-title">Funciones Principales</h3>
+              <span class="section-count">{{ comiteSeleccionado.funciones.length }}</span>
+            </div>
+            <ul class="funciones-list">
+              @for (funcion of comiteSeleccionado.funciones; track funcion; let i = $index) {
+                <li>
+                  <span class="funcion-number">{{ i + 1 }}</span>
+                  <span class="funcion-text">{{ funcion }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+
+          <!-- Integrantes -->
+          <div class="detail-section">
+            <div class="section-header">
+              <h3 class="section-title">Integrantes</h3>
+              <span class="section-count">{{ comiteSeleccionado.integrantes.length }}</span>
+            </div>
+            <ul class="integrantes-list">
+              @for (integrante of comiteSeleccionado.integrantes; track integrante) {
+                <li>
+                  <div class="integrante-avatar">
+                    {{ integrante.charAt(0) }}
+                  </div>
+                  <span class="integrante-name">{{ integrante }}</span>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Información adicional Rediseñada -->
+    <div class="info-section">
+      <div class="info-card">
+        <div class="info-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <circle cx="12" cy="12" r="10" stroke-width="2" />
+            <path d="M12 8V12L15 15" stroke-width="2" stroke-linecap="round" />
+          </svg>
+        </div>
+        <h3>Reuniones Periódicas</h3>
+        <p>Cada comité se reúne mensualmente para evaluar avances y planificar acciones</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </div>
+        <h3>Trabajo Colaborativo</h3>
+        <p>Los comités coordinan entre sí para lograr objetivos institucionales comunes</p>
+      </div>
+
+      <div class="info-card">
+        <div class="info-icon">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <path
+              d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+        <h3>Transparencia</h3>
+        <p>Todas las decisiones y acciones son comunicadas a la comunidad educativa</p>
+      </div>
+    </div>
+  </div>
+</section>

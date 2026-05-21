@@ -1,0 +1,178 @@
+<section class="nosotros-hero">
+  <div class="hero-slider" role="region" aria-label="Galería de imágenes de la institución">
+    <div class="hero-slider-track">
+      @for (image of sliderImages; track image; let idx = $index) {
+        <img
+          class="hero-slide"
+          [src]="image"
+          [alt]="'Imagen institucional ' + (idx + 1)"
+          loading="lazy"
+        />
+      }
+
+      @for (image of sliderImages; track $index; let idx = $index) {
+        <img class="hero-slide" [src]="image" alt="" aria-hidden="true" loading="lazy" />
+      }
+    </div>
+    <div class="slider-overlay"></div>
+  </div>
+</section>
+
+<!-- Misión y Visión -->
+<section class="content-section">
+  <div class="container">
+    <div class="mission-vision">
+      <div class="mission-card">
+        <div class="card-header">
+          <div class="card-icon mission-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+              />
+            </svg>
+          </div>
+          <h2>Nuestra Misión</h2>
+        </div>
+        <p>{{ mision }}</p>
+      </div>
+
+      <div class="vision-card">
+        <div class="card-header">
+          <div class="card-icon vision-icon">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+              />
+            </svg>
+          </div>
+          <h2>Nuestra Visión</h2>
+        </div>
+        <p>{{ vision }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Principios Institucionales -->
+<section class="valores-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Principios Institucionales</h2>
+      <p class="section-subtitle">Valores que guían nuestro quehacer educativo</p>
+    </div>
+    <div class="valores-grid">
+      @for (principio of principios; track principio.nombre) {
+        <div class="valor-card">
+          <div class="principio-numero">{{ $index + 1 }}</div>
+          <h3>{{ principio.nombre }}</h3>
+          <p>{{ principio.descripcion }}</p>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Historia e Himno Integrados -->
+<section class="historia-himno-section">
+  <div class="container-full">
+    <div class="historia-himno-grid">
+      <!-- Historia -->
+      <div class="historia-block">
+        <div class="block-decoracion">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="#0a3a6b" opacity="0.1">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <h2 class="block-title">Nuestra Historia</h2>
+        <div class="historia-content">
+          <p class="historia-intro">
+            <strong>El Colegio Clorinda Matto de Turner</strong> es una institución educativa
+            emblemática del Cusco, con más de <strong>60 años</strong> formando a las mejores
+            generaciones de estudiantes de nuestra región.
+          </p>
+          <p>
+            Fundado en <strong>1966</strong> en honor a la ilustre escritora cusqueña Clorinda Matto
+            de Turner, nuestro colegio ha sido pionero en la educación de excelencia, combinando la
+            formación académica rigurosa con el cultivo de valores y el respeto por nuestra
+            identidad cultural.
+          </p>
+          <p>
+            A lo largo de estas seis décadas, hemos formado profesionales destacados que contribuyen
+            al desarrollo de nuestra región y del país, manteniendo siempre el compromiso con la
+            excelencia educativa y la formación integral.
+          </p>
+          <div class="historia-stats">
+            <div class="stat">
+              <div class="stat-number">60+</div>
+              <div class="stat-label">Años</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number"><i class="bi bi-star-fill" aria-hidden="true"></i></div>
+              <div class="stat-label">Emblemático</div>
+            </div>
+            <div class="stat">
+              <div class="stat-number"><i class="bi bi-trophy-fill" aria-hidden="true"></i></div>
+              <div class="stat-label">Excelencia</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Himno -->
+      <div class="himno-block">
+        <div class="himno-header">
+          <div class="himno-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+              <path
+                d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"
+              />
+            </svg>
+          </div>
+          <h2 class="himno-title">Himno al Colegio</h2>
+          <p class="himno-dedicatoria">Clorinda Matto de Turner</p>
+        </div>
+
+        <div class="himno-content">
+          <div class="himno-parte coro">
+            <div class="parte-label">CORO</div>
+            <p class="himno-verso">¡Adelante, clorindinas a la cumbre!</p>
+            <p class="himno-verso">sois la joven imagen del Cusco moderno,</p>
+            <p class="himno-verso">en tus filas resplandece el patriotismo</p>
+            <p class="himno-verso">que nos inspira entregarte el corazón.</p>
+          </div>
+
+          <div class="himno-parte">
+            <p class="himno-verso">Oh Colegio, tu meta es nuestro lema:</p>
+            <p class="himno-verso">los deportes, las artes y el saber,</p>
+            <p class="himno-verso">vas nutriendo las mentes día a día</p>
+            <p class="himno-verso">irradiando la fuerza de libertad.</p>
+          </div>
+
+          <div class="himno-parte estrofa">
+            <div class="parte-label">ESTROFA</div>
+            <p class="himno-verso">A la lid, juventud estudiosa,</p>
+            <p class="himno-verso">por la senda del bien y la verdad</p>
+            <p class="himno-verso">emprended el trabajo con celo,</p>
+            <p class="himno-verso">os reclama la patria luchar.</p>
+          </div>
+
+          <div class="himno-parte">
+            <p class="himno-verso">Vuestras almas izadas al viento</p>
+            <p class="himno-verso">serán rayos que guíen al fin</p>
+            <p class="himno-verso">a las futuras generaciones, y</p>
+            <p class="himno-verso">a los ecos de este himno triunfal.</p>
+          </div>
+
+          <div class="himno-autor">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="rgba(255,255,255,0.7)">
+              <path
+                d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"
+              />
+            </svg>
+            Letra y música: <strong>Pedro Casas Zapata</strong> (ACC)
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

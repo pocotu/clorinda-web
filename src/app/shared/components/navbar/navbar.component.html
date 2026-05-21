@@ -1,0 +1,104 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" [class.scrolled]="isScrolled">
+  <div class="container-fluid px-lg-4">
+    <!-- LEFT: Logo (1/3) -->
+    <div class="navbar-brand-container nav-desktop-left">
+      <a routerLink="/" class="navbar-brand d-flex align-items-center m-0">
+        <img
+          src="assets/images/logo.png"
+          alt="Logo Clorinda Matto de Turner"
+          class="logo-image me-3"
+          style="height: 55px"
+        />
+        <div class="logo-text-group d-none d-sm-block">
+          <span class="d-block text-muted small lh-1 mb-1">Colegio</span>
+          <span class="d-block fw-bold lh-sm" style="font-size: 0.95rem; color: #001a33"
+            >I.E. Emblemática Clorinda Matto de Turner</span
+          >
+        </div>
+      </a>
+    </div>
+
+    <!-- Mobile Toggle Button -->
+    <button
+      class="navbar-toggler border-0"
+      type="button"
+      (click)="toggleMenu()"
+      [class.active]="menuOpen"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- CENTER & RIGHT (2/3) -->
+    <div
+      class="collapse navbar-collapse nav-desktop-collapse"
+      [class.show]="menuOpen"
+      id="navbarNav"
+    >
+      <!-- CENTER: Navigation Menu (1/3) -->
+      <ul
+        class="navbar-nav justify-content-center align-items-center w-100 mb-2 mb-lg-0 gap-lg-3 nav-desktop-center"
+      >
+        <li class="nav-item">
+          <a
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="closeMenu()"
+            class="nav-link fw-semibold"
+            >Inicio</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            routerLink="/nosotros"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="nav-link fw-semibold"
+            >Nosotros</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            routerLink="/organizacion-institucional"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="nav-link fw-semibold text-center"
+            >Organización<br class="d-none d-lg-block" />Institucional</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            routerLink="/logros"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            class="nav-link fw-semibold"
+            >Logros</a
+          >
+        </li>
+      </ul>
+
+      <!-- RIGHT: Botones de Acceso (1/3) -->
+      <div
+        class="d-flex justify-content-center justify-content-lg-end align-items-center gap-2 mt-3 mt-lg-0 mb-3 mb-lg-0 nav-desktop-right"
+      >
+        <!-- Botón Consulta de Asistencia (Padres) -->
+        <a
+          routerLink="/consulta-asistencia"
+          class="btn btn-parents rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2"
+          (click)="closeMenu()"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+            />
+          </svg>
+          <span class="d-none d-md-inline">Consulta de Asistencia</span>
+          <span class="d-inline d-md-none">Asistencia</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

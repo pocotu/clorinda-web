@@ -1,0 +1,20 @@
+<div class="main-layout">
+  <!-- Navbar superior -->
+  <app-internal-navbar (toggleSidebar)="toggleSidebar()"></app-internal-navbar>
+
+  <div class="layout-container">
+    <!-- Sidebar colapsable -->
+    <app-sidebar [collapsed]="sidebarCollapsed()" (itemSelected)="collapseSidebar()"> </app-sidebar>
+
+    <!-- Contenido principal -->
+    <main class="main-content" [class.sidebar-collapsed]="sidebarCollapsed()">
+      <!-- Breadcrumbs -->
+      <app-breadcrumb></app-breadcrumb>
+
+      <!-- Contenido de la ruta actual -->
+      <div class="content-wrapper">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>

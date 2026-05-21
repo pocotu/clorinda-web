@@ -1,0 +1,481 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="mb-4">Registro de Asistencia</h2>
+
+      <!-- Error Alert -->
+      <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ error }}
+        <button type="button" class="btn-close" (click)="error = null"></button>
+      </div>
+
+      <!-- Save Status Indicator -->
+      <div
+        *ngIf="saveStatus.status !== 'idle'"
+        class="alert mb-3"
+        [ngClass]="{
+          'alert-info': saveStatus.status === 'saving',
+          'alert-success': saveStatus.status === 'saved',
+          'alert-danger': saveStatus.status === 'error',
+        }"
+        role="alert"
+      >
+        <span *ngIf="saveStatus.status === 'saving'">
+          <span class="spinner-border spinner-border-sm me-2"></span>
+          Guardando...
+        </span>
+        <span *ngIf="saveStatus.status === 'saved'">
+          <i class="bi bi-check-circle-fill me-2"></i>
+          {{ saveStatus.message }}
+        </span>
+        <span *ngIf="saveStatus.status === 'error'">
+          <i class="bi bi-x-circle-fill me-2"></i>
+          {{ saveStatus.message }}
+        </span>
+      </div>
+
+      <!-- Session Form (if no active session) -->
+      <div *ngIf="!currentSession" class="card mb-4">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0">Abrir Sesión de Asistencia</h5>
+        </div>
+        <div class="card-body">
+          <form [formGroup]="sessionForm" (ngSubmit)="openSession()">
+            <div class="row g-3">
+              <div class="col-md-3">
+                <label for="sessionDate" class="form-label">Fecha</label>
+                <input
+                  type="date"
+                  class="form-control"
+                  id="sessionDate"
+                  formControlName="sessionDate"
+                  [class.is-invalid]="
+                    sessionForm.get('sessionDate')?.invalid &&
+                    sessionForm.get('sessionDate')?.touched
+                  "
+                />
+                <div class="invalid-feedback">La fecha es requerida</div>
+              </div>
+
+              <div class="col-md-3">
+                <label for="shift" class="form-label">Turno</label>
+                <select
+                  class="form-select"
+                  id="shift"
+                  formControlName="shift"
+                  [class.is-invalid]="
+                    sessionForm.get('shift')?.invalid && sessionForm.get('shift')?.touched
+                  "
+                >
+                  <option *ngFor="let shift of shifts" [value]="shift">
+                    {{ getShiftLabel(shift) }}
+                  </option>
+                </select>
+                <div class="invalid-feedback">El turno es requerido</div>
+              </div>
+
+              <div class="col-md-3">
+                <label for="grade" class="form-label">Grado</label>
+                <select
+                  class="form-select"
+                  id="grade"
+                  formControlName="grade"
+                  [class.is-invalid]="
+                    sessionForm.get('grade')?.invalid && sessionForm.get('grade')?.touched
+                  "
+                >
+                  <option value="" disabled selected>Seleccione</option>
+                  <option *ngFor="let grade of grades" [value]="grade">{{ grade }}°</option>
+                </select>
+                <div class="invalid-feedback">El grado es requerido</div>
+              </div>
+
+              <div class="col-md-3">
+                <label for="section" class="form-label">Sección</label>
+                <select
+                  class="form-select"
+                  id="section"
+                  formControlName="section"
+                  [class.is-invalid]="
+                    sessionForm.get('section')?.invalid && sessionForm.get('section')?.touched
+                  "
+                >
+                  <option value="" disabled selected>Seleccione</option>
+                  <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
+                </select>
+                <div class="invalid-feedback">
+                  <span *ngIf="sessionForm.get('section')?.errors?.['required']">
+                    La sección es requerida
+                  </span>
+                  <span *ngIf="sessionForm.get('section')?.errors?.['pattern']">
+                    Solo letras mayúsculas, números y guiones
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3">
+              <button
+                type="submit"
+                class="btn btn-primary"
+                [disabled]="loading || sessionForm.invalid"
+              >
+                <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+                <i *ngIf="!loading" class="bi bi-door-open me-2"></i>
+                Abrir Sesión
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Active Session -->
+      <div *ngIf="currentSession" class="card mb-3 session-card">
+        <div
+          class="session-header"
+          [class.session-open]="currentSession.status === 'OPEN'"
+          [class.session-closed]="currentSession.status === 'CLOSED'"
+        >
+          <div class="session-info">
+            <div class="session-title">
+              <i class="bi bi-calendar-check me-2"></i>
+              <span class="session-grade"
+                >{{ currentSession.grade }}° {{ currentSession.section }}</span
+              >
+              <span class="session-divider">•</span>
+              <span class="session-shift">{{ getShiftLabel(currentSession.shift) }}</span>
+            </div>
+            <div class="session-meta">
+              <span class="session-date">
+                <i class="bi bi-calendar3 me-1"></i>
+                {{ currentSession.sessionDate | date: 'dd/MM/yyyy' : 'UTC' }}
+              </span>
+              <span class="session-count">
+                <i class="bi bi-people me-1"></i>
+                {{ studentsWithRecords.length }} estudiantes
+              </span>
+            </div>
+          </div>
+          <div class="session-actions">
+            <span
+              class="session-badge"
+              [class.badge-open]="currentSession.status === 'OPEN'"
+              [class.badge-closed]="currentSession.status === 'CLOSED'"
+            >
+              {{ currentSession.status === 'OPEN' ? 'ABIERTA' : 'CERRADA' }}
+            </span>
+            <button
+              *ngIf="!isSessionClosed()"
+              type="button"
+              class="btn-close-session"
+              (click)="openCloseModal()"
+              [disabled]="loading"
+              title="Cerrar sesión"
+            >
+              <i class="bi bi-x-circle"></i>
+              <span class="btn-text">Cerrar</span>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="isSessionClosed()" class="session-alert">
+          <i class="bi bi-info-circle me-2"></i>
+          Esta sesión está cerrada. No se pueden realizar cambios.
+        </div>
+      </div>
+
+      <!-- Students List - Mobile-First Card View -->
+      <div *ngIf="currentSession && studentsWithRecords.length > 0" class="card">
+        <div class="card-header bg-light">
+          <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <h5 class="mb-0">Lista de Estudiantes</h5>
+            <div *ngIf="!isSessionClosed()">
+              <button
+                type="button"
+                class="btn btn-sm btn-success"
+                (click)="markAllPresent()"
+                [disabled]="loading"
+                title="Marca a todos los estudiantes como presentes de una vez. Útil cuando la mayoría está presente."
+              >
+                <i class="bi bi-check-circle me-1"></i>
+                Marcar Todos Presentes
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-2 p-md-3">
+          <!-- Student Cards -->
+          <div class="student-cards-container">
+            <div
+              *ngFor="let studentWithRecord of studentsWithRecords; let i = index"
+              class="student-card"
+              [class.expanded]="expandedStudentId === studentWithRecord.student.id"
+              [class.has-status]="studentWithRecord.record?.status"
+              [class.disabled]="isSessionClosed()"
+            >
+              <!-- Student Header (Always Visible - Clickable) -->
+              <div
+                class="student-header"
+                (click)="toggleStudentExpansion(studentWithRecord.student.id)"
+                role="button"
+                tabindex="0"
+                [attr.aria-expanded]="expandedStudentId === studentWithRecord.student.id"
+              >
+                <div class="student-info">
+                  <span class="student-number">{{ i + 1 }}.</span>
+                  <span class="student-name">{{
+                    getStudentFullName(studentWithRecord.student)
+                  }}</span>
+                </div>
+                <div class="student-status-indicator">
+                  <span
+                    *ngIf="studentWithRecord.record?.status"
+                    class="badge"
+                    [class.bg-success]="studentWithRecord.record?.status === 'PRESENTE'"
+                    [class.bg-danger]="studentWithRecord.record?.status === 'FALTA'"
+                    [class.bg-warning]="studentWithRecord.record?.status === 'TARDANZA'"
+                    [class.text-dark]="studentWithRecord.record?.status === 'TARDANZA'"
+                    [class.bg-info]="studentWithRecord.record?.status === 'CON_PERMISO'"
+                    [class.bg-secondary]="studentWithRecord.record?.status === 'FERIADO'"
+                  >
+                    {{ getStatusLabel(studentWithRecord.record!.status) }}
+                  </span>
+                  <i
+                    class="bi ms-2"
+                    [class.bi-chevron-down]="expandedStudentId !== studentWithRecord.student.id"
+                    [class.bi-chevron-up]="expandedStudentId === studentWithRecord.student.id"
+                  ></i>
+                </div>
+              </div>
+
+              <!-- Student Details (Expandable) -->
+              <div
+                class="student-details"
+                *ngIf="expandedStudentId === studentWithRecord.student.id"
+                [@slideDown]
+              >
+                <!-- Status Buttons -->
+                <div class="status-buttons-grid">
+                  <button
+                    type="button"
+                    class="btn btn-status"
+                    [class.btn-success]="
+                      studentWithRecord.record?.status === AttendanceStatus.PRESENTE
+                    "
+                    [class.btn-outline-success]="
+                      studentWithRecord.record?.status !== AttendanceStatus.PRESENTE
+                    "
+                    [class.active]="studentWithRecord.record?.status === AttendanceStatus.PRESENTE"
+                    (click)="onStatusChange(studentWithRecord, AttendanceStatus.PRESENTE)"
+                    [disabled]="isSessionClosed()"
+                  >
+                    Presente
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-status"
+                    [class.btn-danger]="studentWithRecord.record?.status === AttendanceStatus.FALTA"
+                    [class.btn-outline-danger]="
+                      studentWithRecord.record?.status !== AttendanceStatus.FALTA
+                    "
+                    [class.active]="studentWithRecord.record?.status === AttendanceStatus.FALTA"
+                    (click)="onStatusChange(studentWithRecord, AttendanceStatus.FALTA)"
+                    [disabled]="isSessionClosed()"
+                  >
+                    Falta
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-status"
+                    [class.btn-warning]="
+                      studentWithRecord.record?.status === AttendanceStatus.TARDANZA
+                    "
+                    [class.btn-outline-warning]="
+                      studentWithRecord.record?.status !== AttendanceStatus.TARDANZA
+                    "
+                    [class.active]="studentWithRecord.record?.status === AttendanceStatus.TARDANZA"
+                    [class.text-dark]="
+                      studentWithRecord.record?.status === AttendanceStatus.TARDANZA
+                    "
+                    (click)="onStatusChange(studentWithRecord, AttendanceStatus.TARDANZA)"
+                    [disabled]="isSessionClosed()"
+                  >
+                    Tardanza
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-status"
+                    [class.btn-info]="
+                      studentWithRecord.record?.status === AttendanceStatus.CON_PERMISO
+                    "
+                    [class.btn-outline-info]="
+                      studentWithRecord.record?.status !== AttendanceStatus.CON_PERMISO
+                    "
+                    [class.active]="
+                      studentWithRecord.record?.status === AttendanceStatus.CON_PERMISO
+                    "
+                    (click)="onStatusChange(studentWithRecord, AttendanceStatus.CON_PERMISO)"
+                    [disabled]="isSessionClosed()"
+                  >
+                    Con Permiso
+                  </button>
+                </div>
+
+                <!-- Entry Time (for Presente/Tardanza) -->
+                <div
+                  *ngIf="
+                    studentWithRecord.record && shouldShowEntryTime(studentWithRecord.record.status)
+                  "
+                  class="mt-3"
+                >
+                  <label class="form-label small text-muted mb-1">Hora de Entrada</label>
+                  <input
+                    type="time"
+                    class="form-control"
+                    [value]="studentWithRecord.record.entryTime || ''"
+                    (change)="onEntryTimeChange(studentWithRecord, $any($event.target).value)"
+                    [disabled]="isSessionClosed()"
+                  />
+                </div>
+
+                <!-- Permission Note (for CON_PERMISO) -->
+                <div
+                  *ngIf="
+                    studentWithRecord.record &&
+                    shouldShowPermissionNote(studentWithRecord.record.status)
+                  "
+                  class="mt-3"
+                >
+                  <label class="form-label small text-muted mb-1">Nota de Permiso</label>
+                  <textarea
+                    class="form-control"
+                    rows="2"
+                    placeholder="Ingrese la nota de permiso..."
+                    [value]="studentWithRecord.record.permissionNote || ''"
+                    (input)="onPermissionNoteChange(studentWithRecord, $any($event.target).value)"
+                    [disabled]="isSessionClosed()"
+                    maxlength="500"
+                  ></textarea>
+                </div>
+
+                <!-- Observation (for all statuses) -->
+                <div
+                  *ngIf="
+                    studentWithRecord.record &&
+                    !shouldShowPermissionNote(studentWithRecord.record.status)
+                  "
+                  class="mt-3"
+                >
+                  <label class="form-label small text-muted mb-1">Observación (opcional)</label>
+                  <textarea
+                    class="form-control"
+                    rows="2"
+                    placeholder="Agregar observación..."
+                    [value]="studentWithRecord.record.observation || ''"
+                    (input)="onObservationChange(studentWithRecord, $any($event.target).value)"
+                    [disabled]="isSessionClosed()"
+                    maxlength="500"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="loading && !currentSession" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Cargando...</span>
+        </div>
+        <p class="mt-3 text-muted">Cargando datos...</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Close Session Modal -->
+<div
+  class="modal fade"
+  [class.show]="showCloseModal"
+  [style.display]="showCloseModal ? 'block' : 'none'"
+  tabindex="-1"
+  role="dialog"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <h5 class="modal-title">
+          <i class="bi bi-door-closed me-2"></i>
+          Cerrar Sesión de Asistencia
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          (click)="closeModal()"
+          [disabled]="loading"
+        ></button>
+      </div>
+      <form [formGroup]="closeSessionForm" (ngSubmit)="closeSession()">
+        <div class="modal-body">
+          <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle me-2"></i>
+            <strong>Atención:</strong> Una vez cerrada la sesión, no se podrán realizar cambios sin
+            justificación.
+          </div>
+
+          <div class="mb-3">
+            <label for="closeReason" class="form-label">
+              Motivo de cierre <span class="text-danger">*</span>
+            </label>
+            <textarea
+              class="form-control"
+              id="closeReason"
+              formControlName="reason"
+              rows="3"
+              placeholder="Ingrese el motivo del cierre de sesión..."
+              [class.is-invalid]="
+                closeSessionForm.get('reason')?.invalid && closeSessionForm.get('reason')?.touched
+              "
+              maxlength="500"
+            ></textarea>
+            <div class="invalid-feedback">
+              <span *ngIf="closeSessionForm.get('reason')?.errors?.['required']">
+                El motivo de cierre es requerido
+              </span>
+              <span *ngIf="closeSessionForm.get('reason')?.errors?.['maxlength']">
+                El motivo no debe exceder 500 caracteres
+              </span>
+            </div>
+            <small class="form-text text-muted">
+              {{ closeSessionForm.get('reason')?.value?.length || 0 }} / 500 caracteres
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModal()"
+            [disabled]="loading"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-danger"
+            [disabled]="loading || closeSessionForm.invalid"
+          >
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!loading" class="bi bi-door-closed me-2"></i>
+            Cerrar Sesión
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div *ngIf="showCloseModal" class="modal-backdrop fade show" (click)="closeModal()"></div>

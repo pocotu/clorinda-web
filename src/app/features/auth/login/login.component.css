@@ -1,0 +1,178 @@
+/* Login Component — compacto y sin espacio extra */
+
+.login-wrapper {
+  background-color: var(--color-bg-muted);
+  background-image:
+    radial-gradient(var(--color-primary-light) 1px, transparent 1px),
+    radial-gradient(var(--color-primary-light) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position:
+    0 0,
+    12px 12px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.min-vh-100-adjusted {
+  min-height: auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+/* Encabezado de marca — compacto */
+.login-brand h2 {
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.025em;
+  color: var(--color-secondary);
+  font-size: 1.6rem;
+  margin-bottom: 0.1rem;
+}
+
+.login-brand .login-subtitle {
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Tarjeta — sin altura forzada */
+.login-card {
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* Línea de acento institucional en el tope */
+.login-card::before {
+  content: '';
+  display: block;
+  height: 4px;
+  background: var(--gradient-brand-h);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+/* Labels */
+.tracking-wide {
+  letter-spacing: 0.05em;
+}
+
+.form-label {
+  color: var(--color-text-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Inputs */
+.input-group-merge .input-group-text {
+  border-color: var(--color-border);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  border-right: none;
+  transition:
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.input-group-merge .form-control {
+  border-color: var(--color-border);
+  padding: 0.65rem 1rem 0.65rem 0.25rem;
+  font-size: 0.95rem;
+  color: var(--color-text-primary);
+}
+
+.input-group-merge:focus-within .input-group-text,
+.input-group-merge:focus-within .form-control {
+  border-color: var(--color-border-focus);
+  box-shadow: none;
+}
+
+.input-group-merge:focus-within .input-group-text i {
+  color: var(--color-primary);
+}
+
+.input-group-merge .form-control:focus {
+  box-shadow: none;
+  background-color: var(--color-primary-xlight);
+}
+
+.input-group-merge .form-control.is-invalid {
+  border-color: var(--color-danger);
+  background-image: none;
+}
+
+.invalid-feedback {
+  font-size: 0.8rem;
+  color: var(--color-danger);
+}
+
+/* ── Botón — color sólido institucional (sin degradado) ── */
+.btn-login {
+  background-color: var(--color-primary);
+  border: none;
+  color: var(--color-text-inverse);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.7rem 1rem;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+  box-shadow: var(--shadow-primary);
+  border-radius: var(--radius-md);
+}
+
+.btn-login:hover:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(74, 158, 224, 0.4);
+}
+
+.btn-login:active:not(:disabled) {
+  background-color: var(--color-primary-dark);
+  transform: translateY(0);
+  box-shadow: var(--shadow-primary);
+}
+
+.btn-login:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Alert de error */
+.alert-danger {
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  color: #991b1b;
+  font-size: 0.9rem;
+  border-radius: var(--radius-md);
+}
+.alert-danger i {
+  color: var(--color-danger);
+}
+.alert-danger .btn-close {
+  padding: 1rem;
+}
+
+/* Link de soporte */
+a.text-decoration-none {
+  color: var(--color-primary);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+a.text-decoration-none:hover {
+  color: var(--color-secondary);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .login-card {
+    border-radius: var(--radius-md);
+  }
+  .login-wrapper {
+    padding: 1.25rem 0;
+  }
+}

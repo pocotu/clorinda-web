@@ -1,0 +1,363 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+          {{ isEditMode() ? 'Editar Post' : 'Crear Nuevo Post' }}
+        </h2>
+        <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
+          <i class="bi bi-x-lg"></i> Cancelar
+        </button>
+      </div>
+
+      <!-- Error Alert -->
+      @if (errorMessage()) {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          {{ errorMessage() }}
+          <button type="button" class="btn-close" (click)="errorMessage.set(null)"></button>
+        </div>
+      }
+
+      <!-- Loading Spinner -->
+      @if (isLoading()) {
+        <div class="text-center py-5">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Cargando...</span>
+          </div>
+        </div>
+      }
+
+      <!-- Form -->
+      @if (!isLoading()) {
+        <form [formGroup]="postForm" class="needs-validation" novalidate>
+          <div class="row">
+            <!-- Editor Column -->
+            <div class="col-lg-8">
+              <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                  <!-- Post Type -->
+                  <div class="mb-3">
+                    <label for="postType" class="form-label">
+                      Tipo de Post <span class="text-danger">*</span>
+                    </label>
+                    <select
+                      id="postType"
+                      class="form-select"
+                      formControlName="postType"
+                      [class.is-invalid]="isFieldInvalid('postType')"
+                    >
+                      @for (type of postTypes; track type) {
+                        <option [value]="type">{{ postTypeLabels[type] }}</option>
+                      }
+                    </select>
+                    @if (isFieldInvalid('postType')) {
+                      <div class="invalid-feedback d-block">
+                        {{ getFieldError('postType') }}
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Title -->
+                  <div class="mb-3">
+                    <label for="title" class="form-label">
+                      Título <span class="text-danger">*</span>
+                      <small class="text-muted">({{ getCharacterCount('title') }}/200)</small>
+                    </label>
+                    <input
+                      type="text"
+                      id="title"
+                      class="form-control"
+                      formControlName="title"
+                      placeholder="Ingrese el título del post"
+                      [class.is-invalid]="isFieldInvalid('title')"
+                    />
+                    @if (isFieldInvalid('title')) {
+                      <div class="invalid-feedback">
+                        {{ getFieldError('title') }}
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Summary -->
+                  <div class="mb-3">
+                    <label for="summary" class="form-label">
+                      Resumen
+                      <small class="text-muted">({{ getCharacterCount('summary') }}/500)</small>
+                    </label>
+                    <textarea
+                      id="summary"
+                      class="form-control"
+                      formControlName="summary"
+                      rows="3"
+                      placeholder="Ingrese un resumen breve (opcional)"
+                      [class.is-invalid]="isFieldInvalid('summary')"
+                    ></textarea>
+                    @if (isFieldInvalid('summary')) {
+                      <div class="invalid-feedback">
+                        {{ getFieldError('summary') }}
+                      </div>
+                    }
+                    <small class="form-text text-muted">
+                      El resumen se mostrará en las vistas previas de la lista de posts.
+                    </small>
+                  </div>
+
+                  <!-- Image URL -->
+                  <div class="mb-3">
+                    <label for="imageUrl" class="form-label">
+                      URL de la Imagen (opcional)
+                      <small class="text-muted">({{ getCharacterCount('imageUrl') }}/500)</small>
+                    </label>
+                    <input
+                      type="text"
+                      id="imageUrl"
+                      class="form-control"
+                      formControlName="imageUrl"
+                      placeholder="assets/images/logo.png"
+                      [class.is-invalid]="isFieldInvalid('imageUrl')"
+                    />
+                    @if (isFieldInvalid('imageUrl')) {
+                      <div class="invalid-feedback">
+                        {{ getFieldError('imageUrl') }}
+                      </div>
+                    }
+                    <small class="form-text text-muted">
+                      Ruta o URL de la imagen. Ejemplo: <code>assets/images/logo.png</code> o una
+                      URL externa.
+                    </small>
+                  </div>
+
+                  <!-- Content -->
+                  <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <label for="content" class="form-label mb-0">
+                        Contenido <span class="text-danger">*</span>
+                      </label>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        (click)="togglePreview()"
+                      >
+                        <i
+                          class="bi"
+                          [class.bi-eye]="!showPreview()"
+                          [class.bi-pencil]="showPreview()"
+                        ></i>
+                        {{ showPreview() ? 'Editar' : 'Vista Previa' }}
+                      </button>
+                    </div>
+
+                    @if (!showPreview()) {
+                      <!-- Editor Mode -->
+                      <div class="editor-toolbar mb-2">
+                        <div class="btn-group btn-group-sm" role="group">
+                          <button type="button" class="btn btn-outline-secondary" title="Negrita">
+                            <i class="bi bi-type-bold"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-secondary" title="Cursiva">
+                            <i class="bi bi-type-italic"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-secondary" title="Subrayado">
+                            <i class="bi bi-type-underline"></i>
+                          </button>
+                        </div>
+                        <div class="btn-group btn-group-sm ms-2" role="group">
+                          <button type="button" class="btn btn-outline-secondary" title="Lista">
+                            <i class="bi bi-list-ul"></i>
+                          </button>
+                          <button
+                            type="button"
+                            class="btn btn-outline-secondary"
+                            title="Lista numerada"
+                          >
+                            <i class="bi bi-list-ol"></i>
+                          </button>
+                        </div>
+                        <div class="btn-group btn-group-sm ms-2" role="group">
+                          <button type="button" class="btn btn-outline-secondary" title="Enlace">
+                            <i class="bi bi-link-45deg"></i>
+                          </button>
+                          <button type="button" class="btn btn-outline-secondary" title="Imagen">
+                            <i class="bi bi-image"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <textarea
+                        id="content"
+                        class="form-control font-monospace"
+                        formControlName="content"
+                        rows="15"
+                        placeholder="Ingrese el contenido del post (soporta Markdown)"
+                        [class.is-invalid]="isFieldInvalid('content')"
+                        (input)="onContentChange($event)"
+                      ></textarea>
+                      @if (isFieldInvalid('content')) {
+                        <div class="invalid-feedback">
+                          {{ getFieldError('content') }}
+                        </div>
+                      }
+                      <small class="form-text text-muted">
+                        Puede usar formato Markdown para dar estilo al contenido.
+                      </small>
+                    } @else {
+                      <!-- Preview Mode -->
+                      <div class="card">
+                        <div class="card-body preview-content">
+                          <div [innerHTML]="content?.value || 'Sin contenido'"></div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Sidebar Column -->
+            <div class="col-lg-4">
+              <!-- Publication Settings -->
+              <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0">
+                    <i class="bi bi-calendar-event me-2"></i>
+                    Configuración de Publicación
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <!-- Publish Date -->
+                  <div class="mb-3">
+                    <label for="publishAt" class="form-label"> Fecha de Publicación </label>
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        placeholder="dd/mm/yyyy"
+                        name="publishAt"
+                        formControlName="publishAt"
+                        ngbDatepicker
+                        #publishDatePicker="ngbDatepicker"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        (click)="publishDatePicker.toggle()"
+                        type="button"
+                      >
+                        <i class="bi bi-calendar3"></i>
+                      </button>
+                    </div>
+                    <small class="form-text text-muted">
+                      Si no se especifica, se publicará inmediatamente.
+                    </small>
+                  </div>
+
+                  <!-- Expire Date -->
+                  <div class="mb-3">
+                    <label for="expireAt" class="form-label"> Fecha de Expiración </label>
+                    <div class="input-group">
+                      <input
+                        class="form-control"
+                        placeholder="dd/mm/yyyy"
+                        name="expireAt"
+                        formControlName="expireAt"
+                        ngbDatepicker
+                        #expireDatePicker="ngbDatepicker"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        (click)="expireDatePicker.toggle()"
+                        type="button"
+                      >
+                        <i class="bi bi-calendar3"></i>
+                      </button>
+                    </div>
+                    <small class="form-text text-muted">
+                      El post se ocultará automáticamente después de esta fecha.
+                    </small>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                  <h6 class="mb-0">
+                    <i class="bi bi-gear me-2"></i>
+                    Acciones
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <div class="d-grid gap-2">
+                    <button
+                      type="button"
+                      class="btn btn-outline-secondary"
+                      (click)="saveDraft()"
+                      [disabled]="isLoading()"
+                    >
+                      <i class="bi bi-save me-2"></i>
+                      Guardar Borrador
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      (click)="publish()"
+                      [disabled]="isLoading()"
+                    >
+                      <i class="bi bi-send me-2"></i>
+                      Publicar
+                    </button>
+                  </div>
+
+                  <hr class="my-3" />
+
+                  <!-- Form Status -->
+                  <div class="small">
+                    <div class="d-flex justify-content-between mb-2">
+                      <span class="text-muted">Estado del formulario:</span>
+                      <span
+                        [class.text-success]="postForm.valid"
+                        [class.text-danger]="postForm.invalid"
+                      >
+                        {{ postForm.valid ? 'Válido' : 'Inválido' }}
+                      </span>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <span class="text-muted">Cambios sin guardar:</span>
+                      <span
+                        [class.text-warning]="postForm.dirty"
+                        [class.text-muted]="!postForm.dirty"
+                      >
+                        {{ postForm.dirty ? 'Sí' : 'No' }}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Help Card -->
+              <div class="card shadow-sm mt-4">
+                <div class="card-header bg-info text-white">
+                  <h6 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>
+                    Ayuda
+                  </h6>
+                </div>
+                <div class="card-body">
+                  <p class="small mb-2"><strong>Tipos de Post:</strong></p>
+                  <ul class="small mb-3">
+                    <li><strong>Comunicado:</strong> Anuncios oficiales</li>
+                    <li><strong>Aviso:</strong> Notificaciones importantes</li>
+                    <li><strong>Galería:</strong> Colecciones de imágenes</li>
+                    <li><strong>Destacado:</strong> Contenido prioritario</li>
+                  </ul>
+                  <p class="small mb-0">
+                    <i class="bi bi-lightbulb text-warning me-1"></i>
+                    Los campos marcados con <span class="text-danger">*</span> son obligatorios.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      }
+    </div>
+  </div>
+</div>

@@ -1,0 +1,125 @@
+<div class="login-wrapper">
+  <div class="container">
+    <div class="row justify-content-center align-items-center min-vh-100-adjusted">
+      <div class="col-12 col-md-8 col-lg-5 col-xl-4">
+        <!-- Brand / Logo Area -->
+        <div class="text-center mb-4 login-brand">
+          <h2 class="fw-bold text-dark mb-0">Bienvenido</h2>
+        </div>
+
+        <div class="card login-card border-0 shadow-sm">
+          <div class="card-body p-4 p-md-5">
+            <!-- Error Alert -->
+            @if (errorMessage()) {
+              <div
+                class="alert alert-danger alert-dismissible fade show d-flex align-items-center rounded-3 mb-4"
+                role="alert"
+              >
+                <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
+                <div>
+                  {{ errorMessage() }}
+                </div>
+                <button
+                  type="button"
+                  class="btn-close"
+                  (click)="errorMessage.set(null)"
+                  aria-label="Close"
+                ></button>
+              </div>
+            }
+
+            <!-- Login Form -->
+            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+              <!-- Username Field -->
+              <div class="form-group mb-4">
+                <label
+                  for="username"
+                  class="form-label fw-medium text-secondary small text-uppercase tracking-wide"
+                  >Usuario</label
+                >
+                <div class="input-group input-group-merge">
+                  <span class="input-group-text bg-transparent border-end-0 text-muted">
+                    <i class="bi bi-person"></i>
+                  </span>
+                  <input
+                    type="text"
+                    id="username"
+                    formControlName="username"
+                    class="form-control border-start-0 ps-0"
+                    [class.is-invalid]="hasError('username')"
+                    placeholder="Ingresa tu usuario"
+                    autocomplete="username"
+                  />
+                </div>
+                @if (hasError('username')) {
+                  <div class="invalid-feedback d-block mt-1">
+                    {{ getFieldError('username') }}
+                  </div>
+                }
+              </div>
+
+              <!-- Password Field -->
+              <div class="form-group mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <label
+                    for="password"
+                    class="form-label fw-medium text-secondary small text-uppercase tracking-wide mb-0"
+                    >Contraseña</label
+                  >
+                </div>
+                <div class="input-group input-group-merge">
+                  <span class="input-group-text bg-transparent border-end-0 text-muted">
+                    <i class="bi bi-lock"></i>
+                  </span>
+                  <input
+                    type="password"
+                    id="password"
+                    formControlName="password"
+                    class="form-control border-start-0 ps-0"
+                    [class.is-invalid]="hasError('password')"
+                    placeholder="••••••••"
+                    autocomplete="current-password"
+                  />
+                </div>
+                @if (hasError('password')) {
+                  <div class="invalid-feedback d-block mt-1">
+                    {{ getFieldError('password') }}
+                  </div>
+                }
+              </div>
+
+              <!-- Submit Button -->
+              <div class="d-grid mt-5">
+                <button
+                  type="submit"
+                  class="btn btn-primary btn-login py-3 rounded-3 fw-medium"
+                  [disabled]="isLoading()"
+                >
+                  @if (isLoading()) {
+                    <span
+                      class="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span>Accediendo...</span>
+                  } @else {
+                    <span>Ingresar al Sistema</span>
+                    <i class="bi bi-arrow-right ms-2"></i>
+                  }
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Help Text -->
+        <div class="text-center mt-4">
+          <p class="small text-muted mb-0">
+            ¿Problemas para acceder?
+            <a href="#" class="text-decoration-none fw-medium">Contacta a soporte</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

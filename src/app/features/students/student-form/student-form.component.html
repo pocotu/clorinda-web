@@ -1,0 +1,272 @@
+<div class="student-form-container">
+  <div class="card">
+    <div class="card-header">
+      <h3 class="mb-0">{{ isEditMode ? 'Editar Estudiante' : 'Nuevo Estudiante' }}</h3>
+    </div>
+    <div class="card-body">
+      <!-- Server Error Alert -->
+      <div *ngIf="serverError" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        {{ serverError }}
+        <button
+          type="button"
+          class="btn-close"
+          aria-label="Close"
+          (click)="closeServerError()"
+        ></button>
+      </div>
+
+      <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+        <!-- Código Estudiante -->
+        <div class="mb-3">
+          <label for="studentCode" class="form-label">
+            Código Estudiante <span class="text-danger">*</span>
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            id="studentCode"
+            formControlName="studentCode"
+            placeholder="YYYYNNNN (ej: 20240001)"
+            [class.is-invalid]="hasError('studentCode')"
+            [class.is-valid]="
+              studentForm.get('studentCode')?.valid &&
+              studentForm.get('studentCode')?.touched &&
+              !isValidating('studentCode')
+            "
+          />
+          <div *ngIf="isValidating('studentCode')" class="form-text">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Verificando disponibilidad...
+          </div>
+          <div *ngIf="hasError('studentCode')" class="invalid-feedback">
+            {{ getErrorMessage('studentCode') }}
+          </div>
+          <div class="form-text" *ngIf="!hasError('studentCode') && !isEditMode">
+            Formato: año de ingreso + correlativo de 4 dígitos (ej: 20240001)
+          </div>
+          <div class="form-text" *ngIf="isEditMode">
+            El código de estudiante no puede ser modificado
+          </div>
+        </div>
+
+        <!-- DNI -->
+        <div class="mb-3">
+          <label for="dni" class="form-label">DNI (opcional)</label>
+          <input
+            type="text"
+            class="form-control"
+            id="dni"
+            formControlName="dni"
+            placeholder="8 dígitos"
+            maxlength="8"
+            [class.is-invalid]="hasError('dni')"
+            [class.is-valid]="
+              studentForm.get('dni')?.valid &&
+              studentForm.get('dni')?.touched &&
+              studentForm.get('dni')?.value &&
+              !isValidating('dni')
+            "
+          />
+          <div *ngIf="isValidating('dni')" class="form-text">
+            <span class="spinner-border spinner-border-sm me-2"></span>
+            Verificando disponibilidad...
+          </div>
+          <div *ngIf="hasError('dni')" class="invalid-feedback">
+            {{ getErrorMessage('dni') }}
+          </div>
+        </div>
+
+        <!-- Nombres -->
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label for="firstName" class="form-label">
+              Primer Nombre <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="firstName"
+              formControlName="firstName"
+              [class.is-invalid]="hasError('firstName')"
+            />
+            <div *ngIf="hasError('firstName')" class="invalid-feedback">
+              {{ getErrorMessage('firstName') }}
+            </div>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label for="middleName" class="form-label">Segundo Nombre (opcional)</label>
+            <input type="text" class="form-control" id="middleName" formControlName="middleName" />
+          </div>
+        </div>
+
+        <!-- Apellidos -->
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="lastName" class="form-label">
+              Apellido Paterno <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="lastName"
+              formControlName="lastName"
+              [class.is-invalid]="hasError('lastName')"
+            />
+            <div *ngIf="hasError('lastName')" class="invalid-feedback">
+              {{ getErrorMessage('lastName') }}
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="secondLastName" class="form-label">
+              Apellido Materno <span class="text-danger">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="secondLastName"
+              formControlName="secondLastName"
+              [class.is-invalid]="hasError('secondLastName')"
+            />
+            <div *ngIf="hasError('secondLastName')" class="invalid-feedback">
+              {{ getErrorMessage('secondLastName') }}
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="thirdLastName" class="form-label">Tercer Apellido (opcional)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="thirdLastName"
+              formControlName="thirdLastName"
+            />
+          </div>
+        </div>
+
+        <!-- Grado, Sección, Año Escolar -->
+        <div class="row">
+          <div class="col-md-4 mb-3">
+            <label for="grade" class="form-label"> Grado <span class="text-danger">*</span> </label>
+            <select
+              class="form-select"
+              id="grade"
+              formControlName="grade"
+              [class.is-invalid]="hasError('grade')"
+            >
+              <option [ngValue]="null" disabled>Seleccione un grado</option>
+              <option *ngFor="let grade of grades" [ngValue]="grade">{{ grade }}°</option>
+            </select>
+            <div *ngIf="hasError('grade')" class="invalid-feedback">
+              {{ getErrorMessage('grade') }}
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="section" class="form-label">
+              Sección <span class="text-danger">*</span>
+            </label>
+            <select
+              class="form-select"
+              id="section"
+              formControlName="section"
+              [class.is-invalid]="hasError('section')"
+            >
+              <option value="" disabled>Seleccione una sección</option>
+              <option *ngFor="let section of sections" [value]="section">{{ section }}</option>
+            </select>
+            <div *ngIf="hasError('section')" class="invalid-feedback">
+              {{ getErrorMessage('section') }}
+            </div>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="schoolYear" class="form-label">
+              Año Escolar <span class="text-danger">*</span>
+            </label>
+            <select
+              class="form-select"
+              id="schoolYear"
+              formControlName="schoolYear"
+              [class.is-invalid]="hasError('schoolYear')"
+            >
+              <option [ngValue]="null" disabled>Seleccione un año</option>
+              <option *ngFor="let year of schoolYears" [ngValue]="year">{{ year }}</option>
+            </select>
+            <div *ngIf="hasError('schoolYear')" class="invalid-feedback">
+              {{ getErrorMessage('schoolYear') }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="d-flex justify-content-end gap-2 mt-4">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="onCancel()"
+            [disabled]="isSubmitting"
+          >
+            Cancelar
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="studentForm.invalid || isSubmitting || studentForm.pending"
+          >
+            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+            {{ isSubmitting ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Confirmación -->
+<div
+  class="modal fade"
+  [class.show]="showConfirmation"
+  [style.display]="showConfirmation ? 'block' : 'none'"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="confirmModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirmar Cambios</h5>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="cancelConfirmation()"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Está seguro que desea guardar los cambios?</p>
+        <div *ngIf="!isEditMode" class="alert alert-info mb-0">
+          <i class="bi bi-info-circle me-2"></i>
+          Se creará un nuevo estudiante con el código
+          <strong>{{ studentForm.get('studentCode')?.value }}</strong>
+        </div>
+        <div *ngIf="isEditMode" class="alert alert-info mb-0">
+          <i class="bi bi-info-circle me-2"></i>
+          Se actualizarán los datos del estudiante
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelConfirmation()">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="confirmSave()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Backdrop -->
+<div *ngIf="showConfirmation" class="modal-backdrop fade show" (click)="cancelConfirmation()"></div>

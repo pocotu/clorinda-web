@@ -1,0 +1,39 @@
+<section class="logros-hero">
+  <div class="container">
+    <h1 class="page-title">Mejoras de Aprendizaje</h1>
+    <p class="page-subtitle">Reconocimientos y éxitos que nos enorgullecen</p>
+  </div>
+</section>
+
+<section class="estadisticas-section">
+  <div class="container">
+    <div class="estadisticas-grid">
+      @for (stat of estadisticas; track stat.numero) {
+        <div class="stat-card">
+          <div class="stat-numero">{{ stat.numero }}</div>
+          <div class="stat-texto">{{ stat.texto }}</div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<section class="logros-section">
+  <div class="container">
+    <h2 class="section-title">Logros Destacados</h2>
+    <div class="logros-grid">
+      @for (logro of logros; track logro.titulo) {
+        <article class="logro-card">
+          <div class="logro-anio">{{ logro.anio }}</div>
+          <div class="logro-content">
+            <span class="logro-categoria" [class]="logro.categoria">
+              {{ logro.categoria }}
+            </span>
+            <h3 class="logro-titulo">{{ logro.titulo }}</h3>
+            <p class="logro-descripcion">{{ logro.descripcion }}</p>
+          </div>
+        </article>
+      }
+    </div>
+  </div>
+</section>
