@@ -1,299 +1,199 @@
-<div class="hero-slider">
-  <!-- Contenedor de slides -->
-  <div class="slides-container" [style.transform]="'translateX(-' + currentSlide * 50 + '%)'">
-    <!-- SLIDE 1: Contenido Principal -->
-    <section class="slide slide-principal">
-      <!-- Fondo con imagen -->
-      <div class="slide-background">
-        <img
-          src="assets/images/portada.jpg"
-          alt="I.E. Emblém
+<div class="hero-root" [class.slide2-active]="currentSlide === 1" #heroRoot>
 
-ática Clorinda Matto de Turner"
-          class="background-image"
-        />
-        <div class="background-overlay"></div>
-      </div>
-
-      <div class="slide-content">
-        <div class="hero-container">
-          <!-- Contenido de texto -->
-          <div class="hero-content">
-            <div class="badge-institucional">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
-              </svg>
-              Institución Emblemática del Cusco
-            </div>
-            <h1 class="hero-title">{{ collegeTitle }}</h1>
-            <p class="hero-subtitle">{{ collegeSubtitle }}</p>
-
-            <!-- Lema del Colegio -->
-            <div class="lema-institucional">
-              <div class="lema-content">
-                <span class="lema-texto">Estudio, disciplina y deporte:</span>
-                <span class="lema-identidad">una clorindina, una señorita.</span>
-              </div>
-            </div>
-
-            <div class="hero-actions">
-              <button class="hero-cta primary">
-                Acceso para Padres
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path
-                    d="M7.5 15L12.5 10L7.5 5"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-              </button>
-              <button class="hero-cta secondary">
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                  <path
-                    d="M10 2C5.58 2 2 5.58 2 10C2 14.42 5.58 18 10 18C14.42 18 18 14.42 18 10C18 5.58 14.42 2 10 2ZM8 14V6L14 10L8 14Z"
-                  />
-                </svg>
-                Ver Presentación
-              </button>
-            </div>
-          </div>
-
-          <!-- Contenido multimedia: Video principal + Imagen flotante -->
-          <div class="hero-media">
-            <!-- Video principal en tamaño completo -->
-            <div class="media-video">
-              <div class="video-wrapper">
-                <video
-                  id="video-hero"
-                  class="video-player"
-                  autoplay
-                  muted
-                  loop
-                  playsinline
-                  poster="assets/images/portada.jpg"
-                >
-                  <source src="assets/videos/hero-video.webm" type="video/webm" />
-                  <source src="assets/videos/hero-video.mp4" type="video/mp4" />
-                  Tu navegador no soporta el video.
-                </video>
-
-                <!-- Control de audio -->
-                <div class="control-audio-hero">
-                  <button
-                    class="btn-audio"
-                    (click)="toggleAudioHero()"
-                    [class.active]="audioActivadoHero"
-                    [title]="audioActivadoHero ? 'Desactivar Audio' : 'Activar Audio'"
-                  >
-                    @if (audioActivadoHero) {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-                        <path
-                          d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
-                        />
-                      </svg>
-                    } @else {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-                        <path
-                          d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"
-                        />
-                      </svg>
-                    }
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Imagen flotante al costado -->
-            <div class="media-image">
-              <video
-                id="video-vertical"
-                class="image-secondary"
-                autoplay
-                muted
-                loop
-                playsinline
-                poster="assets/images/portada.jpg"
-              >
-                <source src="assets/videos/hero-video.webm" type="video/webm" />
-                <source src="assets/videos/hero-video.mp4" type="video/mp4" />
-                Tu navegador no soporta el video.
-              </video>
-            </div>
-          </div>
-        </div>
-
-        <!-- Efectos decorativos -->
-        <div class="hero-background">
-          <div class="circle circle-1"></div>
-          <div class="circle circle-2"></div>
-          <div class="wave"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SLIDE 2: Bodas de Diamante -->
-    <section class="slide slide-diamante">
-      <div class="bodas-diamante-content">
-        <div class="bodas-container">
-          <!-- Encabezado principal centrado -->
-          <div class="bodas-header">
-            <div class="celebracion-badge">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                />
-              </svg>
-              Celebración Especial - 60 Años
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
-                />
-              </svg>
-            </div>
-
-            <h2 class="bodas-title">
-              <span class="diamante-icon">💎</span>
-              Bodas de Diamante
-              <span class="diamante-icon">💎</span>
-            </h2>
-
-            <div class="bodas-years">
-              <span class="year-inicio">1966</span>
-              <div class="separador-years">
-                <div class="linea-dorada"></div>
-                <span class="numero-grande">60</span>
-                <div class="linea-dorada"></div>
-              </div>
-              <span class="year-actual">2026</span>
-            </div>
-          </div>
-
-          <!-- Contenido principal: Grid reorganizado -->
-          <div class="bodas-main-content">
-            <!-- Video de Clorinda Matto -->
-            <div class="bodas-video-wrapper">
-              <p class="bodas-subtitle">Mensaje especial de Clorinda Matto de Turner</p>
-
-              <div class="video-diamantes-container">
-                <video
-                  id="video-diamantes"
-                  class="video-diamantes"
-                  loop
-                  playsinline
-                  muted
-                  autoplay
-                  poster="assets/images/img_diamantes.png"
-                  src="assets/videos/video_diamantes.mp4"
-                >
-                  Tu navegador no soporta el video.
-                </video>
-
-                <div class="control-audio">
-                  <button
-                    class="btn-audio"
-                    (click)="toggleAudioDiamante()"
-                    [class.active]="audioActivadoDiamante"
-                    [title]="audioActivadoDiamante ? 'Desactivar Audio' : 'Activar Audio'"
-                  >
-                    @if (audioActivadoDiamante) {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-                        <path
-                          d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
-                        />
-                      </svg>
-                    } @else {
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="white">
-                        <path
-                          d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"
-                        />
-                      </svg>
-                    }
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Sección central: Información principal -->
-            <div class="bodas-info-center">
-              <div class="logo-aniversario">
-                <img src="assets/images/img_diamantes.png" alt="Logo 60 Años" class="logo-img" />
-                <!--<div class="brillo-animado"></div> -->
-              </div>
-
-              <h3 class="description-title">Años de Excelencia Educativa</h3>
-              <p class="description-text">
-                Seis décadas formando líderes, construyendo valores y dejando una huella imborrable
-                en la educación cusqueña.
-              </p>
-            </div>
-
-            <!-- Sección derecha: Logros y datos -->
-            <div class="bodas-achievements">
-              <div class="achievement-highlight">
-                <div class="achievement-icon"><i class="bi bi-book"></i></div>
-                <div class="achievement-content">
-                  <h4>Tradición</h4>
-                  <p>Seis décadas de historia institucional</p>
-                </div>
-              </div>
-
-              <div class="achievement-highlight">
-                <div class="achievement-icon"><i class="bi bi-trophy"></i></div>
-                <div class="achievement-content">
-                  <h4>Excelencia</h4>
-                  <p>Compromiso con la formación integral</p>
-                </div>
-              </div>
-
-              <div class="achievement-highlight">
-                <div class="achievement-icon"><i class="bi bi-gem"></i></div>
-                <div class="achievement-content">
-                  <h4>Legado</h4>
-                  <p>Huella imborrable en educación cusqueña</p>
-                </div>
-              </div>
-
-              <div class="achievement-stats-footer">
-                <div class="stat-item">
-                  <div class="stat-number">60</div>
-                  <div class="stat-label">Años de Legado</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="particulas-doradas"></div>
-        </div>
-      </div>
-    </section>
+  <!-- ── Fondo con imagen + parallax ── -->
+  <div class="hero-bg-wrap" #heroBg>
+    <img
+      src="assets/images/portada.jpg"
+      alt="I.E. Emblemática Clorinda Matto de Turner"
+      class="hero-bg-img"
+      #bgImg
+    />
+    <!-- Capa de oscurecimiento dramático -->
+    <div class="hero-bg-vignette"></div>
+    <div class="hero-bg-overlay"></div>
   </div>
 
-  <!-- Controles de navegación -->
-  <button class="slider-control prev" (click)="prevSlide()" aria-label="Slide anterior">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M15 18L9 12L15 6"
-        stroke="white"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
+  <!-- ── Partículas decorativas ── -->
+  <div class="hero-particles" aria-hidden="true">
+    <div class="particle p1"></div>
+    <div class="particle p2"></div>
+    <div class="particle p3"></div>
+    <div class="particle p4"></div>
+    <div class="particle p5"></div>
+    <div class="particle p6"></div>
+  </div>
+
+  <!-- ── Pill nav interna (liquid-glass) ── -->
+  <nav class="hero-pill-nav liquid-glass" aria-label="Secciones institucionales">
+    <a href="#nosotros" class="pill-link">INSTITUCIÓN</a>
+    <a href="#logros" class="pill-link">LOGROS</a>
+    <a href="#comunicados" class="pill-link">COMUNICADOS</a>
+    <a [routerLink]="['/consulta-asistencia']" class="pill-link">ASISTENCIA</a>
+  </nav>
+
+  <!-- ── Contenido central ── -->
+  <div class="hero-center" [class.visible]="contentVisible">
+
+    <!-- Anillo de honor -->
+    <div class="honor-ring">
+      <svg class="ring-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z"/>
+      </svg>
+      <span>Institución Emblemática del Cusco</span>
+      <svg class="ring-icon" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z"/>
+      </svg>
+    </div>
+
+    <!-- Titular principal — dos líneas -->
+    <h1 class="hero-headline">
+      <span class="hl-line hl-bright">Formando líderes,</span>
+      <span class="hl-line hl-dim">construyendo el Cusco.</span>
+    </h1>
+
+    <!-- Lema institucional -->
+    <p class="hero-lema">
+      <em>Estudio, disciplina y deporte:</em>
+      <span class="lema-identidad"> una clorindina, una señorita.</span>
+    </p>
+  </div>
+
+  <!-- ── Bloque inferior ── -->
+  <div class="hero-bottom" [class.visible]="contentVisible">
+
+    <!-- Descripción -->
+    <p class="hero-desc">
+      Seis décadas formando generaciones con excelencia académica y valores.
+      <span class="desc-dim"> Un espacio digital seguro para toda nuestra comunidad educativa.</span>
+    </p>
+
+    <!-- Acciones -->
+    <div class="hero-actions">
+      <button class="cta-primary" (click)="goToAsistencia()">
+        Consultar asistencia
+        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M7.5 15L12.5 10L7.5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+    </div>
+
+  </div>
+
+  <div class="hero-diamante-overlay" [class.active]="currentSlide === 1">
+
+    <!-- Layout split: portrait atmospheric | editorial content -->
+    <div class="dia-split">
+
+      <!-- Left: Clorinda portrait — blends into the dark bg via CSS mask -->
+      <div class="dia-portrait-col">
+        <img
+          src="assets/images/clorinda.png"
+          alt="Clorinda Matto de Turner"
+          class="dia-portrait-img"
+        />
+        <p class="dia-portrait-caption">Clorinda Matto de Turner · 1852–1909</p>
+      </div>
+
+      <!-- Right: all text floats freely, no containers -->
+      <div class="dia-content-col">
+
+        <!-- Ambient watermark number -->
+        <div class="dia-watermark" aria-hidden="true">60</div>
+
+        <!-- Eyebrow -->
+        <p class="dia-eyebrow">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+          Celebración Especial · 60 Años
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+          </svg>
+        </p>
+
+        <!-- Logo floating, small -->
+        <img src="assets/images/img_diamantes.png" alt="" class="dia-logo" aria-hidden="true" />
+
+        <!-- Main title -->
+        <h2 class="dia-title">
+          <span class="dia-gem">💎</span>
+          Bodas de Diamante
+          <span class="dia-gem">💎</span>
+        </h2>
+
+        <!-- Timeline years -->
+        <div class="dia-timeline">
+          <span class="dia-year">1966</span>
+          <div class="dia-tl-line"></div>
+          <span class="dia-tl-num">60</span>
+          <div class="dia-tl-line"></div>
+          <span class="dia-year">2026</span>
+        </div>
+
+        <!-- Description -->
+        <p class="dia-desc">
+          Seis décadas formando líderes, construyendo valores y dejando una
+          huella imborrable en la educación cusqueña.
+        </p>
+
+        <!-- Achievement strip — horizontal, zero boxes -->
+        <div class="dia-ach-strip">
+          <div class="dia-ach">
+            <i class="bi bi-book dia-ach-icon"></i>
+            <div class="dia-ach-text">
+              <strong>Tradición</strong>
+              <span>Seis décadas de historia</span>
+            </div>
+          </div>
+          <div class="dia-ach-sep"></div>
+          <div class="dia-ach">
+            <i class="bi bi-trophy dia-ach-icon"></i>
+            <div class="dia-ach-text">
+              <strong>Excelencia</strong>
+              <span>Formación integral</span>
+            </div>
+          </div>
+          <div class="dia-ach-sep"></div>
+          <div class="dia-ach">
+            <i class="bi bi-gem dia-ach-icon"></i>
+            <div class="dia-ach-text">
+              <strong>Legado</strong>
+              <span>Educación cusqueña</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ── Controles de navegación ── -->
+  <button class="slide-btn slide-prev" (click)="prevSlide()" aria-label="Slide anterior">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <path d="M15 18L9 12L15 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+  <button class="slide-btn slide-next" (click)="nextSlide()" aria-label="Siguiente slide">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <path d="M9 18L15 12L9 6" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </button>
 
-  <button class="slider-control next" (click)="nextSlide()" aria-label="Siguiente slide">
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path
-        d="M9 18L15 12L9 6"
-        stroke="white"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-  </button>
+  <!-- Indicadores dot -->
+  <div class="slide-dots" role="tablist">
+    <button
+      *ngFor="let i of [0, 1]"
+      class="dot"
+      [class.active]="currentSlide === i"
+      (click)="goToSlide(i)"
+      [attr.aria-label]="'Slide ' + (i + 1)"
+      role="tab"
+    ></button>
+  </div>
 
-  <!-- Indicadores ocultos según solicitud -->
+
+
 </div>

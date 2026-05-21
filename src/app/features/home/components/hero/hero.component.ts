@@ -2,126 +2,124 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   NgZone,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
+  ViewChild,
   inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css',
 })
-export class HeroComponent implements OnDestroy, OnInit, AfterViewInit {
+export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   private platformId = inject(PLATFORM_ID);
-  private cdr = inject(ChangeDetectorRef);
-  private ngZone = inject(NgZone);
+  private cdr        = inject(ChangeDetectorRef);
+  private ngZone     = inject(NgZone);
 
-  readonly collegeTitle = 'I.E. Emblemática Clorinda Matto de Turner';
-  readonly collegeSubtitle =
-    '"Liderando la formación académica y los valores para las futuras generaciones del Cusco. Un espacio digital seguro para nuestra comunidad educativa."';
+  @ViewChild('bgImg') bgImgRef!: ElementRef<HTMLImageElement>;
 
-  // Control del slider
-  currentSlide = 0;
-  totalSlides = 2;
-  autoplayInterval: ReturnType<typeof setInterval> | null = null;
+  // UI state
+  contentVisible = false;
+  currentSlide   = 0;
+  readonly totalSlides = 2;
 
-  // Control de audio para video hero principal
-  audioActivadoHero = false;
-  videoHeroElement: HTMLVideoElement | null = null;
+  private autoplayInterval: ReturnType<typeof setInterval> | null = null;
+  private animFrameId: number | null = null;
+  private mouseMoveHandler: ((e: MouseEvent) => void) | null = null;
 
-  // Control de audio para video de Bodas de Diamante
-  audioActivadoDiamante = false;
-  videoDiamanteElement: HTMLVideoElement | null = null;
+  // Parallax state
+  private targetX = 0;
+  private targetY = 0;
+  private currentX = 0;
+  private currentY = 0;
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.startAutoplay();
     }
   }
 
-  ngAfterViewInit() {
-    if (!isPlatformBrowser(this.platformId)) {
-      return;
-    }
+  ngAfterViewInit(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
 
-    this.videoHeroElement = document.querySelector('#video-hero') as HTMLVideoElement;
-    this.videoDiamanteElement = document.querySelector('#video-diamantes') as HTMLVideoElement;
+    // Fade-in on mount
+    requestAnimationFrame(() => {
+      this.contentVisible = true;
+      this.cdr.detectChanges();
+    });
 
-    if (this.videoHeroElement) {
-      this.videoHeroElement.muted = true;
-    }
-    if (this.videoDiamanteElement) {
-      this.videoDiamanteElement.muted = true;
-    }
-
-    this.audioActivadoHero = false;
-    this.audioActivadoDiamante = false;
+    // Mouse parallax — runs outside Angular to avoid unnecessary change detection
+    this.ngZone.runOutsideAngular(() => {
+      this.mouseMoveHandler = (e: MouseEvent) => {
+        const cx = window.innerWidth  / 2;
+        const cy = window.innerHeight / 2;
+        this.targetX = ((e.clientX - cx) / cx) * 18;
+        this.targetY = ((e.clientY - cy) / cy) * 10;
+      };
+      document.addEventListener('mousemove', this.mouseMoveHandler);
+      this.runParallaxLoop();
+    });
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.stopAutoplay();
+    if (this.animFrameId !== null) cancelAnimationFrame(this.animFrameId);
+    if (this.mouseMoveHandler)    document.removeEventListener('mousemove', this.mouseMoveHandler);
   }
 
-  startAutoplay() {
+  // ── Parallax ─────────────────────────────────────────────────────
+  private runParallaxLoop(): void {
+    const tick = () => {
+      this.currentX += (this.targetX - this.currentX) * 0.06;
+      this.currentY += (this.targetY - this.currentY) * 0.06;
+      const img = this.bgImgRef?.nativeElement;
+      if (img) {
+        img.style.transform = `translate(${this.currentX}px, ${this.currentY}px) scale(1.08)`;
+      }
+      this.animFrameId = requestAnimationFrame(tick);
+    };
+    this.animFrameId = requestAnimationFrame(tick);
+  }
+
+  // ── Slider ────────────────────────────────────────────────────────
+  private startAutoplay(): void {
     this.stopAutoplay();
     this.ngZone.runOutsideAngular(() => {
       this.autoplayInterval = setInterval(() => {
         this.ngZone.run(() => {
-          this.autoNext();
+          this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+          this.cdr.detectChanges();
         });
-      }, 5000); // Cambia cada 5 segundos
+      }, 7000);
     });
   }
 
-  stopAutoplay() {
-    if (this.autoplayInterval) {
-      clearInterval(this.autoplayInterval);
-    }
+  private stopAutoplay(): void {
+    if (this.autoplayInterval) clearInterval(this.autoplayInterval);
   }
 
-  // Método privado para el autoplay automático (sin reiniciar el timer)
-  private autoNext() {
-    // Solo hay 2 slides: índices 0 y 1
-    if (this.currentSlide >= this.totalSlides - 1) {
-      this.currentSlide = 0; // Volver al inicio
-    } else {
-      this.currentSlide++;
-    }
-
-    this.cdr.detectChanges();
-  }
-
-  // Métodos públicos para navegación manual (reinician el timer)
-  nextSlide() {
-    // Al hacer click en "siguiente": del último al primero
-    if (this.currentSlide >= this.totalSlides - 1) {
-      this.currentSlide = 0;
-    } else {
-      this.currentSlide++;
-    }
+  nextSlide(): void {
+    this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
     this.stopAutoplay();
     this.startAutoplay();
   }
 
-  prevSlide() {
-    // Al hacer click en "anterior": del primero al último
-    if (this.currentSlide <= 0) {
-      this.currentSlide = this.totalSlides - 1;
-    } else {
-      this.currentSlide--;
-    }
+  prevSlide(): void {
+    this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
     this.stopAutoplay();
     this.startAutoplay();
   }
 
-  goToSlide(index: number) {
-    // Validar que el índice esté dentro del rango válido [0, 1]
+  goToSlide(index: number): void {
     if (index >= 0 && index < this.totalSlides) {
       this.currentSlide = index;
       this.stopAutoplay();
@@ -129,17 +127,7 @@ export class HeroComponent implements OnDestroy, OnInit, AfterViewInit {
     }
   }
 
-  toggleAudioHero() {
-    if (this.videoHeroElement) {
-      this.audioActivadoHero = !this.audioActivadoHero;
-      this.videoHeroElement.muted = !this.audioActivadoHero;
-    }
-  }
-
-  toggleAudioDiamante() {
-    if (this.videoDiamanteElement) {
-      this.audioActivadoDiamante = !this.audioActivadoDiamante;
-      this.videoDiamanteElement.muted = !this.audioActivadoDiamante;
-    }
+  goToAsistencia(): void {
+    window.location.href = '/consulta-asistencia';
   }
 }
