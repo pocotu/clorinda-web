@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && node -e \"const fs = require('fs'); if (fs.existsSync('dist/clorinda-frontend/browser/index.csr.html')) { fs.copyFileSync('dist/clorinda-frontend/browser/index.csr.html', 'dist/clorinda-frontend/browser/index.html'); }\"",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "eslint .",
