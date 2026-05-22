@@ -344,6 +344,25 @@ export class AttendanceHistoryComponent implements OnInit {
   }
 
   /**
+   * Get student full name
+   */
+  getStudentFullName(student: any): string {
+    if (!student) {
+      return '-';
+    }
+    const names = [
+      student.firstName,
+      student.middleName,
+      student.lastName,
+      student.secondLastName,
+      student.thirdLastName,
+    ]
+      .filter(Boolean)
+      .join(' ');
+    return names;
+  }
+
+  /**
    * Format shift for display
    */
   formatShift(shift: string): string {

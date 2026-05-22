@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal, NgbDatepickerModule, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { switchMap } from 'rxjs';
 import { LandingService } from '../../../core/services/landing.service';
 import { LandingPost, PostType, PostStatus } from '../../../core/models/landing.model';
 
@@ -172,21 +173,33 @@ export class LandingPostEditorComponent implements OnInit {
     this.isLoading.set(true);
     const postData = this.preparePostData('PUBLISHED');
 
-    const publishOperation = this.isEditMode()
-      ? this.landingService.publishPost(this.postId()!)
-      : this.landingService.createPost(postData);
-
-    publishOperation.subscribe({
-      next: (_post) => {
-        this.isLoading.set(false);
-        this.router.navigate(['/admin/landing']);
-      },
-      error: (error) => {
-        this.isLoading.set(false);
-        this.errorMessage.set('Error al publicar el post');
-        console.error('Error publishing post:', error);
-      },
-    });
+    if (this.isEditMode()) {
+      this.landingService.publishPost(this.postId()!).subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.router.navigate(['/admin/landing']);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          this.errorMessage.set('Error al publicar el post');
+          console.error('Error publishing post:', error);
+        },
+      });
+    } else {
+      this.landingService.createPost(postData).pipe(
+        switchMap((createdPost) => this.landingService.publishPost(createdPost.id, postData.publishAt))
+      ).subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.router.navigate(['/admin/landing']);
+        },
+        error: (error) => {
+          this.isLoading.set(false);
+          this.errorMessage.set('Error al publicar el post');
+          console.error('Error publishing post:', error);
+        },
+      });
+    }
   }
 
   private preparePostData(status: PostStatus): Partial<LandingPost> {

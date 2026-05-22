@@ -82,7 +82,7 @@ export class AttendanceService {
   }): Observable<{ data: AttendanceRecord }> {
     const { recordId, ...payload } = data;
     return this.http.post<{ data: AttendanceRecord }>(
-      `${this.apiUrl}/sessions/records/${recordId}`,
+      `${this.apiUrl}/records`,
       payload
     );
   }

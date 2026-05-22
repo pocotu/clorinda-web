@@ -316,7 +316,8 @@
             <table class="table table-bordered table-striped">
               <thead class="table-light">
                 <tr>
-                  <th>Estudiante ID</th>
+                  <th>Código</th>
+                  <th>Estudiante</th>
                   <th>Estado</th>
                   <th>Hora Entrada</th>
                   <th>Permiso / Observación</th>
@@ -324,7 +325,8 @@
               </thead>
               <tbody>
                 <tr *ngFor="let record of selectedSessionRecords()">
-                  <td>{{ record.studentId }}</td>
+                  <td>{{ record.student?.studentCode || '-' }}</td>
+                  <td>{{ record.student ? getStudentFullName(record.student) : '-' }}</td>
                   <td>
                     <span [class]="getStatusBadgeClass(record.status)">
                       {{ formatStatus(record.status) }}
