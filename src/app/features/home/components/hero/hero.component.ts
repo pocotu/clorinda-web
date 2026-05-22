@@ -11,12 +11,11 @@ import {
   inject,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule],
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.css',
 })
@@ -25,7 +24,11 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
   private ngZone = inject(NgZone);
 
+  /** Imagen de fondo — usada por el parallax de mouse */
   @ViewChild('bgImg') bgImgRef!: ElementRef<HTMLImageElement>;
+
+  /** Video institucional en el Slide 1 */
+  @ViewChild('bgVideo') bgVideoRef!: ElementRef<HTMLVideoElement>;
 
   // UI state
   contentVisible = false;
@@ -58,6 +61,9 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
       this.contentVisible = true;
       this.cdr.detectChanges();
     });
+
+    // Iniciar video institucional en Slide 1
+    this.syncVideo();
 
     // Mouse parallax — runs outside Angular to avoid unnecessary change detection
     this.ngZone.runOutsideAngular(() => {
@@ -96,6 +102,25 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
     this.animFrameId = requestAnimationFrame(tick);
   }
 
+  // ── Video: sincroniza play/pause con el slide activo ─────────────
+  /*
+    SOLID — Single Responsibility: este método gestiona únicamente
+    el estado del video según el slide activo. No mezcla lógica de slider.
+  */
+  private syncVideo(): void {
+    const video = this.bgVideoRef?.nativeElement;
+    if (!video) {
+      return;
+    }
+    if (this.currentSlide === 0) {
+      video.play().catch(() => {
+        /* Silenciar error de autoplay — el navegador puede bloquear play() */
+      });
+    } else {
+      video.pause();
+    }
+  }
+
   // ── Slider ────────────────────────────────────────────────────────
   private startAutoplay(): void {
     this.stopAutoplay();
@@ -103,6 +128,7 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
       this.autoplayInterval = setInterval(() => {
         this.ngZone.run(() => {
           this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+          this.syncVideo();
           this.cdr.detectChanges();
         });
       }, 7000);
@@ -117,12 +143,14 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
 
   nextSlide(): void {
     this.currentSlide = (this.currentSlide + 1) % this.totalSlides;
+    this.syncVideo();
     this.stopAutoplay();
     this.startAutoplay();
   }
 
   prevSlide(): void {
     this.currentSlide = (this.currentSlide - 1 + this.totalSlides) % this.totalSlides;
+    this.syncVideo();
     this.stopAutoplay();
     this.startAutoplay();
   }
@@ -130,6 +158,7 @@ export class HeroComponent implements OnInit, AfterViewInit, OnDestroy {
   goToSlide(index: number): void {
     if (index >= 0 && index < this.totalSlides) {
       this.currentSlide = index;
+      this.syncVideo();
       this.stopAutoplay();
       this.startAutoplay();
     }

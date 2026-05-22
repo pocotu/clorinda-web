@@ -1,13 +1,12 @@
 <div class="hero-root" [class.slide2-active]="currentSlide === 1" #heroRoot>
-  <!-- ── Fondo con imagen + parallax ── -->
-  <div class="hero-bg-wrap" #heroBg>
+  <!-- ── Fondo estático con parallax — sin cambios ── -->
+  <div class="hero-bg-wrap">
     <img
+      #bgImg
       src="assets/images/portada.jpg"
       alt="I.E. Emblemática Clorinda Matto de Turner"
       class="hero-bg-img"
-      #bgImg
     />
-    <!-- Capa de oscurecimiento dramático -->
     <div class="hero-bg-vignette"></div>
     <div class="hero-bg-overlay"></div>
   </div>
@@ -22,83 +21,92 @@
     <div class="particle p6"></div>
   </div>
 
-  <!-- ── Pill nav interna (liquid-glass) ── -->
-  <nav class="hero-pill-nav liquid-glass" aria-label="Secciones institucionales">
-    <a href="#nosotros" class="pill-link">INSTITUCIÓN</a>
-    <a href="#logros" class="pill-link">LOGROS</a>
-    <a href="#comunicados" class="pill-link">COMUNICADOS</a>
-    <a [routerLink]="['/consulta-asistencia']" class="pill-link">ASISTENCIA</a>
-  </nav>
-
-  <!-- ── Contenido central ── -->
-  <div class="hero-center" [class.visible]="contentVisible">
-    <!-- Anillo de honor -->
-    <div class="honor-ring">
-      <svg
-        class="ring-icon"
-        width="16"
-        height="16"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
-      </svg>
-      <span>Institución Emblemática del Cusco</span>
-      <svg
-        class="ring-icon"
-        width="16"
-        height="16"
-        viewBox="0 0 20 20"
-        fill="currentColor"
-        aria-hidden="true"
-      >
-        <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
-      </svg>
-    </div>
-
-    <!-- Titular principal — dos líneas -->
-    <h1 class="hero-headline">
-      <span class="hl-line hl-bright">Formando líderes,</span>
-      <span class="hl-line hl-dim">construyendo el Cusco.</span>
-    </h1>
-
-    <!-- Lema institucional -->
-    <p class="hero-lema">
-      <em>Estudio, disciplina y deporte:</em>
-      <span class="lema-identidad"> una clorindina, una señorita.</span>
-    </p>
-  </div>
-
-  <!-- ── Bloque inferior ── -->
-  <div class="hero-bottom" [class.visible]="contentVisible">
-    <!-- Descripción -->
-    <p class="hero-desc">
-      Seis décadas formando generaciones con excelencia académica y valores.
-      <span class="desc-dim">
-        Un espacio digital seguro para toda nuestra comunidad educativa.</span
-      >
-    </p>
-
-    <!-- Acciones -->
-    <div class="hero-actions">
-      <button class="cta-primary" (click)="goToAsistencia()">
-        Consultar asistencia
-        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <path
-            d="M7.5 15L12.5 10L7.5 5"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          />
+  <!-- ── SLIDE 1: Layout split — texto izquierda | video atmosférico derecha ── -->
+  <div class="hero-s1-split" [class.visible]="contentVisible">
+    <!-- Columna texto: honor-ring + titular + lema + descripción + CTA -->
+    <div class="hero-s1-text">
+      <!-- Anillo de honor -->
+      <div class="honor-ring">
+        <svg
+          class="ring-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
         </svg>
-      </button>
+        <span>Institución Emblemática del Cusco</span>
+        <svg
+          class="ring-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path d="M10 2L12.5 7L18 8L14 12L15 18L10 15L5 18L6 12L2 8L7.5 7L10 2Z" />
+        </svg>
+      </div>
+
+      <!-- Titular principal -->
+      <h1 class="hero-headline">
+        <span class="hl-line hl-bright">Formando líderes,</span>
+        <span class="hl-line hl-dim">construyendo el Cusco.</span>
+      </h1>
+
+      <!-- Lema institucional -->
+      <p class="hero-lema">
+        <em>Estudio, disciplina y deporte:</em>
+        <span class="lema-identidad"> una clorindina, una señorita.</span>
+      </p>
+
+      <!-- Descripción -->
+      <p class="hero-desc">
+        Seis décadas formando generaciones con excelencia académica y valores.
+        <span class="desc-dim">
+          Un espacio digital seguro para toda nuestra comunidad educativa.</span
+        >
+      </p>
+
+      <!-- CTA -->
+      <div class="hero-actions">
+        <button class="cta-primary" (click)="goToAsistencia()">
+          Consultar asistencia
+          <svg width="18" height="18" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path
+              d="M7.5 15L12.5 10L7.5 5"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Columna video: video institucional con bordes desenfocados orgánicos -->
+    <div class="hero-s1-video-col" aria-hidden="true">
+      <div class="hero-s1-video-wrap">
+        <video
+          #bgVideo
+          class="hero-s1-video"
+          src="assets/videos/hero-video.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+        ></video>
+      </div>
     </div>
   </div>
 
+  <!-- ── SLIDE 2: Bodas de Diamante — overlay (sin cambios) ── -->
   <div class="hero-diamante-overlay" [class.active]="currentSlide === 1">
-    <!-- Layout split: portrait atmospheric | editorial content -->
+    <!-- Layout split: portrait atmospheric | editorial content | logo atmospheric -->
     <div class="dia-split">
       <!-- Left: Clorinda portrait — blends into the dark bg via CSS mask -->
       <div class="dia-portrait-col">
@@ -110,11 +118,8 @@
         <p class="dia-portrait-caption">Clorinda Matto de Turner · 1852–1909</p>
       </div>
 
-      <!-- Right: all text floats freely, no containers -->
+      <!-- Center: all text floats freely, no containers -->
       <div class="dia-content-col">
-        <!-- Ambient watermark number -->
-        <div class="dia-watermark" aria-hidden="true">60</div>
-
         <!-- Eyebrow -->
         <p class="dia-eyebrow">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -129,9 +134,6 @@
             />
           </svg>
         </p>
-
-        <!-- Logo floating, small -->
-        <img src="assets/images/img_diamantes.png" alt="" class="dia-logo" aria-hidden="true" />
 
         <!-- Main title -->
         <h2 class="dia-title">
@@ -181,6 +183,15 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- Right: Logo circular — mirrors Clorinda's portrait on the right -->
+      <div class="dia-logo-col">
+        <img
+          src="assets/images/img_diamantes.png"
+          alt="Escudo Clorinda Matto de Turner"
+          class="dia-logo-img"
+        />
       </div>
     </div>
   </div>
