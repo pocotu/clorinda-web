@@ -80,11 +80,8 @@ export class AttendanceService {
     permissionNote?: string;
     observation?: string;
   }): Observable<{ data: AttendanceRecord }> {
-    const { recordId, ...payload } = data;
-    return this.http.post<{ data: AttendanceRecord }>(
-      `${this.apiUrl}/records`,
-      payload
-    );
+    const { recordId: _recordId, ...payload } = data;
+    return this.http.post<{ data: AttendanceRecord }>(`${this.apiUrl}/records`, payload);
   }
 
   /**

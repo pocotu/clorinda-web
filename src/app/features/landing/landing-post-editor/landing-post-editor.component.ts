@@ -186,19 +186,24 @@ export class LandingPostEditorComponent implements OnInit {
         },
       });
     } else {
-      this.landingService.createPost(postData).pipe(
-        switchMap((createdPost) => this.landingService.publishPost(createdPost.id, postData.publishAt))
-      ).subscribe({
-        next: () => {
-          this.isLoading.set(false);
-          this.router.navigate(['/admin/landing']);
-        },
-        error: (error) => {
-          this.isLoading.set(false);
-          this.errorMessage.set('Error al publicar el post');
-          console.error('Error publishing post:', error);
-        },
-      });
+      this.landingService
+        .createPost(postData)
+        .pipe(
+          switchMap((createdPost) =>
+            this.landingService.publishPost(createdPost.id, postData.publishAt)
+          )
+        )
+        .subscribe({
+          next: () => {
+            this.isLoading.set(false);
+            this.router.navigate(['/admin/landing']);
+          },
+          error: (error) => {
+            this.isLoading.set(false);
+            this.errorMessage.set('Error al publicar el post');
+            console.error('Error publishing post:', error);
+          },
+        });
     }
   }
 
