@@ -43,7 +43,7 @@ export class SidebarComponent {
       label: 'Asistencia',
       icon: 'bi-clipboard-check',
       route: '/asistencia/sesion',
-      roles: ['AUXILIAR', 'ADMIN'],
+      roles: ['AUXILIAR', 'DIRECCION'],
     },
     {
       label: 'Historial',

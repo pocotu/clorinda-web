@@ -80,7 +80,7 @@ export const routes: Routes = [
               import('./features/attendance/attendance-session/attendance-session.component').then(
                 (m) => m.AttendanceSessionComponent
               ),
-            data: { roles: ['AUXILIAR', 'ADMIN'] },
+            data: { roles: ['AUXILIAR', 'DIRECCION'] },
           },
           {
             path: 'historial',
