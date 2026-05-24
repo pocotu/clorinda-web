@@ -56,6 +56,9 @@ export interface CreateStudentDto {
   lastName: string;
   secondLastName: string;
   thirdLastName?: string;
+  grade?: number;
+  section?: string;
+  schoolYear?: number;
 }
 
 export interface UpdateStudentDto {
@@ -66,6 +69,9 @@ export interface UpdateStudentDto {
   secondLastName?: string;
   thirdLastName?: string;
   isActive?: boolean;
+  grade?: number;
+  section?: string;
+  schoolYear?: number;
 }
 
 export interface PaginationMeta {

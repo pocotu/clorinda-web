@@ -9,6 +9,7 @@ import {
   EnrollmentStatus,
   PaginationMeta,
 } from '../../../core/models/student.model';
+import { StudentFormComponent } from '../student-form/student-form.component';
 
 /**
  * StudentListComponent
@@ -18,7 +19,7 @@ import {
 @Component({
   selector: 'app-student-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, StudentFormComponent],
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.css'],
 })

@@ -30,6 +30,8 @@ export class StudentFormComponent implements OnInit {
   private readonly studentsService = inject(StudentsService);
 
   @Input() student?: Student; // Si existe, modo edición
+  @Input() isModal = false;
+  @Input() showHeader = true;
   @Output() studentSaved = new EventEmitter<Student>();
   @Output() cancelled = new EventEmitter<void>();
 
@@ -284,6 +286,9 @@ export class StudentFormComponent implements OnInit {
         lastName: formValue.lastName,
         secondLastName: formValue.secondLastName,
         thirdLastName: formValue.thirdLastName || undefined,
+        grade: formValue.grade ? Number(formValue.grade) : undefined,
+        section: formValue.section || undefined,
+        schoolYear: formValue.schoolYear ? Number(formValue.schoolYear) : undefined,
       };
 
       this.studentsService.updateStudent(this.student.id, updateDto).subscribe({
@@ -306,6 +311,9 @@ export class StudentFormComponent implements OnInit {
         lastName: formValue.lastName,
         secondLastName: formValue.secondLastName,
         thirdLastName: formValue.thirdLastName || undefined,
+        grade: formValue.grade ? Number(formValue.grade) : undefined,
+        section: formValue.section || undefined,
+        schoolYear: formValue.schoolYear ? Number(formValue.schoolYear) : undefined,
       };
 
       this.studentsService.createStudent(createDto).subscribe({

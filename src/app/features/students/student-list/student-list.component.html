@@ -270,8 +270,7 @@
   </div>
 </div>
 
-<!-- Create Student Modal Placeholder -->
-<!-- TODO: Implement in task 17.3.2 -->
+<!-- Create Student Modal -->
 <div
   *ngIf="showCreateModal"
   class="modal fade show d-block"
@@ -285,19 +284,18 @@
         <button type="button" class="btn-close" (click)="closeCreateModal()"></button>
       </div>
       <div class="modal-body">
-        <p class="text-muted">
-          El formulario de creación de estudiantes se implementará en la tarea 17.3.2
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeCreateModal()">Cerrar</button>
+        <app-student-form
+          [isModal]="true"
+          [showHeader]="false"
+          (studentSaved)="onStudentCreated()"
+          (cancelled)="closeCreateModal()"
+        ></app-student-form>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Edit Student Modal Placeholder -->
-<!-- TODO: Implement in task 17.3.2 -->
+<!-- Edit Student Modal -->
 <div
   *ngIf="showEditModal"
   class="modal fade show d-block"
@@ -311,15 +309,13 @@
         <button type="button" class="btn-close" (click)="closeEditModal()"></button>
       </div>
       <div class="modal-body">
-        <p class="text-muted">
-          El formulario de edición de estudiantes se implementará en la tarea 17.3.2
-        </p>
-        <p *ngIf="selectedStudent">
-          <strong>Estudiante seleccionado:</strong> {{ getStudentFullName(selectedStudent) }}
-        </p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cerrar</button>
+        <app-student-form
+          [isModal]="true"
+          [showHeader]="false"
+          [student]="selectedStudent!"
+          (studentSaved)="onStudentUpdated()"
+          (cancelled)="closeEditModal()"
+        ></app-student-form>
       </div>
     </div>
   </div>

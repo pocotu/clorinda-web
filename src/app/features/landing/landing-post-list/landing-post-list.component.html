@@ -130,7 +130,6 @@
               <th>Tipo</th>
               <th>Título</th>
               <th>Estado</th>
-              <th>Creado Por</th>
               <th>Fecha Publicación</th>
               <th>Fecha Expiración</th>
               <th class="text-center">Acciones</th>
@@ -138,7 +137,7 @@
           </thead>
           <tbody>
             <tr *ngIf="posts().length === 0">
-              <td colspan="7" class="text-center py-5 text-muted">
+              <td colspan="6" class="text-center py-5 text-muted">
                 <i class="bi bi-inbox fs-1 d-block mb-3"></i>
                 No se encontraron posts con los filtros seleccionados
               </td>
@@ -164,11 +163,6 @@
                 <span [ngClass]="getStatusBadgeClass(post.status)">
                   {{ getStatusLabel(post.status) }}
                 </span>
-              </td>
-
-              <!-- Creado Por -->
-              <td>
-                <small>{{ post.createdBy }}</small>
               </td>
 
               <!-- Fecha Publicación -->

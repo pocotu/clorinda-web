@@ -1,9 +1,9 @@
-<div class="student-form-container">
-  <div class="card">
-    <div class="card-header">
+<div [class.student-form-container]="!isModal">
+  <div [class.card]="!isModal">
+    <div *ngIf="showHeader && !isModal" class="card-header">
       <h3 class="mb-0">{{ isEditMode ? 'Editar Estudiante' : 'Nuevo Estudiante' }}</h3>
     </div>
-    <div class="card-body">
+    <div [class.card-body]="!isModal">
       <!-- Server Error Alert -->
       <div *ngIf="serverError" class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
