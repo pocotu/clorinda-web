@@ -28,6 +28,9 @@ describe('AttendanceRecordComponent', () => {
   };
 
   beforeEach(async () => {
+    jasmine.clock().install();
+    jasmine.clock().mockDate(new Date(2026, 4, 23, 12, 0, 0)); // Noon on May 23, 2026
+
     mockAttendanceService = jasmine.createSpyObj('AttendanceService', ['updateRecord']);
 
     await TestBed.configureTestingModule({
@@ -42,8 +45,14 @@ describe('AttendanceRecordComponent', () => {
     component.sessionId = 'session-1';
     component.studentId = 'student-1';
     component.studentName = 'Juan Pérez García';
-    component.sessionDate = new Date().toISOString().split('T')[0];
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    component.sessionDate = yesterday.toISOString().split('T')[0];
     component.sessionStatus = SessionStatus.OPEN;
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
   });
 
   it('should create', () => {

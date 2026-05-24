@@ -25,6 +25,7 @@ export class LandingPostEditorComponent implements OnInit {
   postId = signal<string | null>(null);
   isEditMode = signal<boolean>(false);
   isLoading = signal<boolean>(false);
+  isUploading = signal<boolean>(false);
   showPreview = signal<boolean>(false);
   errorMessage = signal<string | null>(null);
 
@@ -113,6 +114,49 @@ export class LandingPostEditorComponent implements OnInit {
   onContentChange(event: Event): void {
     const textarea = event.target as HTMLTextAreaElement;
     this.postForm.patchValue({ content: textarea.value });
+  }
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) {
+      return;
+    }
+
+    const file = input.files[0];
+
+    // Client-side validations
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    if (!allowedTypes.includes(file.type)) {
+      this.errorMessage.set(
+        'Tipo de archivo inválido. Solo se aceptan imágenes (JPEG, PNG, WEBP, GIF).'
+      );
+      return;
+    }
+
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      this.errorMessage.set('El tamaño de la imagen supera el límite permitido de 5MB.');
+      return;
+    }
+
+    this.isUploading.set(true);
+    this.errorMessage.set(null);
+
+    this.landingService.uploadImage(file).subscribe({
+      next: (res) => {
+        this.postForm.patchValue({ imageUrl: res.imageUrl });
+        this.isUploading.set(false);
+      },
+      error: (err) => {
+        this.errorMessage.set('Error al subir la imagen. Inténtelo de nuevo.');
+        this.isUploading.set(false);
+        console.error('Image upload error:', err);
+      },
+    });
+  }
+
+  removeImage(): void {
+    this.postForm.patchValue({ imageUrl: '' });
   }
 
   togglePreview(): void {

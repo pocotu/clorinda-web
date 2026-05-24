@@ -1,0 +1,302 @@
+<div class="admin-container">
+  <!-- Editorial Header -->
+  <header class="admin-header">
+    <div class="header-badge">Panel de Moderación</div>
+    <h1 class="admin-title">Historias de Exalumnas</h1>
+    <p class="admin-subtitle">
+      Administra y aprueba las anécdotas e historias de éxito compartidas por nuestra comunidad de
+      exalumnas clorindinas.
+    </p>
+  </header>
+
+  <!-- Editorial Tabs -->
+  <div class="tabs-container">
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'PENDING'"
+      (click)="onTabChange('PENDING')"
+    >
+      Pendientes
+      @if (pendingCount() > 0) {
+        <span class="count-badge pending">{{ pendingCount() }}</span>
+      }
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'APPROVED'"
+      (click)="onTabChange('APPROVED')"
+    >
+      Aprobadas
+      @if (approvedCount() > 0) {
+        <span class="count-badge approved">{{ approvedCount() }}</span>
+      }
+    </button>
+    <button
+      class="tab-btn"
+      [class.active]="activeTab() === 'REJECTED'"
+      (click)="onTabChange('REJECTED')"
+    >
+      Rechazadas
+      @if (rejectedCount() > 0) {
+        <span class="count-badge rejected">{{ rejectedCount() }}</span>
+      }
+    </button>
+  </div>
+
+  <!-- Main Workspace -->
+  <div class="workspace-area">
+    <!-- Skeleton Loaders -->
+    @if (isLoading()) {
+      <div class="skeleton-grid">
+        @for (i of [1, 2, 3]; track i) {
+          <div class="skeleton-card">
+            <div class="skeleton-gallery"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line short"></div>
+              <div class="skeleton-line long"></div>
+              <div class="skeleton-line medium"></div>
+              <div class="skeleton-actions"></div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Loaded Content -->
+    @if (!isLoading()) {
+      <!-- Empty State -->
+      @if (filteredStories().length === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M8 12h8"></path>
+            </svg>
+          </div>
+          <h3>No hay historias aquí</h3>
+          <p>No se encontraron publicaciones en el estado seleccionado.</p>
+        </div>
+      }
+
+      <!-- Cards Grid -->
+      @if (filteredStories().length > 0) {
+        <div class="stories-grid">
+          @for (story of filteredStories(); track story.id) {
+            <article class="story-card" [class.expanded]="isCardExpanded(story.id)">
+              <!-- Horizontal Photo gallery inside card -->
+              @if (story.photos && story.photos.length > 0) {
+                <div class="story-gallery">
+                  <div class="gallery-inner">
+                    @for (photo of story.photos; track photo) {
+                      <div class="gallery-photo">
+                        <img [src]="photo" alt="Foto de la historia" />
+                      </div>
+                    }
+                  </div>
+                  <!-- Photos count badge -->
+                  <div class="photos-count">
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                      <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                      <polyline points="21 15 16 10 5 21"></polyline>
+                    </svg>
+                    {{ story.photos.length }}
+                  </div>
+                </div>
+              }
+
+              <div class="card-body">
+                <!-- Header/Meta -->
+                <div class="card-meta">
+                  <span class="story-date">
+                    <svg
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      class="inline-icon"
+                    >
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <line x1="16" y1="2" x2="16" y2="6"></line>
+                      <line x1="8" y1="2" x2="8" y2="6"></line>
+                      <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                    {{ formatDate(story.createdAt) }}
+                  </span>
+                  <span class="status-badge" [class]="story.status.toLowerCase()">
+                    {{
+                      story.status === 'PENDING'
+                        ? 'Pendiente'
+                        : story.status === 'APPROVED'
+                          ? 'Aprobada'
+                          : 'Rechazada'
+                    }}
+                  </span>
+                </div>
+
+                <!-- Narrative text -->
+                <div class="story-content">
+                  <p [class.clamped]="!isCardExpanded(story.id)">
+                    {{ story.description }}
+                  </p>
+                  <!-- Expand toggle link -->
+                  @if (story.description.length > 180) {
+                    <button class="btn-toggle-expand" (click)="toggleExpandCard(story.id)">
+                      {{ isCardExpanded(story.id) ? 'Leer menos' : 'Leer más' }}
+                    </button>
+                  }
+                </div>
+
+                <!-- Card Actions footer -->
+                <div class="card-actions-wrapper">
+                  <!-- Confirmation Mode -->
+                  @if (confirmingId() === story.id) {
+                    <div class="confirm-overlay">
+                      <span class="confirm-message">
+                        ¿Confirmar
+                        {{
+                          confirmAction() === 'APPROVE'
+                            ? 'aprobación'
+                            : confirmAction() === 'REJECT'
+                              ? 'rechazo'
+                              : 'eliminación'
+                        }}?
+                      </span>
+                      <div class="confirm-buttons">
+                        <button class="btn-confirm-yes" (click)="executeAction(story.id)">
+                          Sí, confirmar
+                        </button>
+                        <button class="btn-confirm-no" (click)="cancelConfirmation()">
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
+                  }
+
+                  <!-- Standard actions buttons -->
+                  @if (confirmingId() !== story.id) {
+                    <div class="action-buttons-row">
+                      <!-- Pending Actions -->
+                      @if (activeTab() === 'PENDING') {
+                        <button class="btn-action approve" (click)="askApprove(story.id)">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                          Aprobar
+                        </button>
+                        <button class="btn-action reject" (click)="askReject(story.id)">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                          Rechazar
+                        </button>
+                      }
+
+                      <!-- Approved Actions -->
+                      @if (activeTab() === 'APPROVED') {
+                        <button class="btn-action reject" (click)="askReject(story.id)">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                          </svg>
+                          Rechazar
+                        </button>
+                        <button class="btn-action delete" (click)="askDelete(story.id)">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path
+                              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                            ></path>
+                          </svg>
+                          Eliminar
+                        </button>
+                      }
+
+                      <!-- Rejected Actions -->
+                      @if (activeTab() === 'REJECTED') {
+                        <button class="btn-action approve" (click)="askApprove(story.id)">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                          Aprobar
+                        </button>
+                        <button class="btn-action delete" (click)="askDelete(story.id)">
+                          <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2.5"
+                          >
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path
+                              d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                            ></path>
+                          </svg>
+                          Eliminar
+                        </button>
+                      }
+                    </div>
+                  }
+                </div>
+              </div>
+            </article>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

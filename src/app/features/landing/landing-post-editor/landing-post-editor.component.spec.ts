@@ -203,6 +203,7 @@ describe('LandingPostEditorComponent', () => {
   describe('Publish', () => {
     beforeEach(() => {
       spyOn(window, 'confirm').and.returnValue(true);
+      landingService.publishPost.and.returnValue(of(mockPost));
     });
 
     it('should not publish if form is invalid', () => {

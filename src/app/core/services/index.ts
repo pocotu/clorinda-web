@@ -5,3 +5,4 @@ export * from './students.service';
 export * from './import.service';
 export * from './landing.service';
 export * from './public-query.service';
+export * from './exalumnas.service';

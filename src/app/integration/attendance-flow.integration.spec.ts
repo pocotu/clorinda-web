@@ -273,7 +273,7 @@ describe('Attendance Flow Integration', () => {
       await new Promise((resolve) => setTimeout(resolve, 600));
 
       // Flush the create record request (no existing record, so createRecord is called with recordId=undefined)
-      const req = httpMock.expectOne(`${attendanceBaseUrl}/sessions/records/undefined`);
+      const req = httpMock.expectOne(`${attendanceBaseUrl}/records`);
       req.flush({ data: mockRecords[0] });
 
       await new Promise((resolve) => setTimeout(resolve, 100));

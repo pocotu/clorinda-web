@@ -10,9 +10,9 @@
         </svg>
         Legado
       </div>
-      <h2 class="exalumnas-title">Exalumnas Destacadas</h2>
+      <h2 class="exalumnas-title">Historias de Exalumnas</h2>
       <p class="exalumnas-subtitle">
-        Orgullosas historias de éxito de nuestras egresadas que inspiran a las nuevas generaciones
+        Conoce las experiencias y anécdotas inspiradoras de nuestras egresadas clorindinas
       </p>
     </div>
 
@@ -129,8 +129,17 @@
                 >
                   <path d="M6 17h3l2-4V7H5v6h3zm8 0h3l2-4V7h-6v6h3z" />
                 </svg>
-                "{{ exalumna.frase }}"
+                "{{
+                  exalumna.frase.length > 130
+                    ? (exalumna.frase | slice: 0 : 130) + '...'
+                    : exalumna.frase
+                }}"
               </blockquote>
+              <div class="card-footer-action">
+                <button class="btn-card-more" (click)="abrirModalDetalle(exalumna)">
+                  Leer historia completa
+                </button>
+              </div>
             </div>
           </article>
         }
@@ -155,7 +164,7 @@
 
     <!-- Indicadores -->
     <div class="exalumnas-indicators">
-      @for (exalumna of exalumnas; track exalumna.id; let i = $index) {
+      @for (exalumna of exalumnas(); track exalumna.id; let i = $index) {
         <button
           class="indicator"
           [class.active]="i === currentIndex"
@@ -166,8 +175,8 @@
 
     <!-- CTA -->
     <div class="exalumnas-cta">
-      <p>¿Eres exalumna de nuestro colegio?</p>
-      <button class="btn-registro">
+      <p>¿Eres exalumna de nuestro colegio y deseas compartir tu historia?</p>
+      <button class="btn-registro" (click)="abrirModalRegistro()">
         Comparte tu historia
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
           <path
@@ -188,3 +197,222 @@
     <div class="bg-shape shape-2"></div>
   </div>
 </section>
+
+<!-- MODAL REGISTRO: Comparte tu historia -->
+@if (isSubmitModalOpen()) {
+  <div class="modal-backdrop" (click)="cerrarModalRegistro()">
+    <div class="modal-card" (click)="$event.stopPropagation()">
+      <!-- Close floating button -->
+      <button class="modal-close-btn" (click)="cerrarModalRegistro()" aria-label="Cerrar modal">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <div class="modal-body">
+        <div class="modal-header-text">
+          <h2 class="modal-title">Comparte tu Historia</h2>
+          <p class="modal-subtitle">
+            Queremos escuchar tu anécdota o historia de éxito. Tu publicación será revisada por
+            moderadores.
+          </p>
+        </div>
+
+        <div class="modal-divider"></div>
+
+        @if (sendSuccess()) {
+          <div class="success-screen">
+            <div class="success-icon">
+              <svg
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+              </svg>
+            </div>
+            <h3>¡Gracias por compartir!</h3>
+            <p>
+              Tu historia ha sido enviada con éxito. Será visible en el carrusel una vez aprobada
+              por los moderadores del colegio.
+            </p>
+            <button class="btn-success-close" (click)="cerrarModalRegistro()">Entendido</button>
+          </div>
+        } @else {
+          <form (submit)="$event.preventDefault(); submitStory()" class="story-form">
+            <!-- Text area description -->
+            <div class="form-group">
+              <label for="description">¿Qué historia o anécdota quieres contar?</label>
+              <textarea
+                id="description"
+                class="form-control"
+                [ngModel]="descriptionInput()"
+                (ngModelChange)="descriptionInput.set($event)"
+                name="description"
+                rows="6"
+                placeholder="Escribe aquí tu historia o anécdota (mínimo 10 caracteres)..."
+                required
+              ></textarea>
+              <div class="char-count" [class.error]="descriptionInput().length > 2000">
+                {{ descriptionInput().length }} / 2000 caracteres
+              </div>
+            </div>
+
+            <!-- File Upload -->
+            <div class="form-group">
+              <label>Sube tus fotos (máximo 5)</label>
+              <div class="file-drop-area">
+                <input
+                  type="file"
+                  id="photos-upload"
+                  class="file-input"
+                  multiple
+                  accept="image/*"
+                  (change)="onFileChange($event)"
+                  [disabled]="selectedFiles().length >= 5"
+                />
+                <label for="photos-upload" class="file-label">
+                  <svg
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                    <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                    <polyline points="21 15 16 10 5 21"></polyline>
+                  </svg>
+                  <span>Seleccionar fotos</span>
+                </label>
+              </div>
+
+              <!-- Preview grid -->
+              @if (previewUrls().length > 0) {
+                <div class="preview-grid">
+                  @for (url of previewUrls(); track url; let idx = $index) {
+                    <div class="preview-item">
+                      <img [src]="url" alt="Preview" />
+                      <button type="button" class="btn-remove-photo" (click)="removeFile(idx)">
+                        <svg
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2.5"
+                        >
+                          <line x1="18" y1="6" x2="6" y2="18"></line>
+                          <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  }
+                </div>
+              }
+            </div>
+
+            @if (sendError()) {
+              <div class="error-alert">
+                <p>{{ sendError() }}</p>
+              </div>
+            }
+
+            <div class="modal-form-actions">
+              <button type="button" class="btn-secondary" (click)="cerrarModalRegistro()">
+                Cancelar
+              </button>
+              <button
+                type="submit"
+                class="btn-primary"
+                [disabled]="isSending() || descriptionInput().trim().length < 10"
+              >
+                @if (isSending()) {
+                  <span class="spinner-small"></span> Enviando...
+                } @else {
+                  Enviar mi historia
+                }
+              </button>
+            </div>
+          </form>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!-- MODAL DETALLE: Ver historia completa con fondo desenfocado -->
+@if (isDetailModalOpen() && selectedCard()) {
+  <div class="modal-backdrop" (click)="cerrarModalDetalle()">
+    <div class="modal-card detail-card" (click)="$event.stopPropagation()">
+      <!-- Close floating button -->
+      <button class="modal-close-btn" (click)="cerrarModalDetalle()" aria-label="Cerrar modal">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Carousel/Gallery of photos in the detail modal -->
+      @if (selectedCard()!.photos && selectedCard()!.photos!.length > 0) {
+        <div class="modal-gallery">
+          <div class="gallery-scroll">
+            @for (photo of selectedCard()!.photos; track photo) {
+              <div class="gallery-item">
+                <img [src]="photo" alt="Imagen de la historia" />
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <div class="modal-body">
+        <div class="modal-meta">
+          <span class="modal-badge-categoria">
+            {{ selectedCard()!.promocion }}
+          </span>
+          <span class="modal-badge-profesion">
+            {{ selectedCard()!.profesion }}
+          </span>
+        </div>
+
+        <h2 class="modal-title">{{ selectedCard()!.nombre }}</h2>
+        <p class="modal-logro-sub">{{ selectedCard()!.logro }}</p>
+
+        <div class="modal-divider"></div>
+
+        <div class="modal-story-text">
+          <p>{{ selectedCard()!.frase }}</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-modal-close" (click)="cerrarModalDetalle()">Cerrar</button>
+      </div>
+    </div>
+  </div>
+}

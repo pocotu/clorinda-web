@@ -107,7 +107,7 @@
 }
 
 .sidebar.collapsed .nav-link.active {
-  background-color: rgba(74, 158, 224, 0.25);
+  background-color: rgba(var(--bs-secondary-rgb), 0.25);
 }
 
 .sidebar.collapsed .nav-label {
@@ -135,7 +135,7 @@
   background: transparent;
 }
 .sidebar::-webkit-scrollbar-thumb {
-  background: rgba(74, 158, 224, 0.35);
+  background: rgba(var(--bs-secondary-rgb), 0.35);
   border-radius: var(--radius-pill);
 }
 .sidebar::-webkit-scrollbar-thumb:hover {
@@ -149,7 +149,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 26, 51, 0.5);
+  background-color: rgba(var(--bs-primary-rgb), 0.5);
   z-index: 1019;
   backdrop-filter: blur(2px);
 }

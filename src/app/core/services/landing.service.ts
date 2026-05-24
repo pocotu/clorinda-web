@@ -277,4 +277,18 @@ export class LandingService {
       })
     );
   }
+
+  /**
+   * Upload an image file for a landing post
+   */
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    return this.http
+      .post<
+        { data: { imageUrl: string } } | { imageUrl: string }
+      >(`${environment.apiUrl}/landing/internal/posts/upload-image`, formData)
+      .pipe(map((response) => this.unwrapData<{ imageUrl: string }>(response)));
+  }
 }

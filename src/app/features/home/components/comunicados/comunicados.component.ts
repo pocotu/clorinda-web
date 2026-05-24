@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ComunicadosService } from '../../../../core/services/comunicados.service';
 import { Comunicado } from '../../../../core/models/comunicado.model';
@@ -11,12 +11,15 @@ import { PostType } from '../../../../core/models/landing.model';
   templateUrl: './comunicados.component.html',
   styleUrl: './comunicados.component.css',
 })
-export class ComunicadosComponent implements OnInit {
+export class ComunicadosComponent implements OnInit, OnDestroy {
   comunicados: Comunicado[] = [];
   categoriaSeleccionada: string = 'todos';
   loading: boolean = false;
   error: string | null = null;
   private loadingTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  // Modal State
+  comunicadoSeleccionado: Comunicado | null = null;
 
   // Pagination
   currentPage: number = 1;
@@ -28,6 +31,36 @@ export class ComunicadosComponent implements OnInit {
 
   ngOnInit() {
     this.cargarComunicados();
+  }
+
+  ngOnDestroy() {
+    // Ensure scroll is restored when navigating away
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  handleEscapeKey() {
+    if (this.comunicadoSeleccionado) {
+      this.cerrarComunicado();
+    }
+  }
+
+  abrirComunicado(comunicado: Comunicado) {
+    this.comunicadoSeleccionado = comunicado;
+    // Prevent body scroll when modal is open
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = 'hidden';
+    }
+  }
+
+  cerrarComunicado() {
+    this.comunicadoSeleccionado = null;
+    // Restore body scroll
+    if (typeof document !== 'undefined') {
+      document.body.style.overflow = '';
+    }
   }
 
   cargarComunicados() {

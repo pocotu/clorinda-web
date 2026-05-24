@@ -103,29 +103,60 @@
                     </small>
                   </div>
 
-                  <!-- Image URL -->
+                  <!-- Image Upload Widget -->
                   <div class="mb-3">
-                    <label for="imageUrl" class="form-label">
-                      URL de la Imagen (opcional)
-                      <small class="text-muted">({{ getCharacterCount('imageUrl') }}/500)</small>
-                    </label>
-                    <input
-                      type="text"
-                      id="imageUrl"
-                      class="form-control"
-                      formControlName="imageUrl"
-                      placeholder="assets/images/logo.png"
-                      [class.is-invalid]="isFieldInvalid('imageUrl')"
-                    />
-                    @if (isFieldInvalid('imageUrl')) {
-                      <div class="invalid-feedback">
-                        {{ getFieldError('imageUrl') }}
-                      </div>
-                    }
-                    <small class="form-text text-muted">
-                      Ruta o URL de la imagen. Ejemplo: <code>assets/images/logo.png</code> o una
-                      URL externa.
-                    </small>
+                    <label class="form-label"> Imagen del Post (opcional) </label>
+
+                    <div class="image-upload-wrapper">
+                      <!-- Progress state -->
+                      @if (isUploading()) {
+                        <div class="image-upload-progress">
+                          <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Subiendo...</span>
+                          </div>
+                          <p class="text-muted small">Subiendo y optimizando imagen...</p>
+                        </div>
+                      }
+
+                      <!-- Preview state -->
+                      @else if (postForm.get('imageUrl')?.value) {
+                        <div class="image-upload-preview">
+                          <img
+                            [src]="postForm.get('imageUrl')?.value"
+                            alt="Vista previa de la imagen"
+                            class="image-preview-thumbnail"
+                          />
+                          <div class="image-upload-overlay">
+                            <button
+                              type="button"
+                              class="btn btn-danger btn-sm rounded-circle"
+                              (click)="removeImage()"
+                              title="Eliminar imagen"
+                            >
+                              <i class="bi bi-trash-fill"></i>
+                            </button>
+                          </div>
+                        </div>
+                      }
+
+                      <!-- Default state: Dropzone -->
+                      @else {
+                        <div class="image-upload-dropzone" (click)="fileInput.click()">
+                          <i class="bi bi-cloud-upload"></i>
+                          <p>Selecciona una imagen para este post</p>
+                          <span>Formatos: JPEG, PNG, WEBP, GIF (Máx. 5MB)</span>
+                        </div>
+                      }
+
+                      <!-- Hidden file input -->
+                      <input
+                        type="file"
+                        #fileInput
+                        style="display: none"
+                        (change)="onFileSelected($event)"
+                        accept="image/*"
+                      />
+                    </div>
                   </div>
 
                   <!-- Content -->

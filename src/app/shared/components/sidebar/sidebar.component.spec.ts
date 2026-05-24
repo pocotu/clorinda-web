@@ -50,7 +50,7 @@ describe('SidebarComponent', () => {
     const menuItems = component.menuItems();
 
     expect(menuItems.length).toBeGreaterThan(0);
-    expect(menuItems.some((item) => item.label === 'Asistencia')).toBe(true);
+    expect(menuItems.some((item) => item.label === 'Asistencia')).toBe(false);
     expect(menuItems.some((item) => item.label === 'Estudiantes')).toBe(true);
     expect(menuItems.some((item) => item.label === 'Importación')).toBe(true);
     expect(menuItems.some((item) => item.label === 'Landing')).toBe(true);

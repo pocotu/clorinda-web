@@ -69,6 +69,12 @@ export class SidebarComponent {
       route: '/admin/landing',
       roles: ['ADMIN', 'DIRECCION'],
     },
+    {
+      label: 'Exalumnas',
+      icon: 'bi-mortarboard',
+      route: '/admin/exalumnas',
+      roles: ['ADMIN', 'DIRECCION'],
+    },
   ];
 
   // Menú filtrado según rol del usuario

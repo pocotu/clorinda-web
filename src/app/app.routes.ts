@@ -147,6 +147,14 @@ export const routes: Routes = [
           },
         ],
       },
+      {
+        path: 'admin/exalumnas',
+        data: { roles: ['ADMIN', 'DIRECCION'] },
+        loadComponent: () =>
+          import('./features/exalumnas-admin/exalumnas-admin.component').then(
+            (m) => m.ExalumnasAdminComponent
+          ),
+      },
     ],
   },
 
