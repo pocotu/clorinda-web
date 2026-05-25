@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { InternalNavbarComponent } from '../internal-navbar/internal-navbar.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
-import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
 
 /**
  * MainLayoutComponent
@@ -14,19 +13,12 @@ import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
  * Características:
  * - Navbar superior con logo, nombre del colegio y menú de usuario
  * - Sidebar colapsable con navegación basada en rol
- * - Breadcrumbs para indicar ruta actual
  * - Responsive: sidebar se colapsa en móvil
  */
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterOutlet,
-    InternalNavbarComponent,
-    SidebarComponent,
-    BreadcrumbComponent,
-  ],
+  imports: [CommonModule, RouterOutlet, InternalNavbarComponent, SidebarComponent],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.css',
 })

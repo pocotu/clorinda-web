@@ -1,0 +1,409 @@
+<div class="users-container">
+  <!-- Hero Header with Gradient -->
+  <div class="users-hero">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        Gestión de
+        <span class="title-highlight">Usuarios del Sistema</span>
+      </h1>
+    </div>
+    <div class="hero-actions">
+      <button class="btn-hero-primary" (click)="openCreateModal()">
+        <i class="bi bi-person-plus-fill"></i>
+        <span>Nuevo Usuario</span>
+      </button>
+    </div>
+    <div class="hero-decoration"></div>
+  </div>
+
+  <!-- Main Workspace -->
+  <div class="workspace-area">
+    <!-- Success Alert -->
+    @if (successMessage()) {
+      <div class="alert-modern alert-success animate-fade-in">
+        <div class="alert-icon">
+          <i class="bi bi-check-circle-fill"></i>
+        </div>
+        <div class="alert-content">
+          <strong>Éxito</strong>
+          <p>{{ successMessage() }}</p>
+        </div>
+      </div>
+    }
+
+    <!-- Error Alert -->
+    @if (error()) {
+      <div class="alert-modern alert-error animate-fade-in">
+        <div class="alert-icon">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+        </div>
+        <div class="alert-content">
+          <strong>Error</strong>
+          <p>{{ error() }}</p>
+        </div>
+        <button type="button" class="alert-close" (click)="error.set(null)">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+    }
+
+    <div class="results-card">
+      <div class="card-header-bar">
+        <h3 class="results-title">Usuarios Registrados</h3>
+        <div class="results-count">
+          <span class="count-number">{{ users().length }}</span>
+          <span class="count-label">usuarios totales</span>
+        </div>
+      </div>
+
+      <div class="card-body-content">
+        <!-- Loading State -->
+        @if (isLoading()) {
+          <div class="state-loading">
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Cargando usuarios del sistema...</p>
+          </div>
+        }
+
+        <!-- Loaded Content -->
+        @if (!isLoading()) {
+          @if (users().length === 0) {
+            <div class="state-empty">
+              <div class="empty-icon">
+                <i class="bi bi-people-fill"></i>
+              </div>
+              <h4 class="empty-title">No hay usuarios registrados</h4>
+              <p class="empty-text">Cree un nuevo usuario haciendo clic en el botón superior.</p>
+            </div>
+          } @else {
+            <div class="users-table-wrapper">
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th class="th-username">Usuario</th>
+                    <th class="th-role">Rol</th>
+                    <th class="th-status">Estado</th>
+                    <th class="th-created">Fecha de Creación</th>
+                    <th class="th-actions">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (user of users(); track user.id) {
+                    <tr class="user-row" [class.current-user-row]="user.id === currentUser()?.id">
+                      <td class="td-username">
+                        <div class="username-cell">
+                          <i class="bi bi-person-fill-gear user-icon"></i>
+                          <span class="username-text">{{ user.username }}</span>
+                          @if (user.id === currentUser()?.id) {
+                            <span class="self-badge">Tú</span>
+                          }
+                        </div>
+                      </td>
+                      <td class="td-role">
+                        <span class="role-badge" [class]="user.role.toLowerCase()">
+                          {{ user.role }}
+                        </span>
+                      </td>
+                      <td class="td-status">
+                        <span [class]="user.isActive ? 'status-active' : 'status-inactive'">
+                          <i
+                            [class]="
+                              user.isActive ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'
+                            "
+                          ></i>
+                          {{ user.isActive ? 'Activo' : 'Inactivo' }}
+                        </span>
+                      </td>
+                      <td class="td-created">
+                        <span class="date-text">{{ formatDate(user.createdAt) }}</span>
+                      </td>
+                      <td class="td-actions">
+                        @if (confirmingUserId() === user.id) {
+                          <div class="confirm-inline animate-fade-in">
+                            <span class="confirm-txt">¿Confirmar cambio de estado?</span>
+                            <div class="confirm-btns">
+                              <button
+                                type="button"
+                                class="btn-confirm-yes"
+                                (click)="confirmToggleActive(user)"
+                              >
+                                Sí
+                              </button>
+                              <button
+                                type="button"
+                                class="btn-confirm-no"
+                                (click)="cancelToggleActive()"
+                              >
+                                No
+                              </button>
+                            </div>
+                          </div>
+                        } @else {
+                          <div class="action-buttons">
+                            <!-- Change password button (disabled for self to avoid session issues) -->
+                            <button
+                              type="button"
+                              class="btn-action btn-key"
+                              (click)="openPasswordModal(user)"
+                              [disabled]="user.id === currentUser()?.id"
+                              [title]="
+                                user.id === currentUser()?.id
+                                  ? 'Cambia tu contraseña desde tu perfil'
+                                  : 'Cambiar contraseña'
+                              "
+                            >
+                              <i class="bi bi-key-fill"></i>
+                            </button>
+
+                            <!-- Toggle Active/Inactive (disabled for self) -->
+                            <button
+                              type="button"
+                              [class]="
+                                user.isActive
+                                  ? 'btn-action btn-deactivate'
+                                  : 'btn-action btn-activate'
+                              "
+                              (click)="askToggleActive(user.id)"
+                              [disabled]="user.id === currentUser()?.id"
+                              [title]="
+                                user.id === currentUser()?.id
+                                  ? 'No puedes desactivarte a ti mismo'
+                                  : user.isActive
+                                    ? 'Desactivar usuario'
+                                    : 'Activar usuario'
+                              "
+                            >
+                              <i
+                                [class]="user.isActive ? 'bi bi-toggle-off' : 'bi bi-toggle-on'"
+                              ></i>
+                            </button>
+                          </div>
+                        }
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Create User Modal -->
+@if (showCreateModal()) {
+  <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.65)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content premium-modal animate-scale-up">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-person-plus-fill header-icon"></i>
+            Nuevo Usuario
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closeCreateModal()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <form [formGroup]="createForm" (ngSubmit)="onCreateSubmit()">
+          <div class="modal-body">
+            <div class="form-group mb-3">
+              <label for="username" class="form-label">Nombre de Usuario</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-person-fill"></i></span>
+                <input
+                  type="text"
+                  id="username"
+                  class="form-control"
+                  formControlName="username"
+                  placeholder="ej: auxiliar3, admin2"
+                  [class.is-invalid]="isFieldInvalid(createForm, 'username')"
+                />
+              </div>
+              @if (isFieldInvalid(createForm, 'username')) {
+                <div class="invalid-feedback d-block">
+                  {{ getErrorMessage(createForm, 'username') }}
+                </div>
+              } @else {
+                <span class="form-text-hint"
+                  >Entre 3 y 30 caracteres. Solo minúsculas, números, guiones y guiones bajos.</span
+                >
+              }
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="role" class="form-label">Rol de Usuario</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-shield-lock-fill"></i></span>
+                <select
+                  id="role"
+                  class="form-select"
+                  formControlName="role"
+                  [class.is-invalid]="isFieldInvalid(createForm, 'role')"
+                >
+                  <option value="AUXILIAR">AUXILIAR</option>
+                  <option value="ADMIN">ADMIN</option>
+                </select>
+              </div>
+              @if (isFieldInvalid(createForm, 'role')) {
+                <div class="invalid-feedback d-block">
+                  {{ getErrorMessage(createForm, 'role') }}
+                </div>
+              }
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="password" class="form-label">Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="Mínimo 8 caracteres"
+                  [class.is-invalid]="isFieldInvalid(createForm, 'password')"
+                />
+              </div>
+              @if (isFieldInvalid(createForm, 'password')) {
+                <div class="invalid-feedback d-block">
+                  {{ getErrorMessage(createForm, 'password') }}
+                </div>
+              }
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  placeholder="Repita la contraseña anterior"
+                  [class.is-invalid]="isFieldInvalid(createForm, 'confirmPassword')"
+                />
+              </div>
+              @if (isFieldInvalid(createForm, 'confirmPassword')) {
+                <div class="invalid-feedback d-block">
+                  {{ getErrorMessage(createForm, 'confirmPassword') }}
+                </div>
+              }
+              @if (createForm.get('confirmPassword')?.touched && !passwordsMatch(createForm)) {
+                <div class="invalid-feedback d-block">Las contraseñas no coinciden.</div>
+              }
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" (click)="closeCreateModal()">
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="createForm.invalid || !passwordsMatch(createForm) || isLoading()"
+            >
+              @if (isLoading()) {
+                <span
+                  class="spinner-border spinner-border-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              }
+              Crear Usuario
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Change Password Modal -->
+@if (showPasswordModal() && selectedUser()) {
+  <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.65)">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content premium-modal animate-scale-up">
+        <div class="modal-header">
+          <h5 class="modal-title">
+            <i class="bi bi-key-fill header-icon"></i>
+            Cambiar Contraseña
+          </h5>
+          <button type="button" class="btn-close-custom" (click)="closePasswordModal()">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <div class="modal-subtitle-bar">
+          Usuario: <strong>{{ selectedUser()?.username }}</strong>
+        </div>
+        <form [formGroup]="passwordForm" (ngSubmit)="onPasswordSubmit()">
+          <div class="modal-body">
+            <div class="form-group mb-3">
+              <label for="newPassword" class="form-label">Nueva Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input
+                  type="password"
+                  id="newPassword"
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="Mínimo 8 caracteres"
+                  [class.is-invalid]="isFieldInvalid(passwordForm, 'password')"
+                />
+              </div>
+              @if (isFieldInvalid(passwordForm, 'password')) {
+                <div class="invalid-feedback d-block">
+                  {{ getErrorMessage(passwordForm, 'password') }}
+                </div>
+              }
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="confirmNewPassword" class="form-label">Confirmar Contraseña</label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                <input
+                  type="password"
+                  id="confirmNewPassword"
+                  class="form-control"
+                  formControlName="confirmPassword"
+                  placeholder="Repita la contraseña"
+                  [class.is-invalid]="isFieldInvalid(passwordForm, 'confirmPassword')"
+                />
+              </div>
+              @if (isFieldInvalid(passwordForm, 'confirmPassword')) {
+                <div class="invalid-feedback d-block">
+                  {{ getErrorMessage(passwordForm, 'confirmPassword') }}
+                </div>
+              }
+              @if (passwordForm.get('confirmPassword')?.touched && !passwordsMatch(passwordForm)) {
+                <div class="invalid-feedback d-block">Las contraseñas no coinciden.</div>
+              }
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn-secondary" (click)="closePasswordModal()">
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="passwordForm.invalid || !passwordsMatch(passwordForm) || isLoading()"
+            >
+              @if (isLoading()) {
+                <span
+                  class="spinner-border spinner-border-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+              }
+              Cambiar Contraseña
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+}

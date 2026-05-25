@@ -41,11 +41,10 @@ describe('MainLayoutComponent', () => {
     expect(component.sidebarCollapsed()).toBe(true);
   });
 
-  it('should render navbar, sidebar, and breadcrumb', () => {
+  it('should render navbar and sidebar', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('app-internal-navbar')).toBeTruthy();
     expect(compiled.querySelector('app-sidebar')).toBeTruthy();
-    expect(compiled.querySelector('app-breadcrumb')).toBeTruthy();
   });
 
   it('should render router-outlet', () => {

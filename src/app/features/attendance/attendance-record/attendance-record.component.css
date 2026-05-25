@@ -16,10 +16,13 @@
 .attendance-hero {
   position: relative;
   background: var(--gradient-brand);
-  padding: 2rem 1.5rem 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 0.75rem;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0, 26, 51, 0.15);
   margin: 0 -0.5rem;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
 }
 
 .attendance-hero::before {
@@ -66,20 +69,17 @@
 }
 
 .hero-title {
-  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
   color: white;
-  line-height: 1.1;
-  margin: 0 0 0.5rem;
+  line-height: 1.2;
+  margin: 0;
   letter-spacing: -0.02em;
 }
 
 .title-highlight {
   display: inline-block;
-  background: linear-gradient(135deg, #a8d4f5 0%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: white;
 }
 
 .hero-subtitle {

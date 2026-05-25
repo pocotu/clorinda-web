@@ -155,6 +155,14 @@ export const routes: Routes = [
             (m) => m.ExalumnasAdminComponent
           ),
       },
+      {
+        path: 'admin/usuarios',
+        data: { roles: ['ADMIN'] },
+        loadComponent: () =>
+          import('./features/users/user-management/user-management.component').then(
+            (m) => m.UserManagementComponent
+          ), // trigger compilation
+      },
     ],
   },
 

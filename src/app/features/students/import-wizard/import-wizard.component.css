@@ -21,15 +21,18 @@
 .card-header {
   background: var(--gradient-brand) !important;
   color: white !important;
-  padding: 1.25rem 1.5rem;
+  padding: 1.5rem 1.5rem 1.5rem 0.75rem;
   border-bottom: none;
   border-radius: 0;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
 }
 
 .card-header h4 {
   margin: 0;
   font-weight: 800;
-  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-size: clamp(1.5rem, 4vw, 2rem);
   letter-spacing: -0.02em;
 }
 

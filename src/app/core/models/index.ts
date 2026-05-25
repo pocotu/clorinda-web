@@ -3,6 +3,7 @@ export * from './comunicado.model';
 export * from './import.model';
 export * from './landing.model';
 export * from './public-query.model';
+export * from './user-management.model';
 
 // Attendance models with aliases to avoid conflicts
 export { Shift, SessionStatus, AttendanceStatus } from './attendance.model';
