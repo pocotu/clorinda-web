@@ -73,6 +73,21 @@ export class InternalNavbarComponent {
   }
 
   /**
+   * Navegar a la ruta de inicio según el rol del usuario
+   */
+  navigateToHome(event: Event): void {
+    event.preventDefault();
+    const role = this.currentUser?.role;
+    let route = '/login';
+    if (role === 'AUXILIAR' || role === 'DIRECCION') {
+      route = '/asistencia/sesion';
+    } else if (role === 'ADMIN') {
+      route = '/estudiantes';
+    }
+    this.router.navigate([route]);
+  }
+
+  /**
    * Logout del usuario
    */
   logout(): void {

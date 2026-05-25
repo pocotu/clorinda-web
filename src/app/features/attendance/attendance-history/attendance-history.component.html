@@ -143,7 +143,7 @@
                 <tr *ngFor="let session of sessions()">
                   <td>{{ formatDate(session.sessionDate) }}</td>
                   <td>{{ formatShift(session.shift) }}</td>
-                  <td>{{ session.grade }}</td>
+                  <td>{{ session.grade }}°</td>
                   <td>
                     <span class="badge bg-info">{{ session.section }}</span>
                   </td>
@@ -263,7 +263,7 @@
           Detalle de Asistencia
           <span *ngIf="selectedSession()" class="ms-2">
             - {{ formatDate(selectedSession()!.sessionDate) }} -
-            {{ formatShift(selectedSession()!.shift) }} - Grado {{ selectedSession()!.grade }} -
+            {{ formatShift(selectedSession()!.shift) }} - {{ selectedSession()!.grade }}° -
             Sección {{ selectedSession()!.section }}
           </span>
         </h5>
@@ -284,7 +284,7 @@
             <div class="col-md-3">
               <strong>Turno:</strong> {{ formatShift(selectedSession()!.shift) }}
             </div>
-            <div class="col-md-2"><strong>Grado:</strong> {{ selectedSession()!.grade }}</div>
+            <div class="col-md-2"><strong>Grado:</strong> {{ selectedSession()!.grade }}°</div>
             <div class="col-md-2"><strong>Sección:</strong> {{ selectedSession()!.section }}</div>
             <div class="col-md-2">
               <strong>Estado:</strong>

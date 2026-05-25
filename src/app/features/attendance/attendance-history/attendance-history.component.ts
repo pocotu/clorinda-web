@@ -262,7 +262,7 @@ export class AttendanceHistoryComponent implements OnInit {
       this.formatStatus(session.status),
       session.closedBy?.username || '-',
       session.postCloseEditCount?.toString() || '0',
-      session.updatedAt ? this.formatDateTime(session.updatedAt) : '-',
+      session.lastModifiedAt ? this.formatDateTime(session.lastModifiedAt) : '-',
     ]);
 
     // Create CSV content
@@ -330,7 +330,7 @@ export class AttendanceHistoryComponent implements OnInit {
     if (!date) {
       return '-';
     }
-    const d = new Date(date);
+    const d = date instanceof Date ? date : new Date(date);
     if (isNaN(d.getTime())) {
       return '-';
     }
