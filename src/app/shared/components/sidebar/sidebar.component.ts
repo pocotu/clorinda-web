@@ -64,7 +64,7 @@ export class SidebarComponent {
       roles: ['ADMIN'],
     },
     {
-      label: 'Landing',
+      label: 'Comunicados',
       icon: 'bi-newspaper',
       route: '/admin/landing',
       roles: ['ADMIN', 'DIRECCION'],

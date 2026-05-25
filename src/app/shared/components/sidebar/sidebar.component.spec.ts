@@ -53,7 +53,7 @@ describe('SidebarComponent', () => {
     expect(menuItems.some((item) => item.label === 'Asistencia')).toBe(false);
     expect(menuItems.some((item) => item.label === 'Estudiantes')).toBe(true);
     expect(menuItems.some((item) => item.label === 'Importación')).toBe(true);
-    expect(menuItems.some((item) => item.label === 'Landing')).toBe(true);
+    expect(menuItems.some((item) => item.label === 'Comunicados')).toBe(true);
   });
 
   it('should show DIRECCION menu items', () => {
@@ -69,7 +69,7 @@ describe('SidebarComponent', () => {
     expect(menuItems.length).toBeGreaterThan(0);
     expect(menuItems.some((item) => item.label === 'Historial')).toBe(true);
     expect(menuItems.some((item) => item.label === 'Estudiantes')).toBe(true);
-    expect(menuItems.some((item) => item.label === 'Landing')).toBe(true);
+    expect(menuItems.some((item) => item.label === 'Comunicados')).toBe(true);
   });
 
   it('should return empty menu when no user', () => {

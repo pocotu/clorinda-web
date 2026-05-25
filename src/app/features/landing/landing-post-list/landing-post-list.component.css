@@ -272,7 +272,7 @@
 
 .badge.bg-info {
   background: var(--color-primary-light) !important;
-  color: var(--color-primary-dark);
+  color: white !important;
 }
 
 .badge.bg-success {

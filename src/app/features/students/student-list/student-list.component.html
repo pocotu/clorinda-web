@@ -42,45 +42,41 @@
           formControlName="search"
           placeholder="Código · Nombre · DNI"
         />
-        <span class="filter-hint">Ingrese código de estudiante, nombre completo o DNI</span>
+        <span class="filter-hint">Ingrese código, nombre o DNI</span>
       </div>
 
-      <div class="filter-row">
-        <div class="filter-group">
-          <label for="grade" class="filter-label">
-            <i class="bi bi-123"></i>
-            Grado
-          </label>
-          <select class="filter-select" id="grade" formControlName="grade">
-            <option value="">Todos los grados</option>
-            <option *ngFor="let grade of grades" [value]="grade">{{ grade }}° Grado</option>
-          </select>
-        </div>
+      <div class="filter-group filter-grade">
+        <label for="grade" class="filter-label">
+          <i class="bi bi-123"></i>
+          Grado
+        </label>
+        <select class="filter-select" id="grade" formControlName="grade">
+          <option value="">Todos los grados</option>
+          <option *ngFor="let grade of grades" [value]="grade">{{ grade }}° Grado</option>
+        </select>
+      </div>
 
-        <div class="filter-group">
-          <label for="section" class="filter-label">
-            <i class="bi bi-grid-3x3-gap-fill"></i>
-            Sección
-          </label>
-          <select class="filter-select" id="section" formControlName="section">
-            <option value="">Todas las secciones</option>
-            <option *ngFor="let section of sections" [value]="section">
-              Sección {{ section }}
-            </option>
-          </select>
-        </div>
+      <div class="filter-group filter-section">
+        <label for="section" class="filter-label">
+          <i class="bi bi-grid-3x3-gap-fill"></i>
+          Sección
+        </label>
+        <select class="filter-select" id="section" formControlName="section">
+          <option value="">Todas las secciones</option>
+          <option *ngFor="let section of sections" [value]="section">Sección {{ section }}</option>
+        </select>
+      </div>
 
-        <div class="filter-group">
-          <label for="isActive" class="filter-label">
-            <i class="bi bi-toggle-on"></i>
-            Estado
-          </label>
-          <select class="filter-select" id="isActive" formControlName="isActive">
-            <option value="">Todos los estados</option>
-            <option value="true">✓ Activo</option>
-            <option value="false">✕ Inactivo</option>
-          </select>
-        </div>
+      <div class="filter-group filter-status">
+        <label for="isActive" class="filter-label">
+          <i class="bi bi-toggle-on"></i>
+          Estado
+        </label>
+        <select class="filter-select" id="isActive" formControlName="isActive">
+          <option value="">Todos los estados</option>
+          <option value="true">✓ Activo</option>
+          <option value="false">✕ Inactivo</option>
+        </select>
       </div>
     </form>
   </div>

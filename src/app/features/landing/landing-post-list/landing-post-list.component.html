@@ -2,7 +2,7 @@
   <!-- Header -->
   <div class="row mb-4">
     <div class="col">
-      <h2 class="mb-0">Gestión de Contenido Landing</h2>
+      <h2 class="mb-0">Comunicados y Avisos</h2>
     </div>
     <div class="col-auto">
       <button
@@ -12,7 +12,7 @@
         [disabled]="isLoading()"
       >
         <i class="bi bi-plus-circle me-2"></i>
-        Nuevo Post
+        Nuevo Comunicado
       </button>
     </div>
   </div>
@@ -24,7 +24,7 @@
         <div class="row g-3">
           <!-- Post Type Filter -->
           <div class="col-md-3">
-            <label for="postType" class="form-label">Tipo de Post</label>
+            <label for="postType" class="form-label">Tipo de Publicación</label>
             <select id="postType" class="form-select" formControlName="postType">
               <option *ngFor="let type of postTypes" [value]="type">
                 {{ postTypeLabels[type] }}
@@ -116,7 +116,7 @@
         </div>
         <div class="col-md-6 text-end">
           <span class="text-muted">
-            Total: {{ totalItems() }} post{{ totalItems() !== 1 ? 's' : '' }}
+            Total: {{ totalItems() }} publicado{{ totalItems() !== 1 ? 's' : '' }}
           </span>
         </div>
       </div>
@@ -138,7 +138,7 @@
             <tr *ngIf="posts().length === 0">
               <td colspan="6" class="text-center py-5 text-muted">
                 <i class="bi bi-inbox fs-1 d-block mb-3"></i>
-                No se encontraron posts con los filtros seleccionados
+                No se encontraron publicaciones con los filtros seleccionados
               </td>
             </tr>
             <tr *ngFor="let post of posts()">
@@ -246,7 +246,8 @@
           <div class="text-center text-muted">
             <small>
               Mostrando {{ (currentPage() - 1) * pageSize() + 1 }} a
-              {{ Math.min(currentPage() * pageSize(), totalItems()) }} de {{ totalItems() }} posts
+              {{ Math.min(currentPage() * pageSize(), totalItems()) }} de
+              {{ totalItems() }} publicaciones
             </small>
           </div>
         </div>

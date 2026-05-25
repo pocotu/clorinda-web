@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">
-          {{ isEditMode() ? 'Editar Post' : 'Crear Nuevo Post' }}
+          {{ isEditMode() ? 'Editar Comunicado' : 'Crear Nuevo Comunicado' }}
         </h2>
         <button type="button" class="btn btn-outline-secondary" (click)="cancel()">
           <i class="bi bi-x-lg"></i> Cancelar
@@ -39,7 +39,7 @@
                   <!-- Post Type -->
                   <div class="mb-3">
                     <label for="postType" class="form-label">
-                      Tipo de Post <span class="text-danger">*</span>
+                      Tipo de Publicación <span class="text-danger">*</span>
                     </label>
                     <select
                       id="postType"
@@ -69,7 +69,7 @@
                       id="title"
                       class="form-control"
                       formControlName="title"
-                      placeholder="Ingrese el título del post"
+                      placeholder="Ingrese el título del comunicado"
                       [class.is-invalid]="isFieldInvalid('title')"
                     />
                     @if (isFieldInvalid('title')) {
@@ -99,13 +99,14 @@
                       </div>
                     }
                     <small class="form-text text-muted">
-                      El resumen se mostrará en las vistas previas de la lista de posts.
+                      El resumen se mostrará en las vistas previas de la lista de comunicados y
+                      avisos.
                     </small>
                   </div>
 
                   <!-- Image Upload Widget -->
                   <div class="mb-3">
-                    <label class="form-label"> Imagen del Post (opcional) </label>
+                    <label class="form-label"> Imagen del Comunicado (opcional) </label>
 
                     <div class="image-upload-wrapper">
                       <!-- Progress state -->
@@ -143,7 +144,7 @@
                       @else {
                         <div class="image-upload-dropzone" (click)="fileInput.click()">
                           <i class="bi bi-cloud-upload"></i>
-                          <p>Selecciona una imagen para este post</p>
+                          <p>Selecciona una imagen para este comunicado</p>
                           <span>Formatos: JPEG, PNG, WEBP, GIF (Máx. 5MB)</span>
                         </div>
                       }
