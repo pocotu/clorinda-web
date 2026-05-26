@@ -33,6 +33,7 @@ export class LandingPostListComponent implements OnInit {
   pageSize = signal<number>(10);
   totalItems = signal<number>(0);
   totalPages = computed(() => Math.ceil(this.totalItems() / this.pageSize()));
+  showInfoModal = signal<boolean>(false);
 
   // Filter form
   filterForm!: FormGroup;

@@ -36,6 +36,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
   // Wizard state
   currentStep = 1;
   readonly totalSteps = 4;
+  showInfoModal = false;
 
   // Step 1: Upload
   selectedFiles: SelectedFile[] = [];

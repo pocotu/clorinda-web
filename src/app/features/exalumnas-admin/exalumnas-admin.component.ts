@@ -26,6 +26,7 @@ export class ExalumnasAdminComponent implements OnInit {
 
   // Text Expansion State (IDs of expanded cards)
   expandedCardIds = signal<Set<string>>(new Set());
+  showInfoModal = signal<boolean>(false);
 
   // Dynamic status counts based on loaded stories (for simple tabs)
   // or we can count from all stories. Let's do a complete count of all stories to display.

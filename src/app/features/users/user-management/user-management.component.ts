@@ -28,6 +28,7 @@ export class UserManagementComponent implements OnInit {
   showCreateModal = signal<boolean>(false);
   showPasswordModal = signal<boolean>(false);
   selectedUser = signal<UserListItem | null>(null);
+  showInfoModal = signal<boolean>(false);
 
   // Forms
   createForm!: FormGroup;

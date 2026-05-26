@@ -23,6 +23,7 @@ export class LoginComponent {
   // State signals
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
+  showPassword = signal(false);
 
   constructor() {
     // Initialize form with validators

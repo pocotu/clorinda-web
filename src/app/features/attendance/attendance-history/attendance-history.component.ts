@@ -53,6 +53,7 @@ export class AttendanceHistoryComponent implements OnInit {
   selectedSession = signal<AttendanceSession | null>(null);
   selectedSessionRecords = signal<any[]>([]);
   loadingRecords = signal<boolean>(false);
+  showInfoModal = signal<boolean>(false);
 
   // User role
   currentUser = computed(() => this.authService.getCurrentUser());

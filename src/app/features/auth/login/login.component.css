@@ -1,18 +1,41 @@
-/* Login Component — compacto y sin espacio extra */
+/* Login Component — Rediseño Premium y Profesional */
 
 .login-wrapper {
-  background-color: var(--color-bg-muted);
-  background-image:
-    radial-gradient(var(--color-primary-light) 1px, transparent 1px),
-    radial-gradient(var(--color-primary-light) 1px, transparent 1px);
-  background-size: 24px 24px;
-  background-position:
-    0 0,
-    12px 12px;
+  background: radial-gradient(at 0% 0%, rgba(74, 158, 224, 0.15) 0px, transparent 50%),
+              radial-gradient(at 100% 100%, rgba(0, 31, 63, 0.08) 0px, transparent 50%),
+              linear-gradient(135deg, #f3f6fa 0%, #e7f0fd 100%);
   flex: 1;
   display: flex;
   align-items: center;
-  padding: 2rem 0;
+  padding: 3rem 0;
+  min-height: calc(100vh - 80px - 300px); /* Ocupa todo el espacio entre navbar y footer */
+}
+
+/* Glowing mesh decorative elements */
+.login-glow-1 {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(74, 158, 224, 0.22) 0%, rgba(74, 158, 224, 0) 70%);
+  filter: blur(80px);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.login-glow-2 {
+  position: absolute;
+  bottom: 15%;
+  right: 10%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(0, 31, 63, 0.14) 0%, rgba(0, 31, 63, 0) 70%);
+  filter: blur(100px);
+  z-index: 1;
+  pointer-events: none;
+  border-radius: 50%;
 }
 
 .min-vh-100-adjusted {
@@ -22,157 +45,178 @@
   align-items: center;
 }
 
-/* Encabezado de marca — compacto */
-.login-brand h2 {
-  font-family: 'Inter', sans-serif;
-  letter-spacing: -0.025em;
-  color: var(--color-secondary);
-  font-size: 1.6rem;
-  margin-bottom: 0.1rem;
+/* Security Badge Header Container */
+.login-badge-container {
+  width: 54px;
+  height: 54px;
+  background: linear-gradient(135deg, rgba(74, 158, 224, 0.15) 0%, rgba(0, 31, 63, 0.05) 100%);
+  border: 1px solid rgba(74, 158, 224, 0.25);
+  border-radius: 14px;
+  color: var(--color-primary, #001f3f);
+  font-size: 1.5rem;
+  box-shadow: 0 4px 12px rgba(74, 158, 224, 0.08);
 }
 
-.login-brand .login-subtitle {
-  color: var(--color-text-secondary);
-  font-size: 0.9rem;
+.login-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--color-primary, #001f3f) !important;
 }
 
-/* Tarjeta — sin altura forzada */
+.login-subtitle {
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+/* Glassmorphism Premium Login Card */
 .login-card {
-  border-radius: var(--radius-lg);
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  box-shadow: var(--shadow-card-hover);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 20px 40px rgba(0, 31, 63, 0.05),
+              0 1px 3px rgba(0, 31, 63, 0.02);
+  position: relative;
+  overflow: hidden;
 }
 
-/* Línea de acento institucional en el tope */
-.login-card::before {
-  content: '';
-  display: block;
-  height: 4px;
-  background: var(--gradient-brand-h);
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
-/* Labels */
+/* Form Styles */
 .tracking-wide {
-  letter-spacing: 0.05em;
+  letter-spacing: 0.06em;
 }
 
 .form-label {
-  color: var(--color-text-secondary);
+  color: var(--color-text-secondary, #4a5568);
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
 }
 
-/* Inputs */
+/* Merge input group styling */
+.input-group-merge {
+  display: flex;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
 .input-group-merge .input-group-text {
-  border-color: var(--color-border);
-  background-color: transparent;
-  color: var(--color-text-muted);
-  border-right: none;
-  transition:
-    border-color 0.15s ease,
-    color 0.15s ease;
+  border: none;
+  background: #f9fafb;
+  color: #98a2b3;
+  padding: 0.75rem 0.875rem;
+  display: flex;
+  align-items: center;
+  font-size: 1.05rem;
 }
 
 .input-group-merge .form-control {
-  border-color: var(--color-border);
-  padding: 0.65rem 1rem 0.65rem 0.25rem;
+  border: none;
+  padding: 0.75rem 1rem 0.75rem 0.1rem;
   font-size: 0.95rem;
-  color: var(--color-text-primary);
-}
-
-.input-group-merge:focus-within .input-group-text,
-.input-group-merge:focus-within .form-control {
-  border-color: var(--color-border-focus);
-  box-shadow: none;
-}
-
-.input-group-merge:focus-within .input-group-text i {
-  color: var(--color-primary);
+  color: #1d2939;
+  background: white;
 }
 
 .input-group-merge .form-control:focus {
+  outline: none;
   box-shadow: none;
-  background-color: var(--color-primary-xlight);
 }
 
-.input-group-merge .form-control.is-invalid {
-  border-color: var(--color-danger);
-  background-image: none;
+/* Focus States */
+.input-group-merge:focus-within {
+  border-color: var(--color-secondary, #4A9EE0);
+  box-shadow: 0 0 0 4px rgba(74, 158, 224, 0.15);
+}
+
+.input-group-merge:focus-within .input-group-text {
+  color: var(--color-secondary, #4A9EE0);
+  background: #fcfdfe;
+}
+
+/* Validation styles */
+.input-group-merge:has(.is-invalid) {
+  border-color: var(--color-danger, #dc2626);
+}
+
+.input-group-merge:has(.is-invalid):focus-within {
+  box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.15);
 }
 
 .invalid-feedback {
   font-size: 0.8rem;
-  color: var(--color-danger);
+  font-weight: 500;
+  color: var(--color-danger, #dc2626);
 }
 
-/* ── Botón — color sólido institucional (sin degradado) ── */
+/* Brand Gradient Login Button */
 .btn-login {
-  background-color: var(--color-primary);
+  background: var(--gradient-primary, linear-gradient(135deg, #4A9EE0 0%, #3B82C4 100%));
   border: none;
-  color: var(--color-text-inverse);
-  font-weight: 600;
+  color: white !important;
+  font-weight: 700;
   letter-spacing: 0.02em;
-  padding: 0.7rem 1rem;
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease,
-    box-shadow 0.15s ease;
-  box-shadow: var(--shadow-primary);
-  border-radius: var(--radius-md);
+  padding: 0.875rem 1.25rem;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-primary, 0 4px 10px rgba(74, 158, 224, 0.25));
+  border-radius: 10px;
+  cursor: pointer;
 }
 
 .btn-login:hover:not(:disabled) {
-  background-color: var(--color-primary-dark);
-  color: var(--color-text-inverse);
+  filter: brightness(1.06);
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(74, 158, 224, 0.4);
+  box-shadow: 0 6px 18px rgba(74, 158, 224, 0.4);
 }
 
 .btn-login:active:not(:disabled) {
-  background-color: var(--color-primary-dark);
   transform: translateY(0);
-  box-shadow: var(--shadow-primary);
 }
 
 .btn-login:disabled {
-  opacity: 0.7;
+  opacity: 0.65;
   cursor: not-allowed;
 }
 
-/* Alert de error */
+/* Alert styling */
 .alert-danger {
   background-color: #fef2f2;
   border: 1px solid #fee2e2;
   color: #991b1b;
-  font-size: 0.9rem;
-  border-radius: var(--radius-md);
-}
-.alert-danger i {
-  color: var(--color-danger);
-}
-.alert-danger .btn-close {
-  padding: 1rem;
+  border-radius: 10px;
+  padding: 0.875rem 1.25rem;
 }
 
-/* Link de soporte */
+/* Support link */
 a.text-decoration-none {
-  color: var(--color-primary);
-  font-weight: 600;
-  transition: color 0.2s ease;
-}
-a.text-decoration-none:hover {
-  color: var(--color-secondary);
+  color: var(--color-secondary, #4A9EE0);
+  font-weight: 700;
+  transition: color 0.2s;
 }
 
-/* Responsive */
+a.text-decoration-none:hover {
+  color: var(--color-primary, #001f3f);
+}
+
+/* Eye visibility toggle button styling */
+.input-group-merge button {
+  transition: color 0.2s ease-in-out;
+}
+
+.input-group-merge button:hover {
+  color: var(--color-secondary, #4A9EE0) !important;
+}
+
+/* Responsive adjustment */
 @media (max-width: 576px) {
   .login-card {
-    border-radius: var(--radius-md);
+    border-radius: 12px;
   }
   .login-wrapper {
-    padding: 1.25rem 0;
+    padding: 1.5rem 0;
   }
 }

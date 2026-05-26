@@ -324,3 +324,1020 @@ body {
     font-size: 14px;
   }
 }
+
+/* ================================================================
+   CLORINDA UNIFIED PREMIUM THEME SYSTEM (DRY & SOLID)
+   ================================================================ */
+
+.clorinda-page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8 0%, #e8f4fd 100%);
+  padding: 0 0 2rem 0;
+  overflow-x: hidden;
+}
+
+/* 1. Clorinda Unified Premium Hero Header */
+.clorinda-hero {
+  position: relative;
+  background: var(--gradient-brand, linear-gradient(135deg, #001f3f 0%, #003d7a 100%));
+  padding: 2rem 2.5rem;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 26, 51, 0.15);
+  min-height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  color: white;
+  margin-bottom: 2rem;
+}
+
+.clorinda-hero-content {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 280px;
+}
+
+.clorinda-hero-title {
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 800;
+  color: white;
+  line-height: 1.2;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.clorinda-title-highlight {
+  display: inline-block;
+  color: white;
+  position: relative;
+}
+
+.clorinda-hero-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 400;
+  max-width: 650px;
+  line-height: 1.5;
+  margin: 0.5rem 0 0;
+}
+
+.clorinda-hero-actions {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Action button in Hero */
+.clorinda-btn-hero {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
+  background: var(--color-gold, #d4af37);
+  color: var(--color-primary, #001f3f);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.clorinda-btn-hero:hover {
+  background: var(--color-gold-light, #e5c968);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(212, 175, 55, 0.4);
+  color: var(--color-primary, #001f3f) !important;
+}
+
+.clorinda-hero-decoration {
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 2. Unified Premium Card Container */
+.clorinda-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card, 0 4px 20px rgba(0, 31, 63, 0.08));
+  overflow: hidden;
+  border: 1px solid rgba(0, 40, 80, 0.06);
+  margin-bottom: 2rem;
+}
+
+.clorinda-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #eef2f6;
+  background-color: #fafbfc;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.clorinda-card-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-primary, #001f3f);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clorinda-card-count {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  background-color: #eef2f6;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.clorinda-card-count-number {
+  color: var(--color-primary, #001f3f);
+  font-weight: 700;
+}
+
+.clorinda-card-body {
+  padding: 2rem;
+}
+
+/* 3. Responsive Filters Reusable Form */
+.clorinda-filters-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card, 0 4px 20px rgba(0, 31, 63, 0.08));
+  border: 1px solid rgba(0, 40, 80, 0.06);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.clorinda-filters-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid #eef2f6;
+  padding-bottom: 0.75rem;
+}
+
+.clorinda-filters-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-primary, #001f3f);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clorinda-btn-filter-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary, #475569);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.clorinda-btn-filter-clear:hover {
+  background-color: #f1f5f9;
+  color: var(--color-primary, #001f3f);
+}
+
+.clorinda-filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  align-items: end;
+}
+
+/* 4. Unified Premium Table styling */
+.clorinda-table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+}
+
+.clorinda-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.clorinda-table th {
+  background-color: #fafbfc;
+  padding: 1rem 1.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid #eef2f6;
+  white-space: nowrap;
+}
+
+.clorinda-table td {
+  padding: 1.125rem 1.5rem;
+  border-bottom: 1px solid #eef2f6;
+  vertical-align: middle;
+  font-size: 0.9rem;
+  color: #2d3748;
+}
+
+.clorinda-table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.clorinda-table tbody tr:hover {
+  background-color: #f7fafc;
+}
+
+.clorinda-table-badge-code {
+  background-color: var(--color-primary-xlight, #e6eef5);
+  color: var(--color-primary, #001f3f);
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* 5. Custom Badges & Badges Row */
+.clorinda-badge-role {
+  display: inline-flex;
+  padding: 0.25rem 0.625rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.clorinda-badge-role.admin {
+  background: linear-gradient(135deg, #fff9e6 0%, #ffeba3 100%);
+  color: #8a6d00;
+  border: 1px solid #ffd33d;
+}
+
+.clorinda-badge-role.auxiliar {
+  background: linear-gradient(135deg, #e6f0ff 0%, #c2dcff 100%);
+  color: #0044b3;
+  border: 1px solid #80b3ff;
+}
+
+.clorinda-badge-role.direccion {
+  background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+  color: #6a1b9a;
+  border: 1px solid #ce93d8;
+}
+
+/* 6. Cohesive Form Controls */
+.clorinda-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.clorinda-form-label {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #344054;
+  margin-bottom: 0.375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.clorinda-input-group {
+  display: flex;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: white;
+}
+
+.clorinda-input-group:focus-within {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(74, 158, 224, 0.15);
+}
+
+.clorinda-input-group-text {
+  background-color: #f9fafb;
+  border: none;
+  color: #667085;
+  padding: 0.625rem 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+}
+
+.clorinda-form-control,
+.clorinda-form-select {
+  flex: 1;
+  border: none;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9rem;
+  color: #1d2939;
+  background: white;
+  width: 100%;
+}
+
+.clorinda-form-control:focus,
+.clorinda-form-select:focus {
+  outline: none;
+}
+
+/* 7. Action buttons inside grids or tables */
+.clorinda-action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.clorinda-btn-action {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.9rem;
+}
+
+.clorinda-btn-action:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.clorinda-btn-action:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background-color: #f7fafc;
+}
+
+.clorinda-btn-action.btn-edit:hover:not(:disabled) {
+  color: var(--color-secondary-mid);
+  border-color: var(--color-secondary-light);
+  background-color: var(--color-secondary-xlight);
+}
+
+.clorinda-btn-action.btn-key:hover:not(:disabled) {
+  color: #d97706;
+  border-color: #fbbf24;
+  background-color: #fffbeb;
+}
+
+.clorinda-btn-action.btn-deactivate:hover:not(:disabled) {
+  color: #dc2626;
+  border-color: #fca5a5;
+  background-color: #fef2f2;
+}
+
+.clorinda-btn-action.btn-activate:hover:not(:disabled) {
+  color: #16a34a;
+  border-color: #86efac;
+  background-color: #f0fdf4;
+}
+
+/* 8. Cohesive Premium Modal */
+.clorinda-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1040;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clorinda-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  width: 100%;
+  max-width: 600px;
+  margin: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  animation: clorindaScaleUp 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.clorinda-modal-header {
+  background: var(--gradient-brand, linear-gradient(135deg, #001f3f 0%, #003d7a 100%));
+  color: white;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.clorinda-modal-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clorinda-modal-close {
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.clorinda-modal-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.clorinda-modal-body {
+  padding: 1.5rem;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.clorinda-modal-footer {
+  padding: 1rem 1.5rem;
+  background-color: #fafbfc;
+  border-top: 1px solid #eef2f6;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* 9. Unified Stepper */
+.clorinda-stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.clorinda-stepper-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+}
+
+.clorinda-stepper-circle {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: #e2e8f0;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border: 2px solid #cbd5e1;
+  transition: all 0.3s;
+}
+
+.clorinda-stepper-item.active .clorinda-stepper-circle {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(0, 31, 63, 0.15);
+}
+
+.clorinda-stepper-item.completed .clorinda-stepper-circle {
+  background-color: var(--color-success);
+  color: white;
+  border-color: var(--color-success);
+}
+
+.clorinda-stepper-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-top: 0.5rem;
+  text-align: center;
+  transition: color 0.3s;
+}
+
+.clorinda-stepper-item.active .clorinda-stepper-label {
+  color: var(--color-primary);
+}
+
+.clorinda-stepper-line {
+  flex: 1;
+  height: 2px;
+  background-color: #e2e8f0;
+  margin: -1.25rem 0 0 0;
+  z-index: 1;
+  transition: background-color 0.3s;
+}
+
+.clorinda-stepper-line.completed {
+  background-color: var(--color-success);
+}
+
+/* 10. Status Colors & Text classes */
+.clorinda-text-success { color: var(--color-success) !important; }
+.clorinda-text-warning { color: var(--color-warning) !important; }
+.clorinda-text-danger { color: var(--color-danger) !important; }
+
+/* 11. Cohesive Alerts */
+.clorinda-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border-left: 5px solid transparent;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.clorinda-alert-success {
+  background-color: #e6f4ea;
+  border-color: #137333;
+  color: #137333;
+}
+
+.clorinda-alert-error {
+  background-color: #fce8e6;
+  border-color: #c5221f;
+  color: #c5221f;
+}
+
+.clorinda-alert-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  margin-top: 0.125rem;
+}
+
+.clorinda-alert-content {
+  flex: 1;
+}
+
+.clorinda-alert-content strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.clorinda-alert-content p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: inherit;
+}
+
+.clorinda-alert-close {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  padding: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.clorinda-alert-close:hover {
+  opacity: 1;
+}
+
+/* 12. States: Loading / Empty */
+.clorinda-state-loading,
+.clorinda-state-empty {
+  padding: 4rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.clorinda-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e2e8f0;
+  border-top: 3px solid var(--color-primary);
+  border-radius: 50%;
+  animation: clorindaSpin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.clorinda-loading-text {
+  font-size: 0.95rem;
+  color: #718096;
+  margin: 0;
+}
+
+.clorinda-empty-icon {
+  font-size: 3rem;
+  color: #cbd5e0;
+  margin-bottom: 1rem;
+}
+
+.clorinda-empty-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0 0 0.5rem 0;
+}
+
+.clorinda-empty-text {
+  font-size: 0.9rem;
+  color: #718096;
+  max-width: 320px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* Pagination Row */
+.clorinda-pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #eef2f6;
+  background-color: #fafbfc;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+}
+
+.clorinda-pagination-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clorinda-pagination-label {
+  font-size: 0.875rem;
+  color: #4a5568;
+  margin-bottom: 0;
+}
+
+.clorinda-pagination-select {
+  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 1px solid #d2d6dc;
+  border-radius: 6px;
+  color: #2d3748;
+}
+
+.clorinda-pagination-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.clorinda-pagination-btn {
+  padding: 0.5rem 0.875rem;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background-color: white;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.clorinda-pagination-btn:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-xlight);
+}
+
+.clorinda-pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.clorinda-pagination-pages {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.clorinda-pagination-page {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  background-color: white;
+  color: #475569;
+  font-weight: 600;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.clorinda-pagination-page:hover:not(.active) {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-xlight);
+}
+
+.clorinda-pagination-page.active {
+  background: var(--gradient-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow-primary);
+}
+
+.clorinda-pagination-summary {
+  font-size: 0.875rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.clorinda-summary-total {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+@keyframes clorindaSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes clorindaScaleUp {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive grid for stories / exalumnas cards */
+.clorinda-stories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+/* Premium tab button styles */
+.clorinda-tabs-container {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.clorinda-tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-secondary);
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 0.75rem 0.5rem;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clorinda-tab-btn:hover {
+  color: var(--color-primary);
+}
+
+.clorinda-tab-btn.active {
+  color: var(--color-primary);
+}
+
+.clorinda-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-primary);
+  border-radius: 3px 3px 0 0;
+}
+
+/* ================================================================
+   INFO MODALS & SUBTLE ICONS
+   ================================================================ */
+.clorinda-info-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.7rem;
+  margin-left: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  vertical-align: middle;
+  padding: 0;
+}
+
+.clorinda-info-icon:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  border-color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.clorinda-info-icon i {
+  display: inline-flex;
+}
+
+/* Modal overlays */
+.clorinda-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.clorinda-modal-card {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+  animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.clorinda-modal-header-info {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+}
+
+.clorinda-modal-title-info {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.clorinda-modal-body-info {
+  padding: 1.5rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #475569;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.clorinda-modal-footer-info {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: flex-end;
+  background: #f8fafc;
+}
+
+/* Guide specific styling */
+.clorinda-modal-desc {
+  font-size: 0.95rem;
+  color: #1e293b;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.clorinda-modal-bullet-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0 0;
+}
+
+.clorinda-modal-bullet-item {
+  position: relative;
+  padding-left: 1.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.clorinda-modal-bullet-item::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-secondary);
+  font-weight: 700;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Premium Buttons for Modals */
+.clorinda-btn-primary {
+  background: var(--gradient-primary, linear-gradient(135deg, #4A9EE0 0%, #3B82C4 100%));
+  color: white !important;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  transition: all 0.2s ease-in-out;
+  box-shadow: var(--shadow-primary, 0 4px 10px rgba(74, 158, 224, 0.25));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0.625rem 1.5rem;
+  font-size: 0.9rem;
+}
+
+.clorinda-btn-primary:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(74, 158, 224, 0.35);
+  color: white !important;
+}
+
+.clorinda-btn-primary:active {
+  transform: translateY(0);
+}

@@ -1,257 +1,318 @@
-<div class="container-fluid py-4">
-  <!-- Header -->
-  <div class="row mb-4">
-    <div class="col">
-      <h2 class="mb-0">Comunicados y Avisos</h2>
+<div class="clorinda-page-container">
+  <!-- Hero Header with Gradient -->
+  <div class="clorinda-hero">
+    <div class="clorinda-hero-content">
+      <h1 class="clorinda-hero-title">
+        Comunicados y <span class="clorinda-title-highlight">Avisos</span>
+        <button type="button" class="clorinda-info-icon" (click)="showInfoModal.set(true)" title="Ver información del panel" aria-label="Información">
+          <i class="bi bi-info-circle-fill"></i>
+        </button>
+      </h1>
     </div>
-    <div class="col-auto">
+    <div class="clorinda-hero-actions">
       <button
         type="button"
-        class="btn btn-primary"
+        class="clorinda-btn-hero"
         (click)="createNewPost()"
         [disabled]="isLoading()"
       >
-        <i class="bi bi-plus-circle me-2"></i>
-        Nuevo Comunicado
+        <i class="bi bi-plus-circle-fill"></i>
+        <span>Nuevo Comunicado</span>
       </button>
     </div>
+    <div class="clorinda-hero-decoration"></div>
   </div>
 
-  <!-- Filters -->
-  <div class="card mb-4">
-    <div class="card-body">
-      <form [formGroup]="filterForm">
-        <div class="row g-3">
-          <!-- Post Type Filter -->
-          <div class="col-md-3">
-            <label for="postType" class="form-label">Tipo de Publicación</label>
-            <select id="postType" class="form-select" formControlName="postType">
+  <div class="clorinda-workspace">
+    <!-- Filters Section -->
+    <div class="clorinda-filters-card">
+      <div class="clorinda-filters-header">
+        <div class="clorinda-filters-title">
+          <i class="bi bi-funnel-fill text-primary-inst"></i>
+          <span>Filtros de Publicaciones</span>
+        </div>
+        <button
+          type="button"
+          class="clorinda-btn-filter-clear"
+          (click)="clearFilters()"
+          [disabled]="isLoading()"
+        >
+          <i class="bi bi-arrow-counterclockwise"></i>
+          <span>Limpiar</span>
+        </button>
+      </div>
+
+      <form [formGroup]="filterForm" class="clorinda-filters-grid">
+        <!-- Post Type Filter -->
+        <div class="clorinda-form-group">
+          <label for="postType" class="clorinda-form-label">
+            <i class="bi bi-file-post"></i>
+            Tipo de Publicación
+          </label>
+          <div class="clorinda-input-group">
+            <select id="postType" class="clorinda-form-select" formControlName="postType">
               <option *ngFor="let type of postTypes" [value]="type">
                 {{ postTypeLabels[type] }}
               </option>
             </select>
           </div>
+        </div>
 
-          <!-- Status Filter -->
-          <div class="col-md-3">
-            <label for="status" class="form-label">Estado</label>
-            <select id="status" class="form-select" formControlName="status">
+        <!-- Status Filter -->
+        <div class="clorinda-form-group">
+          <label for="status" class="clorinda-form-label">
+            <i class="bi bi-toggle-on"></i>
+            Estado
+          </label>
+          <div class="clorinda-input-group">
+            <select id="status" class="clorinda-form-select" formControlName="status">
               <option *ngFor="let statusOption of postStatuses" [value]="statusOption">
                 {{ postStatusLabels[statusOption] }}
               </option>
             </select>
           </div>
+        </div>
 
-          <!-- Search Filter -->
-          <div class="col-md-4">
-            <label for="search" class="form-label">Buscar por título</label>
+        <!-- Search Filter -->
+        <div class="clorinda-form-group" style="grid-column: span 2;">
+          <label for="search" class="clorinda-form-label">
+            <i class="bi bi-search"></i>
+            Buscar por título
+          </label>
+          <div class="clorinda-input-group">
             <input
               type="text"
               id="search"
-              class="form-control"
+              class="clorinda-form-control"
               formControlName="search"
               placeholder="Ingrese título del post..."
             />
           </div>
-
-          <!-- Clear Filters Button -->
-          <div class="col-md-2 d-flex align-items-end">
-            <button
-              type="button"
-              class="btn btn-outline-secondary w-100"
-              (click)="clearFilters()"
-              [disabled]="isLoading()"
-            >
-              <i class="bi bi-x-circle me-2"></i>
-              Limpiar
-            </button>
-          </div>
         </div>
       </form>
     </div>
-  </div>
 
-  <!-- Error Message -->
-  <div *ngIf="errorMessage()" class="alert alert-danger alert-dismissible fade show" role="alert">
-    <i class="bi bi-exclamation-triangle-fill me-2"></i>
-    {{ errorMessage() }}
-    <button
-      type="button"
-      class="btn-close"
-      (click)="errorMessage.set(null)"
-      aria-label="Close"
-    ></button>
-  </div>
-
-  <!-- Loading Spinner -->
-  <div *ngIf="isLoading()" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Cargando...</span>
+    <!-- Error Message -->
+    <div *ngIf="errorMessage()" class="clorinda-alert clorinda-alert-error animate-fade-in" role="alert">
+      <div class="clorinda-alert-icon">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <div class="clorinda-alert-content">
+        <strong>Error</strong>
+        <p>{{ errorMessage() }}</p>
+      </div>
+      <button
+        type="button"
+        class="clorinda-alert-close"
+        (click)="errorMessage.set(null)"
+      >
+        <i class="bi bi-x-lg"></i>
+      </button>
     </div>
-    <p class="mt-3 text-muted">Cargando posts...</p>
-  </div>
 
-  <!-- Posts Table -->
-  <div *ngIf="!isLoading()" class="card">
-    <div class="card-body">
-      <!-- Page Size Selector -->
-      <div class="row mb-3">
-        <div class="col-md-6">
-          <div class="d-flex align-items-center">
-            <label for="pageSize" class="me-2 text-nowrap">Mostrar:</label>
+    <!-- Results Card -->
+    <div class="clorinda-card animate-fade-in">
+      <div class="clorinda-card-header">
+        <h3 class="clorinda-card-title">
+          <i class="bi bi-journal-text text-primary-inst"></i>
+          Publicaciones en la Landing
+        </h3>
+        <div class="clorinda-card-count">
+          <span class="clorinda-card-count-number">{{ totalItems() }}</span>
+          <span>publicaciones</span>
+        </div>
+      </div>
+
+      <div class="clorinda-card-body p-0">
+        <!-- Loading Spinner -->
+        <div *ngIf="isLoading()" class="clorinda-state-loading">
+          <div class="clorinda-loading-spinner"></div>
+          <p class="clorinda-loading-text">Cargando publicaciones...</p>
+        </div>
+
+        <!-- Loaded Table -->
+        <div *ngIf="!isLoading()" class="clorinda-table-wrapper">
+          <table class="clorinda-table">
+            <thead>
+              <tr>
+                <th>Tipo</th>
+                <th>Título / Resumen</th>
+                <th>Estado</th>
+                <th>Fecha Publicación</th>
+                <th>Fecha Expiración</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngIf="posts().length === 0">
+                <td colspan="6" class="text-center py-5 text-muted">
+                  <div class="clorinda-state-empty">
+                    <div class="clorinda-empty-icon">
+                      <i class="bi bi-inbox text-muted"></i>
+                    </div>
+                    <h4 class="clorinda-empty-title">No se encontraron posts</h4>
+                    <p class="clorinda-empty-text">No se encontraron publicaciones con los filtros seleccionados.</p>
+                  </div>
+                </td>
+              </tr>
+              <tr *ngFor="let post of posts()" class="post-row">
+                <!-- Tipo -->
+                <td>
+                  <span class="post-type-badge" [class]="post.postType.toLowerCase()">
+                    {{ getTypeLabel(post.postType) }}
+                  </span>
+                </td>
+
+                <!-- Título -->
+                <td>
+                  <div class="fw-semibold text-primary-inst mb-1" style="font-size:0.95rem;">{{ post.title }}</div>
+                  <div class="text-muted small" *ngIf="post.summary">
+                    {{ post.summary.substring(0, 100) }}{{ post.summary.length > 100 ? '...' : '' }}
+                  </div>
+                </td>
+
+                <!-- Estado -->
+                <td>
+                  <span class="post-status-badge" [class]="post.status.toLowerCase()">
+                    <i [class]="post.status === 'PUBLISHED' ? 'bi bi-check-circle-fill' : 'bi bi-pencil-fill'"></i>
+                    {{ getStatusLabel(post.status) }}
+                  </span>
+                </td>
+
+                <!-- Fecha Publicación -->
+                <td>
+                  <span class="date-text">{{ formatDate(post.publishAt) }}</span>
+                </td>
+
+                <!-- Fecha Expiración -->
+                <td>
+                  <span class="date-text">{{ formatDate(post.expireAt) }}</span>
+                </td>
+
+                <!-- Acciones -->
+                <td>
+                  <div class="clorinda-action-buttons">
+                    <!-- Edit Button -->
+                    <button
+                      type="button"
+                      class="clorinda-btn-action btn-edit"
+                      (click)="editPost(post)"
+                      [disabled]="!canEdit(post)"
+                      [title]="canEdit(post) ? 'Editar' : 'No se puede editar en este estado'"
+                    >
+                      <i class="bi bi-pencil-fill"></i>
+                    </button>
+
+                    <!-- Publish Button -->
+                    <button
+                      *ngIf="canPublish(post)"
+                      type="button"
+                      class="clorinda-btn-action btn-activate"
+                      (click)="publishPost(post)"
+                      title="Publicar"
+                    >
+                      <i class="bi bi-send-fill"></i>
+                    </button>
+
+                    <!-- Unpublish Button -->
+                    <button
+                      *ngIf="canUnpublish(post)"
+                      type="button"
+                      class="clorinda-btn-action btn-key"
+                      (click)="unpublishPost(post)"
+                      title="Despublicar"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+
+                    <!-- Delete Button -->
+                    <button
+                      type="button"
+                      class="clorinda-btn-action btn-deactivate"
+                      (click)="deletePost(post)"
+                      [disabled]="!canDelete(post)"
+                      [title]="canDelete(post) ? 'Eliminar' : 'No se puede eliminar en este estado'"
+                    >
+                      <i class="bi bi-trash-fill"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div *ngIf="!isLoading() && posts().length > 0" class="clorinda-pagination-container">
+          <div class="clorinda-pagination-info">
+            <label for="pageSize" class="clorinda-pagination-label">Mostrar:</label>
             <select
+              class="clorinda-pagination-select"
               id="pageSize"
-              class="form-select form-select-sm"
-              style="width: auto"
               [value]="pageSize()"
               (change)="onPageSizeChange($event)"
             >
-              <option [value]="10">10</option>
-              <option [value]="25">25</option>
-              <option [value]="50">50</option>
-              <option [value]="100">100</option>
+              <option [value]="10">10 filas</option>
+              <option [value]="25">25 filas</option>
+              <option [value]="50">50 filas</option>
+              <option [value]="100">100 filas</option>
             </select>
-            <span class="ms-2 text-muted">registros</span>
           </div>
-        </div>
-        <div class="col-md-6 text-end">
-          <span class="text-muted">
-            Total: {{ totalItems() }} publicado{{ totalItems() !== 1 ? 's' : '' }}
-          </span>
-        </div>
-      </div>
 
-      <!-- Table -->
-      <div class="table-responsive">
-        <table class="table table-hover align-middle">
-          <thead class="table-light">
-            <tr>
-              <th>Tipo</th>
-              <th>Título</th>
-              <th>Estado</th>
-              <th>Fecha Publicación</th>
-              <th>Fecha Expiración</th>
-              <th class="text-center">Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngIf="posts().length === 0">
-              <td colspan="6" class="text-center py-5 text-muted">
-                <i class="bi bi-inbox fs-1 d-block mb-3"></i>
-                No se encontraron publicaciones con los filtros seleccionados
-              </td>
-            </tr>
-            <tr *ngFor="let post of posts()">
-              <!-- Tipo -->
-              <td>
-                <span class="badge bg-light text-dark">
-                  {{ getTypeLabel(post.postType) }}
-                </span>
-              </td>
-
-              <!-- Título -->
-              <td>
-                <div class="fw-semibold">{{ post.title }}</div>
-                <small class="text-muted" *ngIf="post.summary">
-                  {{ post.summary.substring(0, 80) }}{{ post.summary.length > 80 ? '...' : '' }}
-                </small>
-              </td>
-
-              <!-- Estado -->
-              <td>
-                <span [ngClass]="getStatusBadgeClass(post.status)">
-                  {{ getStatusLabel(post.status) }}
-                </span>
-              </td>
-
-              <!-- Fecha Publicación -->
-              <td>
-                <small>{{ formatDate(post.publishAt) }}</small>
-              </td>
-
-              <!-- Fecha Expiración -->
-              <td>
-                <small>{{ formatDate(post.expireAt) }}</small>
-              </td>
-
-              <!-- Acciones -->
-              <td>
-                <div class="btn-group btn-group-sm" role="group">
-                  <!-- Edit Button -->
-                  <button
-                    type="button"
-                    class="btn btn-outline-primary"
-                    (click)="editPost(post)"
-                    [disabled]="!canEdit(post)"
-                    [title]="canEdit(post) ? 'Editar' : 'No se puede editar en este estado'"
-                  >
-                    <i class="bi bi-pencil"></i>
-                  </button>
-
-                  <!-- Publish Button -->
-                  <button
-                    *ngIf="canPublish(post)"
-                    type="button"
-                    class="btn btn-outline-success"
-                    (click)="publishPost(post)"
-                    title="Publicar"
-                  >
-                    <i class="bi bi-check-circle"></i>
-                  </button>
-
-                  <!-- Unpublish Button -->
-                  <button
-                    *ngIf="canUnpublish(post)"
-                    type="button"
-                    class="btn btn-outline-warning"
-                    (click)="unpublishPost(post)"
-                    title="Despublicar"
-                  >
-                    <i class="bi bi-x-circle"></i>
-                  </button>
-
-                  <!-- Delete Button -->
-                  <button
-                    type="button"
-                    class="btn btn-outline-danger"
-                    (click)="deletePost(post)"
-                    [disabled]="!canDelete(post)"
-                    [title]="canDelete(post) ? 'Eliminar' : 'No se puede eliminar en este estado'"
-                  >
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Pagination -->
-      <div class="row mt-4" *ngIf="totalPages() > 1">
-        <div class="col-12">
-          <nav aria-label="Paginación de posts">
+          <nav class="clorinda-pagination-nav" aria-label="Paginación de posts">
             <ngb-pagination
               [collectionSize]="totalItems()"
-              [(page)]="currentPage"
+              [page]="currentPage()"
+              (pageChange)="onPageChange($event)"
               [pageSize]="pageSize()"
               [maxSize]="5"
               [rotate]="true"
               [boundaryLinks]="true"
-              (pageChange)="onPageChange($event)"
-              class="d-flex justify-content-center"
             >
             </ngb-pagination>
           </nav>
-          <div class="text-center text-muted">
-            <small>
-              Mostrando {{ (currentPage() - 1) * pageSize() + 1 }} a
-              {{ Math.min(currentPage() * pageSize(), totalItems()) }} de
-              {{ totalItems() }} publicaciones
-            </small>
+
+          <div class="clorinda-pagination-summary">
+            <span>
+              {{ (currentPage() - 1) * pageSize() + 1 }}–{{
+                Math.min(currentPage() * pageSize(), totalItems())
+              }}
+            </span>
+            <span class="text-muted mx-1">de</span>
+            <span class="clorinda-summary-total">{{ totalItems() }}</span>
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Guide Info Modal -->
+@if (showInfoModal()) {
+  <div class="clorinda-modal-overlay" (click)="showInfoModal.set(false)">
+    <div class="clorinda-modal-card" (click)="$event.stopPropagation()">
+      <div class="clorinda-modal-header-info">
+        <h3 class="clorinda-modal-title-info">
+          <i class="bi bi-info-circle-fill text-secondary-inst"></i>
+          <span>Información</span>
+        </h3>
+        <button type="button" class="btn-close" (click)="showInfoModal.set(false)" aria-label="Cerrar"></button>
+      </div>
+      <div class="clorinda-modal-body-info">
+        <p class="clorinda-modal-desc">
+          Este panel está destinado a la <strong>Gestión de publicaciones, noticias y avisos informativos</strong> de la landing page institucional.
+        </p>
+        <ul class="clorinda-modal-bullet-list">
+          <li class="clorinda-modal-bullet-item">Publicar nuevos comunicados y avisos institucionales categorizándolos en Noticias, Eventos, Avisos o Documentos.</li>
+          <li class="clorinda-modal-bullet-item">Activar (Publicado) o desactivar (Borrador) artículos informativos para controlar lo que se visualiza en la página web pública de la I.E.</li>
+          <li class="clorinda-modal-bullet-item">Destacar artículos relevantes, configurar fechas de vigencia y adjuntar imágenes o enlaces relacionados a cada nota escolar.</li>
+        </ul>
+      </div>
+      <div class="clorinda-modal-footer-info">
+        <button type="button" class="clorinda-btn-primary px-4 py-2 text-white" (click)="showInfoModal.set(false)">
+          Entendido
+        </button>
+      </div>
+    </div>
+  </div>
+}

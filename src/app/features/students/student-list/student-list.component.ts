@@ -58,6 +58,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   showCreateModal = false;
   showEditModal = false;
   selectedStudent: Student | null = null;
+  showInfoModal = false;
 
   ngOnInit(): void {
     this.initFilterForm();

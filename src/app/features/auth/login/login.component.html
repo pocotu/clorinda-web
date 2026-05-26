@@ -1,14 +1,20 @@
-<div class="login-wrapper">
-  <div class="container">
+<div class="login-wrapper position-relative overflow-hidden">
+  <!-- Glowing Background Mesh Shapes -->
+  <div class="login-glow-1"></div>
+  <div class="login-glow-2"></div>
+
+  <div class="container position-relative" style="z-index: 10;">
     <div class="row justify-content-center align-items-center min-vh-100-adjusted">
       <div class="col-12 col-md-8 col-lg-5 col-xl-4">
-        <!-- Brand / Logo Area -->
-        <div class="text-center mb-4 login-brand">
-          <h2 class="fw-bold text-dark mb-0">Bienvenido</h2>
-        </div>
-
-        <div class="card login-card border-0 shadow-sm">
+        
+        <!-- Brand / Logo Card -->
+        <div class="card login-card border-0 shadow-lg">
           <div class="card-body p-4 p-md-5">
+            <!-- Sleek Header Title -->
+            <div class="text-center mb-4">
+              <h2 class="fw-bold login-title text-dark">Acceso Administrativo</h2>
+            </div>
+
             <!-- Error Alert -->
             @if (errorMessage()) {
               <div
@@ -16,7 +22,7 @@
                 role="alert"
               >
                 <i class="bi bi-exclamation-circle-fill me-2 fs-5"></i>
-                <div>
+                <div class="small">
                   {{ errorMessage() }}
                 </div>
                 <button
@@ -34,18 +40,18 @@
               <div class="form-group mb-4">
                 <label
                   for="username"
-                  class="form-label fw-medium text-secondary small text-uppercase tracking-wide"
+                  class="form-label fw-bold small text-uppercase tracking-wide"
                   >Usuario</label
                 >
                 <div class="input-group input-group-merge">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted">
-                    <i class="bi bi-person"></i>
+                  <span class="input-group-text">
+                    <i class="bi bi-person-fill"></i>
                   </span>
                   <input
                     type="text"
                     id="username"
                     formControlName="username"
-                    class="form-control border-start-0 ps-0"
+                    class="form-control"
                     [class.is-invalid]="hasError('username')"
                     placeholder="Ingresa tu usuario"
                     autocomplete="username"
@@ -63,23 +69,33 @@
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <label
                     for="password"
-                    class="form-label fw-medium text-secondary small text-uppercase tracking-wide mb-0"
+                    class="form-label fw-bold small text-uppercase tracking-wide mb-0"
                     >Contraseña</label
                   >
                 </div>
                 <div class="input-group input-group-merge">
-                  <span class="input-group-text bg-transparent border-end-0 text-muted">
-                    <i class="bi bi-lock"></i>
+                  <span class="input-group-text">
+                    <i class="bi bi-lock-fill"></i>
                   </span>
                   <input
-                    type="password"
+                    [type]="showPassword() ? 'text' : 'password'"
                     id="password"
                     formControlName="password"
-                    class="form-control border-start-0 ps-0"
+                    class="form-control"
                     [class.is-invalid]="hasError('password')"
                     placeholder="••••••••"
                     autocomplete="current-password"
                   />
+                  <!-- Toggle Show/Hide Password Eye Button -->
+                  <button
+                    type="button"
+                    class="btn border-0 bg-transparent text-muted px-3 d-flex align-items-center justify-content-center"
+                    (click)="showPassword.set(!showPassword())"
+                    [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                    style="font-size: 1.1rem; outline: none; box-shadow: none;"
+                  >
+                    <i class="bi" [class.bi-eye-fill]="!showPassword()" [class.bi-eye-slash-fill]="showPassword()"></i>
+                  </button>
                 </div>
                 @if (hasError('password')) {
                   <div class="invalid-feedback d-block mt-1">
@@ -89,22 +105,22 @@
               </div>
 
               <!-- Submit Button -->
-              <div class="d-grid mt-5">
+              <div class="d-grid mt-4">
                 <button
                   type="submit"
-                  class="btn btn-primary btn-login py-3 rounded-3 fw-medium"
+                  class="btn btn-login py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
                   [disabled]="isLoading()"
                 >
                   @if (isLoading()) {
                     <span
-                      class="spinner-border spinner-border-sm me-2"
+                      class="spinner-border spinner-border-sm"
                       role="status"
                       aria-hidden="true"
                     ></span>
                     <span>Accediendo...</span>
                   } @else {
                     <span>Ingresar al Sistema</span>
-                    <i class="bi bi-arrow-right ms-2"></i>
+                    <i class="bi bi-arrow-right fs-5"></i>
                   }
                 </button>
               </div>
@@ -112,11 +128,11 @@
           </div>
         </div>
 
-        <!-- Help Text -->
+        <!-- Help Text / Support -->
         <div class="text-center mt-4">
           <p class="small text-muted mb-0">
             ¿Problemas para acceder?
-            <a href="#" class="text-decoration-none fw-medium">Contacta a soporte</a>
+            <a href="#" class="text-decoration-none fw-bold ms-1">Contacta a soporte</a>
           </p>
         </div>
       </div>
