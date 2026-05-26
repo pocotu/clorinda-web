@@ -153,17 +153,12 @@
                           </div>
                         } @else {
                           <div class="clorinda-action-buttons">
-                            <!-- Change password button (disabled for self to avoid session issues) -->
+                            <!-- Change password button (enabled for self so admin can manage their own password) -->
                             <button
                               type="button"
                               class="clorinda-btn-action btn-key"
                               (click)="openPasswordModal(user)"
-                              [disabled]="user.id === currentUser()?.id"
-                              [title]="
-                                user.id === currentUser()?.id
-                                  ? 'Cambia tu contraseña desde tu perfil'
-                                  : 'Cambiar contraseña'
-                              "
+                              title="Cambiar contraseña"
                             >
                               <i class="bi bi-key-fill"></i>
                             </button>
