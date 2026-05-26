@@ -70,11 +70,13 @@
 }
 
 /* Table Row Enhancements */
-.session-row, .record-row {
+.session-row,
+.record-row {
   transition: background-color 0.2s ease;
 }
 
-.session-row:hover, .record-row:hover {
+.session-row:hover,
+.record-row:hover {
   background-color: #f8fafc !important;
 }
 

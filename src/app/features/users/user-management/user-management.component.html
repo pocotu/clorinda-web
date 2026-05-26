@@ -4,7 +4,13 @@
     <div class="clorinda-hero-content">
       <h1 class="clorinda-hero-title">
         <span class="clorinda-title-highlight">Usuarios del Sistema</span>
-        <button type="button" class="clorinda-info-icon" (click)="showInfoModal.set(true)" title="Ver información del panel" aria-label="Información">
+        <button
+          type="button"
+          class="clorinda-info-icon"
+          (click)="showInfoModal.set(true)"
+          title="Ver información del panel"
+          aria-label="Información"
+        >
           <i class="bi bi-info-circle-fill"></i>
         </button>
       </h1>
@@ -78,7 +84,9 @@
                 <i class="bi bi-people-fill text-muted"></i>
               </div>
               <h4 class="clorinda-empty-title">No hay usuarios registrados</h4>
-              <p class="clorinda-empty-text">Cree un nuevo usuario haciendo clic en el botón superior.</p>
+              <p class="clorinda-empty-text">
+                Cree un nuevo usuario haciendo clic en el botón superior.
+              </p>
             </div>
           } @else {
             <div class="clorinda-table-wrapper">
@@ -301,9 +309,7 @@
           </div>
         </div>
         <div class="clorinda-modal-footer">
-          <button type="button" class="btn-secondary" (click)="closeCreateModal()">
-            Cancelar
-          </button>
+          <button type="button" class="btn-secondary" (click)="closeCreateModal()">Cancelar</button>
           <button
             type="submit"
             class="btn-primary"
@@ -418,20 +424,38 @@
           <i class="bi bi-info-circle-fill text-secondary-inst"></i>
           <span>Información</span>
         </h3>
-        <button type="button" class="btn-close" (click)="showInfoModal.set(false)" aria-label="Cerrar"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showInfoModal.set(false)"
+          aria-label="Cerrar"
+        ></button>
       </div>
       <div class="clorinda-modal-body-info">
         <p class="clorinda-modal-desc">
-          Este panel está destinado a la <strong>Gestión de cuentas institucionales y niveles de acceso</strong> de la plataforma.
+          Este panel está destinado a la
+          <strong>Gestión de cuentas institucionales y niveles de acceso</strong> de la plataforma.
         </p>
         <ul class="clorinda-modal-bullet-list">
-          <li class="clorinda-modal-bullet-item">Crear nuevas cuentas de usuarios asignando el nombre de usuario y rol.</li>
-          <li class="clorinda-modal-bullet-item">Restablecer contraseñas de forma inmediata para usuarios que hayan olvidado sus credenciales.</li>
-          <li class="clorinda-modal-bullet-item">Habilitar o deshabilitar temporalmente cuentas de usuario para controlar la seguridad de acceso a la intranet en tiempo real.</li>
+          <li class="clorinda-modal-bullet-item">
+            Crear nuevas cuentas de usuarios asignando el nombre de usuario y rol.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Restablecer contraseñas de forma inmediata para usuarios que hayan olvidado sus
+            credenciales.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Habilitar o deshabilitar temporalmente cuentas de usuario para controlar la seguridad de
+            acceso a la intranet en tiempo real.
+          </li>
         </ul>
       </div>
       <div class="clorinda-modal-footer-info">
-        <button type="button" class="clorinda-btn-primary px-4 py-2 text-white" (click)="showInfoModal.set(false)">
+        <button
+          type="button"
+          class="clorinda-btn-primary px-4 py-2 text-white"
+          (click)="showInfoModal.set(false)"
+        >
           Entendido
         </button>
       </div>

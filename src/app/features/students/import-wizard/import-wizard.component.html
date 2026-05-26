@@ -4,7 +4,13 @@
     <div class="clorinda-hero-content">
       <h1 class="clorinda-hero-title">
         Importación de <span class="clorinda-title-highlight">Estudiantes</span>
-        <button type="button" class="clorinda-info-icon" (click)="showInfoModal = true" title="Ver información del panel" aria-label="Información">
+        <button
+          type="button"
+          class="clorinda-info-icon"
+          (click)="showInfoModal = true"
+          title="Ver información del panel"
+          aria-label="Información"
+        >
           <i class="bi bi-info-circle-fill"></i>
         </button>
       </h1>
@@ -33,7 +39,10 @@
               <div class="clorinda-stepper-label">{{ getStepTitle(step) }}</div>
             </div>
             @if (step < 4) {
-              <div class="clorinda-stepper-line" [class.completed]="isStepCompleted(step + 1)"></div>
+              <div
+                class="clorinda-stepper-line"
+                [class.completed]="isStepCompleted(step + 1)"
+              ></div>
             }
           }
         </div>
@@ -43,7 +52,8 @@
           <div class="step-content animate-fade-in">
             <h5 class="fw-bold text-primary-inst mb-3">Paso 1: Subir Archivos de Nómina</h5>
             <p class="text-muted mb-4">
-              Seleccione uno o varios archivos Excel (.xlsx) o CSV (.csv) para procesar e importar la nómina institucional.
+              Seleccione uno o varios archivos Excel (.xlsx) o CSV (.csv) para procesar e importar
+              la nómina institucional.
             </p>
 
             <!-- Drag & Drop Zone -->
@@ -56,7 +66,9 @@
             >
               <div class="drop-zone-content text-center py-4">
                 <i class="bi bi-cloud-arrow-up-fill display-3 text-secondary-mid mb-3"></i>
-                <p class="mb-2 fw-semibold fs-5 text-primary-inst">Arrastre archivos aquí o haga clic para seleccionar</p>
+                <p class="mb-2 fw-semibold fs-5 text-primary-inst">
+                  Arrastre archivos aquí o haga clic para seleccionar
+                </p>
                 <p class="text-muted small mb-4">
                   Formatos soportados: Excel (.xlsx) y CSV (.csv) (Tamaño máximo: 10MB por archivo)
                 </p>
@@ -68,7 +80,11 @@
                   accept=".xlsx,.csv"
                   (change)="onFileSelected($event)"
                 />
-                <label for="fileInput" class="btn btn-primary px-4 py-2" style="border-radius:30px; font-weight:600;">
+                <label
+                  for="fileInput"
+                  class="btn btn-primary px-4 py-2"
+                  style="border-radius: 30px; font-weight: 600"
+                >
                   <i class="bi bi-folder2-open me-2"></i>
                   Seleccionar Archivos
                 </label>
@@ -93,9 +109,17 @@
 
             <!-- Selected Files List -->
             @if (selectedFiles.length > 0) {
-              <div class="selected-files mb-4 p-3 bg-light rounded" style="border: 1px solid #eef2f6;">
-                <h6 class="fw-bold text-primary-inst mb-3">Archivos Seleccionados ({{ selectedFiles.length }})</h6>
-                <div class="list-group list-group-flush" style="border-radius: 8px; border: 1px solid #e2e8f0; background:white;">
+              <div
+                class="selected-files mb-4 p-3 bg-light rounded"
+                style="border: 1px solid #eef2f6"
+              >
+                <h6 class="fw-bold text-primary-inst mb-3">
+                  Archivos Seleccionados ({{ selectedFiles.length }})
+                </h6>
+                <div
+                  class="list-group list-group-flush"
+                  style="border-radius: 8px; border: 1px solid #e2e8f0; background: white"
+                >
                   @for (file of selectedFiles; track file.id) {
                     <div
                       class="list-group-item d-flex justify-content-between align-items-center py-3 px-4"
@@ -157,9 +181,11 @@
 
             @if (validating) {
               <div class="clorinda-state-loading py-5">
-                <div class="clorinda-loading-spinner" style="width: 3.5rem; height: 3.5rem;"></div>
+                <div class="clorinda-loading-spinner" style="width: 3.5rem; height: 3.5rem"></div>
                 <p class="clorinda-loading-text fw-bold">Validando nóminas, por favor espere...</p>
-                <p class="text-muted small mt-1">El backend está analizando la integridad y correspondencia de las hojas y filas.</p>
+                <p class="text-muted small mt-1">
+                  El backend está analizando la integridad y correspondencia de las hojas y filas.
+                </p>
               </div>
             }
 
@@ -180,48 +206,87 @@
                 <div class="row g-3 mb-4">
                   <div class="col-6 col-md-3">
                     <div class="card p-3 bg-light border text-center rounded-3">
-                      <h3 class="mb-0 fw-bold text-primary-inst">{{ validationResult.summary.totalRows }}</h3>
-                      <small class="text-muted uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">TOTAL FILAS</small>
+                      <h3 class="mb-0 fw-bold text-primary-inst">
+                        {{ validationResult.summary.totalRows }}
+                      </h3>
+                      <small
+                        class="text-muted uppercase fw-bold"
+                        style="font-size: 0.75rem; letter-spacing: 0.5px"
+                        >TOTAL FILAS</small
+                      >
                     </div>
                   </div>
                   <div class="col-6 col-md-3">
-                    <div class="card p-3 text-white text-center rounded-3" style="background-color: var(--color-success);">
+                    <div
+                      class="card p-3 text-white text-center rounded-3"
+                      style="background-color: var(--color-success)"
+                    >
                       <h3 class="mb-0 fw-bold">{{ validationResult.summary.validRows }}</h3>
-                      <small class="uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">VÁLIDAS</small>
+                      <small
+                        class="uppercase fw-bold"
+                        style="font-size: 0.75rem; letter-spacing: 0.5px"
+                        >VÁLIDAS</small
+                      >
                     </div>
                   </div>
                   <div class="col-6 col-md-3">
-                    <div class="card p-3 text-dark text-center rounded-3" style="background-color: var(--color-gold-light);">
+                    <div
+                      class="card p-3 text-dark text-center rounded-3"
+                      style="background-color: var(--color-gold-light)"
+                    >
                       <h3 class="mb-0 fw-bold">{{ validationResult.summary.warnings }}</h3>
-                      <small class="uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">ADVERTENCIAS</small>
+                      <small
+                        class="uppercase fw-bold"
+                        style="font-size: 0.75rem; letter-spacing: 0.5px"
+                        >ADVERTENCIAS</small
+                      >
                     </div>
                   </div>
                   <div class="col-6 col-md-3">
-                    <div class="card p-3 text-white text-center rounded-3" style="background-color: var(--color-danger);">
+                    <div
+                      class="card p-3 text-white text-center rounded-3"
+                      style="background-color: var(--color-danger)"
+                    >
                       <h3 class="mb-0 fw-bold">{{ validationResult.summary.errors }}</h3>
-                      <small class="uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">ERRORES CRÍTICOS</small>
+                      <small
+                        class="uppercase fw-bold"
+                        style="font-size: 0.75rem; letter-spacing: 0.5px"
+                        >ERRORES CRÍTICOS</small
+                      >
                     </div>
                   </div>
                 </div>
 
                 @if (!validationResult.canConfirm) {
-                  <div class="clorinda-alert clorinda-alert-error mb-4" style="border-left-width: 8px;">
+                  <div
+                    class="clorinda-alert clorinda-alert-error mb-4"
+                    style="border-left-width: 8px"
+                  >
                     <div class="clorinda-alert-icon">
                       <i class="bi bi-x-circle-fill fs-3"></i>
                     </div>
                     <div class="clorinda-alert-content">
                       <strong>Bloqueo de Importación</strong>
-                      <p>Se han detectado errores críticos en la nómina. Debe corregir las filas observadas y volver a subir el archivo.</p>
+                      <p>
+                        Se han detectado errores críticos en la nómina. Debe corregir las filas
+                        observadas y volver a subir el archivo.
+                      </p>
                     </div>
                   </div>
                 } @else {
-                  <div class="clorinda-alert clorinda-alert-success mb-4" style="border-left-width: 8px;">
+                  <div
+                    class="clorinda-alert clorinda-alert-success mb-4"
+                    style="border-left-width: 8px"
+                  >
                     <div class="clorinda-alert-icon">
                       <i class="bi bi-check-circle-fill fs-3"></i>
                     </div>
                     <div class="clorinda-alert-content">
                       <strong>Estructura Válida</strong>
-                      <p>Todas las filas críticas se encuentran validadas correctamente. El lote está listo para consolidarse en la base de datos.</p>
+                      <p>
+                        Todas las filas críticas se encuentran validadas correctamente. El lote está
+                        listo para consolidarse en la base de datos.
+                      </p>
                     </div>
                   </div>
                 }
@@ -266,13 +331,17 @@
         <!-- Step 3: Preview -->
         @if (currentStep === 3) {
           <div class="step-content animate-fade-in">
-            <h5 class="fw-bold text-primary-inst mb-3">Paso 3: Detalle de Observaciones y Errores</h5>
+            <h5 class="fw-bold text-primary-inst mb-3">
+              Paso 3: Detalle de Observaciones y Errores
+            </h5>
 
             @if (validationResult) {
               <!-- Filters Grid -->
-              <div class="row g-3 mb-4 p-3 bg-light rounded" style="border:1px solid #eef2f6;">
+              <div class="row g-3 mb-4 p-3 bg-light rounded" style="border: 1px solid #eef2f6">
                 <div class="col-md-4">
-                  <label class="form-label fw-bold text-primary-inst small">Filtrar por Severidad</label>
+                  <label class="form-label fw-bold text-primary-inst small"
+                    >Filtrar por Severidad</label
+                  >
                   <select
                     class="form-select"
                     [(ngModel)]="selectedSeverityFilter"
@@ -284,7 +353,9 @@
                   </select>
                 </div>
                 <div class="col-md-4">
-                  <label class="form-label fw-bold text-primary-inst small">Filtrar por Archivo</label>
+                  <label class="form-label fw-bold text-primary-inst small"
+                    >Filtrar por Archivo</label
+                  >
                   <select
                     class="form-select"
                     [(ngModel)]="selectedFileFilter"
@@ -310,7 +381,10 @@
 
               <!-- Issues Table -->
               @if (filteredIssues.length > 0) {
-                <div class="clorinda-table-wrapper mb-4" style="border: 1px solid #eef2f6; border-radius: 8px;">
+                <div
+                  class="clorinda-table-wrapper mb-4"
+                  style="border: 1px solid #eef2f6; border-radius: 8px"
+                >
                   <table class="clorinda-table">
                     <thead>
                       <tr>
@@ -324,7 +398,7 @@
                     <tbody>
                       @for (issue of getPaginatedIssues(); track issue.id) {
                         <tr class="issue-row">
-                          <td style="max-width: 250px;" class="text-truncate-mobile">
+                          <td style="max-width: 250px" class="text-truncate-mobile">
                             <span class="fw-semibold text-primary-inst">{{
                               getFileName(
                                 selectedFileFilter === 'ALL'
@@ -333,14 +407,20 @@
                               )
                             }}</span>
                           </td>
-                          <td><span class="badge bg-light text-dark border px-2">{{ issue.sheetName }}</span></td>
-                          <td><strong class="text-primary-inst">#{{ issue.rowNumber }}</strong></td>
+                          <td>
+                            <span class="badge bg-light text-dark border px-2">{{
+                              issue.sheetName
+                            }}</span>
+                          </td>
+                          <td>
+                            <strong class="text-primary-inst">#{{ issue.rowNumber }}</strong>
+                          </td>
                           <td>
                             <span [class]="getSeverityBadgeClass(issue.severity)">
                               {{ issue.severity === 'ERROR' ? 'Crítico' : 'Advertencia' }}
                             </span>
                           </td>
-                          <td class="text-muted" style="max-width: 350px;">{{ issue.message }}</td>
+                          <td class="text-muted" style="max-width: 350px">{{ issue.message }}</td>
                         </tr>
                       }
                     </tbody>
@@ -352,13 +432,19 @@
                   <nav class="mb-4">
                     <ul class="pagination justify-content-center gap-1">
                       <li class="page-item" [class.disabled]="currentPage === 1">
-                        <button class="page-link py-2 px-3 border rounded" (click)="previousPage()">Anterior</button>
+                        <button class="page-link py-2 px-3 border rounded" (click)="previousPage()">
+                          Anterior
+                        </button>
                       </li>
                       <li class="page-item active">
-                        <span class="page-link py-2 px-3 border rounded bg-primary text-white">{{ currentPage }} de {{ getTotalPages() }}</span>
+                        <span class="page-link py-2 px-3 border rounded bg-primary text-white"
+                          >{{ currentPage }} de {{ getTotalPages() }}</span
+                        >
                       </li>
                       <li class="page-item" [class.disabled]="currentPage === getTotalPages()">
-                        <button class="page-link py-2 px-3 border rounded" (click)="nextPage()">Siguiente</button>
+                        <button class="page-link py-2 px-3 border rounded" (click)="nextPage()">
+                          Siguiente
+                        </button>
                       </li>
                     </ul>
                   </nav>
@@ -396,7 +482,10 @@
                       class="btn btn-success px-4"
                       (click)="goNext()"
                       [disabled]="!canGoNext()"
-                      style="background-color: var(--color-success); border-color: var(--color-success);"
+                      style="
+                        background-color: var(--color-success);
+                        border-color: var(--color-success);
+                      "
                     >
                       <i class="bi bi-cloud-upload-fill me-2"></i>
                       Confirmar e Importar
@@ -420,9 +509,12 @@
 
             @if (confirming) {
               <div class="clorinda-state-loading py-5">
-                <div class="clorinda-loading-spinner" style="width: 3.5rem; height: 3.5rem;"></div>
+                <div class="clorinda-loading-spinner" style="width: 3.5rem; height: 3.5rem"></div>
                 <p class="clorinda-loading-text fw-bold">Guardando nómina en base de datos...</p>
-                <p class="text-muted small mt-1">Este proceso ejecuta una transacción masiva segura. Por favor, no cierre esta ventana.</p>
+                <p class="text-muted small mt-1">
+                  Este proceso ejecuta una transacción masiva segura. Por favor, no cierre esta
+                  ventana.
+                </p>
               </div>
             }
 
@@ -445,49 +537,83 @@
             }
 
             @if (importResult && !confirming) {
-              <div class="clorinda-alert clorinda-alert-success mb-4" style="border-left-width: 8px;">
+              <div
+                class="clorinda-alert clorinda-alert-success mb-4"
+                style="border-left-width: 8px"
+              >
                 <div class="clorinda-alert-icon">
                   <i class="bi bi-check-circle-fill fs-3"></i>
                 </div>
                 <div class="clorinda-alert-content">
                   <strong>¡Proceso de Importación Completado!</strong>
-                  <p>La nómina escolar del periodo se ha guardado exitosamente con la auditoría institucional requerida.</p>
+                  <p>
+                    La nómina escolar del periodo se ha guardado exitosamente con la auditoría
+                    institucional requerida.
+                  </p>
                 </div>
               </div>
 
               <div class="row g-3 mb-5">
                 <div class="col-12 col-md-4">
                   <div class="card p-3 bg-light border text-center rounded-3">
-                    <h3 class="mb-0 fw-bold text-primary-inst">{{ importResult.summary.totalRows }}</h3>
-                    <small class="text-muted uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">FILAS LEÍDAS</small>
+                    <h3 class="mb-0 fw-bold text-primary-inst">
+                      {{ importResult.summary.totalRows }}
+                    </h3>
+                    <small
+                      class="text-muted uppercase fw-bold"
+                      style="font-size: 0.75rem; letter-spacing: 0.5px"
+                      >FILAS LEÍDAS</small
+                    >
                   </div>
                 </div>
                 <div class="col-6 col-md-4">
-                  <div class="card p-3 text-white text-center rounded-3" style="background-color: var(--color-success);">
+                  <div
+                    class="card p-3 text-white text-center rounded-3"
+                    style="background-color: var(--color-success)"
+                  >
                     <h3 class="mb-0 fw-bold">{{ importResult.summary.inserted }}</h3>
-                    <small class="uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">ESTUDIANTES GUARDADOS</small>
+                    <small
+                      class="uppercase fw-bold"
+                      style="font-size: 0.75rem; letter-spacing: 0.5px"
+                      >ESTUDIANTES GUARDADOS</small
+                    >
                   </div>
                 </div>
                 <div class="col-6 col-md-4">
-                  <div class="card p-3 text-white text-center rounded-3" style="background-color: var(--color-danger);">
+                  <div
+                    class="card p-3 text-white text-center rounded-3"
+                    style="background-color: var(--color-danger)"
+                  >
                     <h3 class="mb-0 fw-bold">{{ importResult.summary.rejected }}</h3>
-                    <small class="uppercase fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">FILAS RECHAZADAS</small>
+                    <small
+                      class="uppercase fw-bold"
+                      style="font-size: 0.75rem; letter-spacing: 0.5px"
+                      >FILAS RECHAZADAS</small
+                    >
                   </div>
                 </div>
               </div>
 
               <!-- Actions -->
-              <div class="d-flex justify-content-end gap-3 mt-4" style="border-top:1px solid #eef2f6; padding-top:1.5rem;">
+              <div
+                class="d-flex justify-content-end gap-3 mt-4"
+                style="border-top: 1px solid #eef2f6; padding-top: 1.5rem"
+              >
                 <button
                   type="button"
                   class="btn btn-secondary px-4 py-2"
-                  style="border-radius:30px; font-weight:600;"
+                  style="border-radius: 30px; font-weight: 600"
                   (click)="startNewImport()"
                 >
                   <i class="bi bi-arrow-counterclockwise me-2"></i>
                   Nueva Carga
                 </button>
-                <button type="button" class="btn btn-primary px-4 py-2" style="border-radius:30px; font-weight:600;" (click)="goToStudentList()">
+                <button
+                  type="button"
+                  class="btn btn-primary px-4 py-2"
+                  style="border-radius: 30px; font-weight: 600"
+                  (click)="goToStudentList()"
+                >
                   <i class="bi bi-people-fill me-2"></i>
                   Ver Lista de Estudiantes
                 </button>
@@ -509,21 +635,44 @@
           <i class="bi bi-info-circle-fill text-secondary-inst"></i>
           <span>Información</span>
         </h3>
-        <button type="button" class="btn-close" (click)="showInfoModal = false" aria-label="Cerrar"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showInfoModal = false"
+          aria-label="Cerrar"
+        ></button>
       </div>
       <div class="clorinda-modal-body-info">
         <p class="clorinda-modal-desc">
-          Este panel funciona como un <strong>Asistente guiado de carga masiva de nóminas estudiantiles</strong> desde archivos Excel/CSV.
+          Este panel funciona como un
+          <strong>Asistente guiado de carga masiva de nóminas estudiantiles</strong> desde archivos
+          Excel/CSV.
         </p>
         <ul class="clorinda-modal-bullet-list">
-          <li class="clorinda-modal-bullet-item">Subir archivos con extensiones permitidas (.xlsx, .csv) y de tamaño máximo de 10 MB por carga masiva.</li>
-          <li class="clorinda-modal-bullet-item">Validar automáticamente la estructura del archivo cargado (estructura de columnas, datos del DNI y códigos duplicados).</li>
-          <li class="clorinda-modal-bullet-item">Previsualizar el reporte de semáforos (Advertencias y Errores encontrados en cada fila) y descargar el informe de auditoría detallado.</li>
-          <li class="clorinda-modal-bullet-item">Confirmar la importación final de los registros válidos al padrón escolar activo de manera ágil y masiva.</li>
+          <li class="clorinda-modal-bullet-item">
+            Subir archivos con extensiones permitidas (.xlsx, .csv) y de tamaño máximo de 10 MB por
+            carga masiva.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Validar automáticamente la estructura del archivo cargado (estructura de columnas, datos
+            del DNI y códigos duplicados).
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Previsualizar el reporte de semáforos (Advertencias y Errores encontrados en cada fila)
+            y descargar el informe de auditoría detallado.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Confirmar la importación final de los registros válidos al padrón escolar activo de
+            manera ágil y masiva.
+          </li>
         </ul>
       </div>
       <div class="clorinda-modal-footer-info">
-        <button type="button" class="clorinda-btn-primary px-4 py-2 text-white" (click)="showInfoModal = false">
+        <button
+          type="button"
+          class="clorinda-btn-primary px-4 py-2 text-white"
+          (click)="showInfoModal = false"
+        >
           Entendido
         </button>
       </div>

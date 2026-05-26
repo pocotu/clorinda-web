@@ -4,7 +4,13 @@
     <div class="clorinda-hero-content">
       <h1 class="clorinda-hero-title">
         Padrón de <span class="clorinda-title-highlight">Estudiantes</span>
-        <button type="button" class="clorinda-info-icon" (click)="showInfoModal = true" title="Ver información del panel" aria-label="Información">
+        <button
+          type="button"
+          class="clorinda-info-icon"
+          (click)="showInfoModal = true"
+          title="Ver información del panel"
+          aria-label="Información"
+        >
           <i class="bi bi-info-circle-fill"></i>
         </button>
       </h1>
@@ -70,7 +76,9 @@
           <div class="clorinda-input-group">
             <select class="clorinda-form-select" id="section" formControlName="section">
               <option value="">Todas las secciones</option>
-              <option *ngFor="let section of sections" [value]="section">Sección {{ section }}</option>
+              <option *ngFor="let section of sections" [value]="section">
+                Sección {{ section }}
+              </option>
             </select>
           </div>
         </div>
@@ -113,7 +121,11 @@
           Resultados de Búsqueda
         </h3>
         <div class="d-flex align-items-center gap-3">
-          <button class="btn btn-sm btn-outline-primary py-1 px-3 d-inline-flex align-items-center gap-2" style="border-radius:20px; font-weight:600;" (click)="exportToCSV()">
+          <button
+            class="btn btn-sm btn-outline-primary py-1 px-3 d-inline-flex align-items-center gap-2"
+            style="border-radius: 20px; font-weight: 600"
+            (click)="exportToCSV()"
+          >
             <i class="bi bi-download"></i>
             <span>Exportar CSV</span>
           </button>
@@ -136,7 +148,9 @@
             <i class="bi bi-inbox text-muted"></i>
           </div>
           <h4 class="clorinda-empty-title">No se encontraron estudiantes</h4>
-          <p class="clorinda-empty-text">Intente ajustar los filtros de búsqueda o cree un nuevo estudiante.</p>
+          <p class="clorinda-empty-text">
+            Intente ajustar los filtros de búsqueda o cree un nuevo estudiante.
+          </p>
         </div>
 
         <!-- Students Table -->
@@ -171,13 +185,17 @@
                   <span *ngIf="getCurrentEnrollment(student) as enrollment" class="grade-badge">
                     {{ enrollment.grade }}°
                   </span>
-                  <span *ngIf="!getCurrentEnrollment(student)" class="grade-empty text-muted">—</span>
+                  <span *ngIf="!getCurrentEnrollment(student)" class="grade-empty text-muted"
+                    >—</span
+                  >
                 </td>
                 <td>
                   <span *ngIf="getCurrentEnrollment(student) as enrollment" class="section-badge">
                     {{ enrollment.section }}
                   </span>
-                  <span *ngIf="!getCurrentEnrollment(student)" class="section-empty text-muted">—</span>
+                  <span *ngIf="!getCurrentEnrollment(student)" class="section-empty text-muted"
+                    >—</span
+                  >
                 </td>
                 <td>
                   <span [class]="student.isActive ? 'status-active' : 'status-inactive'">
@@ -200,7 +218,9 @@
                     <button
                       type="button"
                       [class]="
-                        student.isActive ? 'clorinda-btn-action btn-deactivate' : 'clorinda-btn-action btn-activate'
+                        student.isActive
+                          ? 'clorinda-btn-action btn-deactivate'
+                          : 'clorinda-btn-action btn-activate'
                       "
                       (click)="toggleStudentStatus(student)"
                       [title]="student.isActive ? 'Desactivar estudiante' : 'Activar estudiante'"
@@ -276,7 +296,7 @@
 
 <!-- Create Student Modal -->
 <div *ngIf="showCreateModal" class="clorinda-modal-backdrop">
-  <div class="clorinda-modal" style="max-width: 800px;">
+  <div class="clorinda-modal" style="max-width: 800px">
     <div class="clorinda-modal-header">
       <h5 class="clorinda-modal-title">
         <i class="bi bi-person-plus-fill"></i>
@@ -299,7 +319,7 @@
 
 <!-- Edit Student Modal -->
 <div *ngIf="showEditModal" class="clorinda-modal-backdrop">
-  <div class="clorinda-modal" style="max-width: 800px;">
+  <div class="clorinda-modal" style="max-width: 800px">
     <div class="clorinda-modal-header">
       <h5 class="clorinda-modal-title">
         <i class="bi bi-pencil-square"></i>
@@ -330,20 +350,40 @@
           <i class="bi bi-info-circle-fill text-secondary-inst"></i>
           <span>Información</span>
         </h3>
-        <button type="button" class="btn-close" (click)="showInfoModal = false" aria-label="Cerrar"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showInfoModal = false"
+          aria-label="Cerrar"
+        ></button>
       </div>
       <div class="clorinda-modal-body-info">
         <p class="clorinda-modal-desc">
-          Este panel está destinado a la <strong>Búsqueda, registro y administración de estudiantes matriculados</strong> en la institución.
+          Este panel está destinado a la
+          <strong>Búsqueda, registro y administración de estudiantes matriculados</strong> en la
+          institución.
         </p>
         <ul class="clorinda-modal-bullet-list">
-          <li class="clorinda-modal-bullet-item">Buscar estudiantes matriculados en tiempo real por DNI, código de estudiante o apellidos y nombres.</li>
-          <li class="clorinda-modal-bullet-item">Registrar nuevos alumnos en el sistema rellenando su información básica, datos del apoderado e historial médico básico.</li>
-          <li class="clorinda-modal-bullet-item">Modificar los perfiles existentes, gestionar el estado de matrícula (Activo, Inactivo) y exportar el padrón filtrado a un archivo CSV.</li>
+          <li class="clorinda-modal-bullet-item">
+            Buscar estudiantes matriculados en tiempo real por DNI, código de estudiante o apellidos
+            y nombres.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Registrar nuevos alumnos en el sistema rellenando su información básica, datos del
+            apoderado e historial médico básico.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Modificar los perfiles existentes, gestionar el estado de matrícula (Activo, Inactivo) y
+            exportar el padrón filtrado a un archivo CSV.
+          </li>
         </ul>
       </div>
       <div class="clorinda-modal-footer-info">
-        <button type="button" class="clorinda-btn-primary px-4 py-2 text-white" (click)="showInfoModal = false">
+        <button
+          type="button"
+          class="clorinda-btn-primary px-4 py-2 text-white"
+          (click)="showInfoModal = false"
+        >
           Entendido
         </button>
       </div>

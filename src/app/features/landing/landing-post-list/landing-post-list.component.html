@@ -4,7 +4,13 @@
     <div class="clorinda-hero-content">
       <h1 class="clorinda-hero-title">
         Comunicados y <span class="clorinda-title-highlight">Avisos</span>
-        <button type="button" class="clorinda-info-icon" (click)="showInfoModal.set(true)" title="Ver información del panel" aria-label="Información">
+        <button
+          type="button"
+          class="clorinda-info-icon"
+          (click)="showInfoModal.set(true)"
+          title="Ver información del panel"
+          aria-label="Información"
+        >
           <i class="bi bi-info-circle-fill"></i>
         </button>
       </h1>
@@ -74,7 +80,7 @@
         </div>
 
         <!-- Search Filter -->
-        <div class="clorinda-form-group" style="grid-column: span 2;">
+        <div class="clorinda-form-group" style="grid-column: span 2">
           <label for="search" class="clorinda-form-label">
             <i class="bi bi-search"></i>
             Buscar por título
@@ -93,7 +99,11 @@
     </div>
 
     <!-- Error Message -->
-    <div *ngIf="errorMessage()" class="clorinda-alert clorinda-alert-error animate-fade-in" role="alert">
+    <div
+      *ngIf="errorMessage()"
+      class="clorinda-alert clorinda-alert-error animate-fade-in"
+      role="alert"
+    >
       <div class="clorinda-alert-icon">
         <i class="bi bi-exclamation-triangle-fill"></i>
       </div>
@@ -101,11 +111,7 @@
         <strong>Error</strong>
         <p>{{ errorMessage() }}</p>
       </div>
-      <button
-        type="button"
-        class="clorinda-alert-close"
-        (click)="errorMessage.set(null)"
-      >
+      <button type="button" class="clorinda-alert-close" (click)="errorMessage.set(null)">
         <i class="bi bi-x-lg"></i>
       </button>
     </div>
@@ -151,7 +157,9 @@
                       <i class="bi bi-inbox text-muted"></i>
                     </div>
                     <h4 class="clorinda-empty-title">No se encontraron posts</h4>
-                    <p class="clorinda-empty-text">No se encontraron publicaciones con los filtros seleccionados.</p>
+                    <p class="clorinda-empty-text">
+                      No se encontraron publicaciones con los filtros seleccionados.
+                    </p>
                   </div>
                 </td>
               </tr>
@@ -165,7 +173,9 @@
 
                 <!-- Título -->
                 <td>
-                  <div class="fw-semibold text-primary-inst mb-1" style="font-size:0.95rem;">{{ post.title }}</div>
+                  <div class="fw-semibold text-primary-inst mb-1" style="font-size: 0.95rem">
+                    {{ post.title }}
+                  </div>
                   <div class="text-muted small" *ngIf="post.summary">
                     {{ post.summary.substring(0, 100) }}{{ post.summary.length > 100 ? '...' : '' }}
                   </div>
@@ -174,7 +184,13 @@
                 <!-- Estado -->
                 <td>
                   <span class="post-status-badge" [class]="post.status.toLowerCase()">
-                    <i [class]="post.status === 'PUBLISHED' ? 'bi bi-check-circle-fill' : 'bi bi-pencil-fill'"></i>
+                    <i
+                      [class]="
+                        post.status === 'PUBLISHED'
+                          ? 'bi bi-check-circle-fill'
+                          : 'bi bi-pencil-fill'
+                      "
+                    ></i>
                     {{ getStatusLabel(post.status) }}
                   </span>
                 </td>
@@ -296,20 +312,40 @@
           <i class="bi bi-info-circle-fill text-secondary-inst"></i>
           <span>Información</span>
         </h3>
-        <button type="button" class="btn-close" (click)="showInfoModal.set(false)" aria-label="Cerrar"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showInfoModal.set(false)"
+          aria-label="Cerrar"
+        ></button>
       </div>
       <div class="clorinda-modal-body-info">
         <p class="clorinda-modal-desc">
-          Este panel está destinado a la <strong>Gestión de publicaciones, noticias y avisos informativos</strong> de la landing page institucional.
+          Este panel está destinado a la
+          <strong>Gestión de publicaciones, noticias y avisos informativos</strong> de la landing
+          page institucional.
         </p>
         <ul class="clorinda-modal-bullet-list">
-          <li class="clorinda-modal-bullet-item">Publicar nuevos comunicados y avisos institucionales categorizándolos en Noticias, Eventos, Avisos o Documentos.</li>
-          <li class="clorinda-modal-bullet-item">Activar (Publicado) o desactivar (Borrador) artículos informativos para controlar lo que se visualiza en la página web pública de la I.E.</li>
-          <li class="clorinda-modal-bullet-item">Destacar artículos relevantes, configurar fechas de vigencia y adjuntar imágenes o enlaces relacionados a cada nota escolar.</li>
+          <li class="clorinda-modal-bullet-item">
+            Publicar nuevos comunicados y avisos institucionales categorizándolos en Noticias,
+            Eventos, Avisos o Documentos.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Activar (Publicado) o desactivar (Borrador) artículos informativos para controlar lo que
+            se visualiza en la página web pública de la I.E.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Destacar artículos relevantes, configurar fechas de vigencia y adjuntar imágenes o
+            enlaces relacionados a cada nota escolar.
+          </li>
         </ul>
       </div>
       <div class="clorinda-modal-footer-info">
-        <button type="button" class="clorinda-btn-primary px-4 py-2 text-white" (click)="showInfoModal.set(false)">
+        <button
+          type="button"
+          class="clorinda-btn-primary px-4 py-2 text-white"
+          (click)="showInfoModal.set(false)"
+        >
           Entendido
         </button>
       </div>

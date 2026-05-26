@@ -603,7 +603,7 @@ body {
 .clorinda-table-badge-code {
   background-color: var(--color-primary-xlight, #e6eef5);
   color: var(--color-primary, #001f3f);
-  font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
   font-size: 0.8rem;
   font-weight: 700;
   padding: 0.25rem 0.5rem;
@@ -660,7 +660,9 @@ body {
   border: 1px solid #d0d5dd;
   border-radius: 8px;
   overflow: hidden;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
   background: white;
 }
 
@@ -901,9 +903,15 @@ body {
 }
 
 /* 10. Status Colors & Text classes */
-.clorinda-text-success { color: var(--color-success) !important; }
-.clorinda-text-warning { color: var(--color-warning) !important; }
-.clorinda-text-danger { color: var(--color-danger) !important; }
+.clorinda-text-success {
+  color: var(--color-success) !important;
+}
+.clorinda-text-warning {
+  color: var(--color-warning) !important;
+}
+.clorinda-text-danger {
+  color: var(--color-danger) !important;
+}
 
 /* 11. Cohesive Alerts */
 .clorinda-alert {
@@ -1130,8 +1138,12 @@ body {
 }
 
 @keyframes clorindaSpin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 @keyframes clorindaScaleUp {
@@ -1251,7 +1263,9 @@ body {
   border-radius: 16px;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(226, 232, 240, 0.8);
   overflow: hidden;
   animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1319,7 +1333,7 @@ body {
 }
 
 .clorinda-modal-bullet-item::before {
-  content: "✓";
+  content: '✓';
   position: absolute;
   left: 0;
   top: 0;
@@ -1329,18 +1343,28 @@ body {
 
 /* Animations */
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Premium Buttons for Modals */
 .clorinda-btn-primary {
-  background: var(--gradient-primary, linear-gradient(135deg, #4A9EE0 0%, #3B82C4 100%));
+  background: var(--gradient-primary, linear-gradient(135deg, #4a9ee0 0%, #3b82c4 100%));
   color: white !important;
   border: none;
   border-radius: 8px;

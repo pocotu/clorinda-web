@@ -3,10 +3,9 @@
   <div class="login-glow-1"></div>
   <div class="login-glow-2"></div>
 
-  <div class="container position-relative" style="z-index: 10;">
+  <div class="container position-relative" style="z-index: 10">
     <div class="row justify-content-center align-items-center min-vh-100-adjusted">
       <div class="col-12 col-md-8 col-lg-5 col-xl-4">
-        
         <!-- Brand / Logo Card -->
         <div class="card login-card border-0 shadow-lg">
           <div class="card-body p-4 p-md-5">
@@ -38,9 +37,7 @@
             <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
               <!-- Username Field -->
               <div class="form-group mb-4">
-                <label
-                  for="username"
-                  class="form-label fw-bold small text-uppercase tracking-wide"
+                <label for="username" class="form-label fw-bold small text-uppercase tracking-wide"
                   >Usuario</label
                 >
                 <div class="input-group input-group-merge">
@@ -92,9 +89,13 @@
                     class="btn border-0 bg-transparent text-muted px-3 d-flex align-items-center justify-content-center"
                     (click)="showPassword.set(!showPassword())"
                     [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-                    style="font-size: 1.1rem; outline: none; box-shadow: none;"
+                    style="font-size: 1.1rem; outline: none; box-shadow: none"
                   >
-                    <i class="bi" [class.bi-eye-fill]="!showPassword()" [class.bi-eye-slash-fill]="showPassword()"></i>
+                    <i
+                      class="bi"
+                      [class.bi-eye-fill]="!showPassword()"
+                      [class.bi-eye-slash-fill]="showPassword()"
+                    ></i>
                   </button>
                 </div>
                 @if (hasError('password')) {

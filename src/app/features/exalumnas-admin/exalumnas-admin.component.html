@@ -4,7 +4,13 @@
     <div class="clorinda-hero-content">
       <h1 class="clorinda-hero-title">
         Historias de <span class="clorinda-title-highlight">Exalumnas</span>
-        <button type="button" class="clorinda-info-icon" (click)="showInfoModal.set(true)" title="Ver información del panel" aria-label="Información">
+        <button
+          type="button"
+          class="clorinda-info-icon"
+          (click)="showInfoModal.set(true)"
+          title="Ver información del panel"
+          aria-label="Información"
+        >
           <i class="bi bi-info-circle-fill"></i>
         </button>
       </h1>
@@ -72,12 +78,17 @@
     @if (!isLoading()) {
       <!-- Empty State -->
       @if (filteredStories().length === 0) {
-        <div class="clorinda-state-empty bg-white p-5 rounded shadow-sm" style="border: 1px solid #eef2f6;">
+        <div
+          class="clorinda-state-empty bg-white p-5 rounded shadow-sm"
+          style="border: 1px solid #eef2f6"
+        >
           <div class="clorinda-empty-icon">
             <i class="bi bi-inbox text-muted"></i>
           </div>
           <h4 class="clorinda-empty-title">No hay historias aquí</h4>
-          <p class="clorinda-empty-text">No se encontraron publicaciones en el estado seleccionado.</p>
+          <p class="clorinda-empty-text">
+            No se encontraron publicaciones en el estado seleccionado.
+          </p>
         </div>
       }
 
@@ -220,20 +231,40 @@
           <i class="bi bi-info-circle-fill text-secondary-inst"></i>
           <span>Información</span>
         </h3>
-        <button type="button" class="btn-close" (click)="showInfoModal.set(false)" aria-label="Cerrar"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="showInfoModal.set(false)"
+          aria-label="Cerrar"
+        ></button>
       </div>
       <div class="clorinda-modal-body-info">
         <p class="clorinda-modal-desc">
-          Este panel está destinado a la <strong>Moderación y aprobación de historias, testimonios y memorias</strong> de las exalumnas de la institución.
+          Este panel está destinado a la
+          <strong>Moderación y aprobación de historias, testimonios y memorias</strong> de las
+          exalumnas de la institución.
         </p>
         <ul class="clorinda-modal-bullet-list">
-          <li class="clorinda-modal-bullet-item">Revisar los nuevos testimonios enviados por las exalumnas en la pestaña "Pendientes" antes de su publicación oficial.</li>
-          <li class="clorinda-modal-bullet-item">Aprobar memorias destacables para que se publiquen automáticamente en el mural escolar de la landing pública de la I.E.</li>
-          <li class="clorinda-modal-bullet-item">Rechazar relatos inapropiados o falsos, y eliminar definitivamente registros obsoletos manteniendo un control editorial absoluto.</li>
+          <li class="clorinda-modal-bullet-item">
+            Revisar los nuevos testimonios enviados por las exalumnas en la pestaña "Pendientes"
+            antes de su publicación oficial.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Aprobar memorias destacables para que se publiquen automáticamente en el mural escolar
+            de la landing pública de la I.E.
+          </li>
+          <li class="clorinda-modal-bullet-item">
+            Rechazar relatos inapropiados o falsos, y eliminar definitivamente registros obsoletos
+            manteniendo un control editorial absoluto.
+          </li>
         </ul>
       </div>
       <div class="clorinda-modal-footer-info">
-        <button type="button" class="clorinda-btn-primary px-4 py-2 text-white" (click)="showInfoModal.set(false)">
+        <button
+          type="button"
+          class="clorinda-btn-primary px-4 py-2 text-white"
+          (click)="showInfoModal.set(false)"
+        >
           Entendido
         </button>
       </div>
