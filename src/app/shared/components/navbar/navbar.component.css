@@ -1,10 +1,13 @@
-/* Navbar público — usa tokens de styles.css */
+/* Navbar Público — Rediseño Premium y Profesional */
+
 :host {
   display: block;
   position: sticky;
   top: 0;
   z-index: 1050;
   width: 100%;
+  /* Pull the public layout content underneath the transparent navbar gradient */
+  margin-bottom: -80px;
 }
 
 .navbar {
@@ -13,37 +16,70 @@
   width: 100%;
   position: relative;
   z-index: 1000;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
-  background-color: var(--color-bg-surface) !important;
-  border-bottom: 2px solid var(--color-primary-xlight);
-  transition: box-shadow 0.3s ease;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  /* Vertical top-to-bottom gradient using root marine colors fading to transparent */
+  background: linear-gradient(
+    180deg,
+    rgba(0, 31, 63, 0.98) 0%,
+    rgba(0, 31, 63, 0.7) 65%,
+    rgba(0, 31, 63, 0) 100%
+  ) !important;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-bottom: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
+/* Scrolled state - solid darker marine background and enhanced drop shadow */
 .navbar.scrolled {
-  box-shadow: var(--shadow-card-hover);
+  background: var(--color-primary-dark) !important;
+  border-bottom: none;
+  box-shadow: 0 10px 30px rgba(0, 13, 26, 0.3);
 }
 
-/* Logo */
+/* Logo Image */
+.logo-image {
+  height: 52px;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover .logo-image {
+  transform: scale(1.05);
+}
+
+/* Logo Text Styling */
+.logo-text-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 0.25rem;
+}
+
 .logo-kicker {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-text-secondary);
-}
-
-.logo-name {
-  font-size: clamp(1.1rem, 2vw, 1.8rem);
+  font-size: 0.65rem;
   font-weight: 800;
-  color: var(--color-secondary);
+  color: var(--color-gold, #d4af37);
+  letter-spacing: 0.15em;
+  line-height: 1;
+  margin-bottom: 0.2rem;
 }
 
-/* Desktop 3-column layout */
+.logo-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+/* Desktop 3-column layout structure */
 @media (min-width: 992px) {
   .navbar .container-fluid {
     display: flex;
   }
   .nav-desktop-left {
-    flex: 1;
+    flex: 1.2;
     display: flex;
     align-items: center;
   }
@@ -58,97 +94,147 @@
   }
 }
 
-/* Nav links */
+/* Navigation Links */
 .nav-link {
-  color: var(--color-text-secondary) !important;
-  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 0.92rem;
   padding: 0.5rem 1rem !important;
-  border-radius: var(--radius-sm);
-  transition: all 0.3s ease;
+  border-radius: var(--radius-sm, 6px);
+  transition: all 0.25s ease-in-out;
   position: relative;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 
 .nav-link:hover {
-  color: var(--color-secondary) !important;
-  background-color: var(--color-primary-xlight);
+  color: var(--color-gold-light, #e5c968) !important;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .nav-link.active {
-  color: var(--color-secondary) !important;
-  background-color: var(--color-primary-xlight);
-  font-weight: 600 !important;
+  color: var(--color-gold, #d4af37) !important;
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
-.nav-link.active::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 40%;
-  height: 3px;
-  background: var(--gradient-brand-h);
-  border-radius: 2px 2px 0 0;
+/* Indicator line for active items on desktop */
+@media (min-width: 992px) {
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+    border-radius: 4px;
+    animation: scaleIn 0.25s ease-out;
+  }
 }
 
-/* Mobile menu */
+/* Hamburger Toggler Icon */
+.navbar-toggler {
+  border: none;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.navbar-toggler:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Premium Consultation Button (Gold Theme) */
+.btn-parents {
+  background: var(--gradient-gold, linear-gradient(135deg, #d4af37 0%, #e5c968 100%));
+  color: var(--color-primary, #001f3f) !important;
+  border: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-parents:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(212, 175, 55, 0.4);
+}
+
+.btn-parents:active {
+  transform: translateY(0);
+}
+
+/* Mobile & Tablet Styles */
 @media (max-width: 991px) {
+  /* Expand full solid backdrop when menu is open on mobile */
+  .navbar.menu-open {
+    background: var(--color-primary-dark) !important;
+  }
+
+  .navbar-collapse {
+    background: var(--color-primary-dark);
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    margin-top: 0.75rem;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
   .nav-link {
-    padding: 0.75rem 1rem !important;
-    border-radius: var(--radius-sm);
+    padding: 0.8rem 1.2rem !important;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 0.5rem;
   }
 
   .nav-link.active::after {
     display: none;
   }
+
+  /* Left accent border for active option in mobile vertical list */
   .nav-link.active::before {
     content: '';
     position: absolute;
-    left: 0;
+    left: 6px;
     top: 50%;
     transform: translateY(-50%);
     width: 4px;
-    height: 70%;
-    background: var(--gradient-brand);
-    border-radius: 0 2px 2px 0;
+    height: 60%;
+    background: var(--color-gold, #d4af37);
+    border-radius: 0 4px 4px 0;
   }
 
   .nav-desktop-right {
-    flex-direction: column;
     width: 100%;
+    margin-top: 1rem;
   }
+
   .btn-parents {
     width: 100%;
     justify-content: center;
+    padding: 0.75rem 1.5rem;
   }
 }
 
-/* Botón "Consulta de Asistencia" */
-.btn-parents {
-  background: var(--gradient-primary);
-  color: var(--color-text-inverse);
-  border: none;
-  border-radius: var(--radius-pill);
-  font-size: 0.9rem;
-  font-weight: 600;
-  white-space: nowrap;
-  transition: all 0.3s ease;
-  box-shadow: var(--shadow-primary);
-}
-
-.btn-parents:hover {
-  filter: brightness(1.08);
-  color: var(--color-text-inverse);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(74, 158, 224, 0.4);
-}
-
-/* Hamburger */
-.navbar-toggler {
-  border: none;
-}
-.navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23001a33' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+/* Animation Utilities */
+@keyframes scaleIn {
+  from {
+    transform: translateX(-50%) scaleX(0);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+  }
 }

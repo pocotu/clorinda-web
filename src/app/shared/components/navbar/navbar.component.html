@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" [class.scrolled]="isScrolled">
+<nav class="navbar navbar-expand-lg" [class.scrolled]="isScrolled" [class.menu-open]="menuOpen">
   <div class="container-fluid px-lg-4">
     <!-- LEFT: Logo (1/3) -->
     <div class="navbar-brand-container nav-desktop-left">
@@ -7,13 +7,10 @@
           src="assets/images/logo.png"
           alt="Logo Clorinda Matto de Turner"
           class="logo-image me-3"
-          style="height: 55px"
         />
         <div class="logo-text-group d-none d-sm-block">
-          <span class="d-block text-muted small lh-1 mb-1">Colegio</span>
-          <span class="d-block fw-bold lh-sm" style="font-size: 0.95rem; color: #001a33"
-            >I.E. Emblemática Clorinda Matto de Turner</span
-          >
+          <span class="logo-kicker text-uppercase">Colegio</span>
+          <span class="logo-title">I.E. Emblemática Clorinda Matto de Turner</span>
         </div>
       </a>
     </div>
@@ -80,14 +77,14 @@
         </li>
       </ul>
 
-      <!-- RIGHT: Botones de Acceso (1/3) -->
+      <!-- RIGHT: Access Buttons (1/3) -->
       <div
         class="d-flex justify-content-center justify-content-lg-end align-items-center gap-2 mt-3 mt-lg-0 mb-3 mb-lg-0 nav-desktop-right"
       >
-        <!-- Botón Consulta de Asistencia (Padres) -->
+        <!-- Consulta de Asistencia Button -->
         <a
           routerLink="/consulta-asistencia"
-          class="btn btn-parents rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center gap-2"
+          class="btn btn-parents rounded-pill px-4 py-2 fw-bold d-flex align-items-center gap-2"
           (click)="closeMenu()"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">

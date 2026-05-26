@@ -222,6 +222,30 @@ body {
 /* ================================================================
    COMPONENTES SHARED
    ================================================================ */
+/* Ajuste de padding-top para héroes públicos debido a la superposición del navbar */
+.hero-root {
+  padding-top: 80px !important;
+}
+.nosotros-hero {
+  /* Fondo va detrás de la cabecera y no tiene contenido de texto directo */
+  padding-top: 0 !important;
+}
+.organizacion-hero {
+  padding-top: calc(1.25rem + 80px) !important;
+}
+.logros-hero {
+  padding-top: calc(5rem + 80px) !important;
+}
+.comites-hero {
+  padding-top: calc(4rem + 80px) !important;
+}
+.query-hero {
+  padding-top: calc(2rem + 80px) !important;
+}
+.login-wrapper {
+  padding-top: calc(3rem + 80px) !important;
+}
+
 .container-institutional {
   max-width: 1200px;
   margin: 0 auto;
