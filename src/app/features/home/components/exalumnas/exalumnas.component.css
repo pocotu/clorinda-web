@@ -156,14 +156,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 1.5rem;
   margin-bottom: 2rem;
 }
 
 .carousel-btn {
   background: white;
-  border: 2px solid #001a33;
-  color: #001a33;
+  border: 2px solid var(--color-primary, #001a33);
+  color: var(--color-primary, #001a33);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -177,7 +177,7 @@
 }
 
 .carousel-btn:hover:not(.disabled) {
-  background: #001a33;
+  background: var(--color-primary, #001a33);
   color: white;
   transform: scale(1.1);
   box-shadow: 0 6px 20px rgba(0, 26, 51, 0.4);
@@ -190,12 +190,13 @@
   color: #ddd;
 }
 
-/* Grid de Exalumnas */
+/* Grid de Exalumnas — 3 columnas en desktop */
 .exalumnas-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
   flex: 1;
+  min-width: 0;
 }
 
 .exalumna-card {
@@ -460,6 +461,7 @@
   }
 }
 
+/* Tablet: 2 columnas, botones de carrusel visibles */
 @media (max-width: 992px) {
   .exalumnas {
     padding: 4rem 1.5rem;
@@ -469,12 +471,17 @@
     font-size: 2.5rem;
   }
 
+  /* Tablet: 2 columnas en la grilla */
   .exalumnas-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
   }
 
+  /* Reducir tamaño del botón de carousel en tablet */
   .carousel-btn {
-    display: none;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
   }
 
   .fotos-grid {
@@ -487,6 +494,7 @@
   }
 }
 
+/* Móvil: 1 columna, ocultar botones de carousel */
 @media (max-width: 576px) {
   .exalumnas {
     padding: 3rem 1rem;
@@ -498,6 +506,17 @@
 
   .exalumnas-subtitle {
     font-size: 1rem;
+  }
+
+  /* Móvil: 1 sola columna */
+  .exalumnas-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  /* Ocultar botones de carousel: en móvil se usa swipe o indicadores */
+  .carousel-btn {
+    display: none;
   }
 
   .card-image {
@@ -531,6 +550,11 @@
 
   .foto-caption {
     font-size: 1rem;
+  }
+
+  /* Carrusel: ajustar padding lateral del exalumnas-carousel */
+  .exalumnas-carousel {
+    gap: 0;
   }
 }
 

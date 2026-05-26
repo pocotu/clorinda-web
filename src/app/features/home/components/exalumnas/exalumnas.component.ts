@@ -35,6 +35,29 @@ interface DisplayCard {
 export class ExalumnasComponent implements OnInit, OnDestroy {
   private exalumnasService = inject(ExalumnasService);
 
+  /** Number of cards visible at once — adapts to viewport width */
+  cardsPerPage = signal<number>(this.getCardsPerPage());
+
+  private getCardsPerPage(): number {
+    if (typeof window === 'undefined') return 3;
+    if (window.innerWidth < 576) return 1;
+    if (window.innerWidth < 992) return 2;
+    return 3;
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    const newCount = this.getCardsPerPage();
+    if (newCount !== this.cardsPerPage()) {
+      this.cardsPerPage.set(newCount);
+      // Clamp currentIndex so it doesn't exceed bounds after resize
+      const max = Math.max(0, this.exalumnas().length - newCount);
+      if (this.currentIndex > max) {
+        this.currentIndex = max;
+      }
+    }
+  }
+
   // Dynamic state
   stories = signal<ExalumnaStory[]>([]);
   isLoading = signal<boolean>(true);
@@ -159,7 +182,7 @@ export class ExalumnasComponent implements OnInit, OnDestroy {
 
   // Carousel methods
   get exalumnasVisibles() {
-    return this.exalumnas().slice(this.currentIndex, this.currentIndex + 3);
+    return this.exalumnas().slice(this.currentIndex, this.currentIndex + this.cardsPerPage());
   }
 
   anterior() {
@@ -169,7 +192,7 @@ export class ExalumnasComponent implements OnInit, OnDestroy {
   }
 
   siguiente() {
-    if (this.currentIndex < this.exalumnas().length - 3) {
+    if (this.currentIndex < this.exalumnas().length - this.cardsPerPage()) {
       this.currentIndex++;
     }
   }
@@ -179,7 +202,7 @@ export class ExalumnasComponent implements OnInit, OnDestroy {
   }
 
   get mostrarSiguiente(): boolean {
-    return this.currentIndex < this.exalumnas().length - 3;
+    return this.currentIndex < this.exalumnas().length - this.cardsPerPage();
   }
 
   // Modal Detail methods

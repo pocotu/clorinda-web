@@ -528,11 +528,13 @@
    PERFORMANCE OPTIMIZATIONS
    ============================================ */
 
-/* Reducir animaciones en móvil para mejor performance */
-@media (max-width: 767.98px) and (prefers-reduced-motion: no-preference) {
-  * {
-    animation-duration: 0.2s !important;
-    transition-duration: 0.2s !important;
+/* Reducir solo animaciones de fondo pesadas en móvil (NO las transiciones de UI) */
+@media (max-width: 767.98px) {
+  /* Solo restringimos animaciones de fondo decorativas, no transiciones de UI */
+  .bg-shape,
+  .hero-particles .particle,
+  .hero-bg-img {
+    animation-duration: 0.5s !important;
   }
 }
 
