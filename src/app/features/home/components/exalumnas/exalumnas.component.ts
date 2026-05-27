@@ -39,9 +39,15 @@ export class ExalumnasComponent implements OnInit, OnDestroy {
   cardsPerPage = signal<number>(this.getCardsPerPage());
 
   private getCardsPerPage(): number {
-    if (typeof window === 'undefined') return 3;
-    if (window.innerWidth < 576) return 1;
-    if (window.innerWidth < 992) return 2;
+    if (typeof window === 'undefined') {
+      return 3;
+    }
+    if (window.innerWidth < 576) {
+      return 1;
+    }
+    if (window.innerWidth < 992) {
+      return 2;
+    }
     return 3;
   }
 
@@ -155,6 +161,7 @@ export class ExalumnasComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.restoreScroll();
+    this.resetForm();
   }
 
   @HostListener('document:keydown.escape')
@@ -237,18 +244,41 @@ export class ExalumnasComponent implements OnInit, OnDestroy {
     }
 
     const filesArray = Array.from(input.files);
-    const totalFiles = this.selectedFiles().length + filesArray.length;
 
+    // Validate type and size
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    const validFiles: File[] = [];
+
+    for (const file of filesArray) {
+      if (!allowedTypes.includes(file.type)) {
+        alert(
+          `Archivo "${file.name}" tiene un formato no válido. Solo se permiten imágenes (JPEG, PNG, WEBP, GIF).`
+        );
+        continue;
+      }
+      if (file.size > maxSizeInBytes) {
+        alert(`El tamaño del archivo "${file.name}" supera el límite permitido de 5MB.`);
+        continue;
+      }
+      validFiles.push(file);
+    }
+
+    if (validFiles.length === 0) {
+      return;
+    }
+
+    const totalFiles = this.selectedFiles().length + validFiles.length;
     if (totalFiles > 5) {
       alert('Solo puedes subir un máximo de 5 fotos.');
       return;
     }
 
-    const currentFiles = [...this.selectedFiles(), ...filesArray];
+    const currentFiles = [...this.selectedFiles(), ...validFiles];
     this.selectedFiles.set(currentFiles);
 
     // Generate previews
-    const newPreviews = filesArray.map((file) => URL.createObjectURL(file));
+    const newPreviews = validFiles.map((file) => URL.createObjectURL(file));
     this.previewUrls.set([...this.previewUrls(), ...newPreviews]);
   }
 

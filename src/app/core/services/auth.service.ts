@@ -2,7 +2,7 @@ import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { tap, catchError, map } from 'rxjs/operators';
+import { tap, catchError, map, filter, take } from 'rxjs/operators';
 
 import { AuthResponse, LoginRequest, User } from '../models/auth.model';
 import { environment } from '../../../environments/environment';
@@ -19,6 +19,9 @@ export class AuthService {
   private readonly USER_KEY = 'current_user';
   private readonly storageMode = environment.authStorage ?? 'session';
   private readonly memoryStore: Record<string, string> = {};
+
+  private isRefreshing = false;
+  private refreshTokenSubject = new BehaviorSubject<string | null>(null);
 
   // Signal-based state management
   private currentUserSubject = new BehaviorSubject<User | null>(this.getUserFromStorage());
@@ -113,6 +116,34 @@ export class AuthService {
           return throwError(() => error);
         })
       );
+  }
+
+  /**
+   * Refreshes the token and handles parallel requests using a BehaviorSubject queue
+   */
+  refreshAccessToken(): Observable<string> {
+    if (this.isRefreshing) {
+      return this.refreshTokenSubject.pipe(
+        filter((token): token is string => token !== null),
+        take(1)
+      );
+    }
+
+    this.isRefreshing = true;
+    this.refreshTokenSubject.next(null);
+
+    return this.refresh().pipe(
+      map((response) => response.accessToken),
+      tap((token) => {
+        this.isRefreshing = false;
+        this.refreshTokenSubject.next(token);
+      }),
+      catchError((err) => {
+        this.isRefreshing = false;
+        this.refreshTokenSubject.next(null);
+        return throwError(() => err);
+      })
+    );
   }
 
   /**
@@ -231,7 +262,15 @@ export class AuthService {
         throw new Error('Invalid token format');
       }
 
-      const payload = parts[1];
+      let payload = parts[1];
+      // Convert base64url to base64 format
+      payload = payload.replace(/-/g, '+').replace(/_/g, '/');
+      // Add necessary padding if missing
+      const pad = payload.length % 4;
+      if (pad) {
+        payload += '='.repeat(4 - pad);
+      }
+
       const decoded =
         typeof atob === 'function'
           ? atob(payload)

@@ -93,14 +93,11 @@ function handleUnauthorized(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ) {
-  // Attempt to refresh the token
-  return authService.refresh().pipe(
+  // Attempt to refresh the token using the queueing method
+  return authService.refreshAccessToken().pipe(
     switchMap(() => {
-      // Refresh successful - retry original request with new token
       const newToken = authService.getAccessToken();
-
       if (!newToken) {
-        // No token after refresh - redirect to login
         router.navigate(['/login']);
         return throwError(() => new Error('Authentication failed'));
       }

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { HttpClient, provideHttpClient, withInterceptors } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { of, throwError } from 'rxjs';
+import { of, throwError, map } from 'rxjs';
 import { authInterceptor } from './auth.interceptor';
 import { AuthService } from '../services/auth.service';
 import { AuthResponse } from '../models/auth.model';
@@ -29,7 +29,12 @@ describe('authInterceptor', () => {
       getAccessToken: jasmine.createSpy('getAccessToken'),
       getRefreshToken: jasmine.createSpy('getRefreshToken'),
       refresh: jasmine.createSpy('refresh'),
+      refreshAccessToken: jasmine.createSpy('refreshAccessToken'),
     };
+
+    authService.refreshAccessToken.and.callFake(() => {
+      return authService.refresh().pipe(map((res: any) => res.accessToken));
+    });
 
     router = {
       navigate: jasmine.createSpy('navigate'),
