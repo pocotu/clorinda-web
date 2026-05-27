@@ -29,6 +29,8 @@ export class UserManagementComponent implements OnInit {
   showPasswordModal = signal<boolean>(false);
   selectedUser = signal<UserListItem | null>(null);
   showInfoModal = signal<boolean>(false);
+  showPassword = signal<boolean>(false);
+  showConfirmPassword = signal<boolean>(false);
 
   // Forms
   createForm!: FormGroup;
@@ -83,6 +85,8 @@ export class UserManagementComponent implements OnInit {
   // Modals management
   openCreateModal(): void {
     this.createForm.reset({ role: 'AUXILIAR' });
+    this.showPassword.set(false);
+    this.showConfirmPassword.set(false);
     this.error.set(null);
     this.showCreateModal.set(true);
   }
@@ -94,6 +98,8 @@ export class UserManagementComponent implements OnInit {
   openPasswordModal(user: UserListItem): void {
     this.selectedUser.set(user);
     this.passwordForm.reset();
+    this.showPassword.set(false);
+    this.showConfirmPassword.set(false);
     this.error.set(null);
     this.showPasswordModal.set(true);
   }

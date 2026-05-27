@@ -266,13 +266,22 @@
             <div class="clorinda-input-group">
               <span class="clorinda-input-group-text"><i class="bi bi-lock-fill"></i></span>
               <input
-                type="password"
+                [type]="showPassword() ? 'text' : 'password'"
                 id="password"
                 class="clorinda-form-control"
                 formControlName="password"
                 placeholder="Mínimo 8 caracteres"
                 [class.is-invalid]="isFieldInvalid(createForm, 'password')"
               />
+              <button
+                type="button"
+                class="clorinda-input-group-btn-icon"
+                (click)="showPassword.set(!showPassword())"
+                [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                aria-label="Toggle password visibility"
+              >
+                <i [class]="showPassword() ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+              </button>
             </div>
             @if (isFieldInvalid(createForm, 'password')) {
               <div class="invalid-feedback d-block">
@@ -286,13 +295,22 @@
             <div class="clorinda-input-group">
               <span class="clorinda-input-group-text"><i class="bi bi-lock-fill"></i></span>
               <input
-                type="password"
+                [type]="showConfirmPassword() ? 'text' : 'password'"
                 id="confirmPassword"
                 class="clorinda-form-control"
                 formControlName="confirmPassword"
                 placeholder="Repita la contraseña anterior"
                 [class.is-invalid]="isFieldInvalid(createForm, 'confirmPassword')"
               />
+              <button
+                type="button"
+                class="clorinda-input-group-btn-icon"
+                (click)="showConfirmPassword.set(!showConfirmPassword())"
+                [title]="showConfirmPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                aria-label="Toggle password visibility"
+              >
+                <i [class]="showConfirmPassword() ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+              </button>
             </div>
             @if (isFieldInvalid(createForm, 'confirmPassword')) {
               <div class="invalid-feedback d-block">
@@ -305,10 +323,12 @@
           </div>
         </div>
         <div class="clorinda-modal-footer">
-          <button type="button" class="btn-secondary" (click)="closeCreateModal()">Cancelar</button>
+          <button type="button" class="clorinda-btn-secondary" (click)="closeCreateModal()">
+            Cancelar
+          </button>
           <button
             type="submit"
-            class="btn-primary"
+            class="clorinda-btn-primary"
             [disabled]="createForm.invalid || !passwordsMatch(createForm) || isLoading()"
           >
             @if (isLoading()) {
@@ -349,13 +369,22 @@
             <div class="clorinda-input-group">
               <span class="clorinda-input-group-text"><i class="bi bi-lock-fill"></i></span>
               <input
-                type="password"
+                [type]="showPassword() ? 'text' : 'password'"
                 id="newPassword"
                 class="clorinda-form-control"
                 formControlName="password"
                 placeholder="Mínimo 8 caracteres"
                 [class.is-invalid]="isFieldInvalid(passwordForm, 'password')"
               />
+              <button
+                type="button"
+                class="clorinda-input-group-btn-icon"
+                (click)="showPassword.set(!showPassword())"
+                [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                aria-label="Toggle password visibility"
+              >
+                <i [class]="showPassword() ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+              </button>
             </div>
             @if (isFieldInvalid(passwordForm, 'password')) {
               <div class="invalid-feedback d-block">
@@ -369,13 +398,22 @@
             <div class="clorinda-input-group">
               <span class="clorinda-input-group-text"><i class="bi bi-lock-fill"></i></span>
               <input
-                type="password"
+                [type]="showConfirmPassword() ? 'text' : 'password'"
                 id="confirmNewPassword"
                 class="clorinda-form-control"
                 formControlName="confirmPassword"
                 placeholder="Repita la contraseña"
                 [class.is-invalid]="isFieldInvalid(passwordForm, 'confirmPassword')"
               />
+              <button
+                type="button"
+                class="clorinda-input-group-btn-icon"
+                (click)="showConfirmPassword.set(!showConfirmPassword())"
+                [title]="showConfirmPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                aria-label="Toggle password visibility"
+              >
+                <i [class]="showConfirmPassword() ? 'bi bi-eye-slash-fill' : 'bi bi-eye-fill'"></i>
+              </button>
             </div>
             @if (isFieldInvalid(passwordForm, 'confirmPassword')) {
               <div class="invalid-feedback d-block">
@@ -388,12 +426,12 @@
           </div>
         </div>
         <div class="clorinda-modal-footer">
-          <button type="button" class="btn-secondary" (click)="closePasswordModal()">
+          <button type="button" class="clorinda-btn-secondary" (click)="closePasswordModal()">
             Cancelar
           </button>
           <button
             type="submit"
-            class="btn-primary"
+            class="clorinda-btn-primary"
             [disabled]="passwordForm.invalid || !passwordsMatch(passwordForm) || isLoading()"
           >
             @if (isLoading()) {
