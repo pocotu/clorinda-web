@@ -26,4 +26,12 @@ minimumReleaseAgeExclude:
   - '@angular/ssr@21.2.12'
   - '@ngtools/webpack@21.2.12'
   - '@schematics/angular@21.2.12'
+  - tmp@0.2.6
 nodeLinker: isolated
+
+overrides:
+  tmp: ^0.2.6
+  ws: ^8.20.1
+  sockjs>uuid: ^11.1.1
+  qs: ^6.15.2
+  webpack-dev-server: ^5.2.4
