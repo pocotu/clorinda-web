@@ -3,36 +3,6 @@
    Adheres to: SOLID, #frontend-design and institutional variables
    ================================================================ */
 
-.dashboard-hero {
-  position: relative;
-  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
-  border-radius: 16px;
-  padding: 2.25rem 2.5rem;
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.dashboard-hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-}
-
-.dashboard-hero-title {
-  font-family: 'Cinzel', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: white;
-  margin-bottom: 0.5rem;
-}
-
-.title-highlight {
-  color: var(--color-secondary);
-  font-weight: 800;
-  text-shadow: 0 2px 10px rgba(74, 158, 224, 0.2);
-}
-
 /* Responsive Action Cards */
 .dashboard-grid {
   margin-top: 1rem;
@@ -42,10 +12,10 @@
 .dashboard-action-pad {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem; /* Elegant compact gap grouping them close together */
+  gap: 1rem; /* Elegant compact gap grouping them close together */
   justify-content: center; /* Centered layout */
   margin: 2rem auto 0 auto;
-  max-width: 360px; /* Beautiful 3-column max constraint for 110px squares */
+  max-width: 420px; /* Beautiful 3-column max constraint for 120px squares */
 }
 
 /* Card Button: Square Tile Design */
@@ -56,10 +26,10 @@
   justify-content: center;
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border);
-  border-radius: 12px; /* Proportional border-radius for 110px size */
-  padding: 0.75rem 0.5rem;
-  width: 110px;
-  height: 110px; /* EXACTLY SQUARE */
+  border-radius: 16px; /* Match Clorinda cards slightly more rounded */
+  padding: 1rem 0.5rem;
+  width: 120px;
+  height: 120px; /* EXACTLY SQUARE */
   cursor: pointer;
   box-shadow: var(--shadow-card);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -69,8 +39,8 @@
 
 /* Hover and active micro-animations */
 .dashboard-card-btn:hover {
-  transform: translateY(-2px);
-  border-color: var(--color-secondary-mid);
+  transform: translateY(-4px);
+  border-color: var(--color-secondary);
   box-shadow: var(--shadow-card-hover);
 }
 
@@ -100,8 +70,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 42px;
+  height: 42px;
   border-radius: 8px;
   background-color: var(--color-primary-xlight);
   color: var(--color-primary); /* SINGLE CONSISTENT ICON COLOR */
@@ -109,7 +79,7 @@
 }
 
 .dashboard-icon {
-  font-size: 1.15rem;
+  font-size: 1.3rem;
 }
 
 .dashboard-card-btn:hover .dashboard-icon-wrapper {
@@ -121,7 +91,7 @@
 .dashboard-card-label {
   font-weight: 700;
   color: var(--color-primary);
-  font-size: 0.76rem; /* Compact clean typography */
+  font-size: 0.8rem; /* Compact clean typography */
   letter-spacing: -0.1px;
   text-align: center;
   line-height: 1.2;

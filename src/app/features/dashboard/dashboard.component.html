@@ -1,15 +1,20 @@
 <div class="clorinda-page-container">
-  <!-- Dynamic Dashboard Header with Greeting -->
-  <div class="dashboard-hero animate-fade-in">
-    <div class="dashboard-hero-content">
-      <h1 class="dashboard-hero-title">
+  <!-- Unified Premium Dashboard Header with Greeting -->
+  <div class="clorinda-hero animate-fade-in">
+    <div class="clorinda-hero-content">
+      <h1 class="clorinda-hero-title">
         Bienvenido,
-        <span class="title-highlight">{{ currentUser()?.username }}</span>
+        <span
+          class="clorinda-title-highlight"
+          style="color: var(--color-gold); text-transform: uppercase"
+          >{{ currentUser()?.username || 'Usuario' }}</span
+        >
       </h1>
     </div>
+    <div class="clorinda-hero-decoration"></div>
   </div>
 
-  <div class="clorinda-workspace mt-4">
+  <div class="clorinda-workspace mt-4 container-institutional">
     <!-- Responsive Action Grid (Square Buttons Grouped Close Together) -->
     <div class="dashboard-action-pad animate-fade-in">
       @for (item of dashboardItems(); track item.route; let i = $index) {

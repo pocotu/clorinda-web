@@ -96,7 +96,7 @@ export class LoginComponent {
     // 2. Fallback routes if no returnUrl is present
     const roleRoutes: Record<'AUXILIAR' | 'ADMIN' | 'DIRECCION', string> = {
       AUXILIAR: '/asistencia/sesion',
-      ADMIN: '/estudiantes',
+      ADMIN: '/inicio',
       DIRECCION: '/asistencia/historial',
     };
 

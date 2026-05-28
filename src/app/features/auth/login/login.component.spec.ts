@@ -154,7 +154,7 @@ describe('LoginComponent', () => {
       expect(router.navigate).toHaveBeenCalledWith(['/asistencia/sesion']);
     });
 
-    it('should redirect ADMIN to /admin/dashboard', () => {
+    it('should redirect ADMIN to /inicio', () => {
       const response = {
         ...mockAuthResponse,
         user: { ...mockAuthResponse.user, role: 'ADMIN' as const },
@@ -163,7 +163,7 @@ describe('LoginComponent', () => {
 
       component.onSubmit();
 
-      expect(router.navigate).toHaveBeenCalledWith(['/estudiantes']);
+      expect(router.navigate).toHaveBeenCalledWith(['/inicio']);
     });
 
     it('should redirect DIRECCION to /direccion/dashboard', () => {
