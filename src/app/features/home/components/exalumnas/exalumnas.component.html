@@ -112,13 +112,17 @@
 
             <div class="card-content">
               <h3 class="exalumna-nombre">{{ exalumna.nombre }}</h3>
-              <p class="exalumna-profesion">{{ exalumna.profesion }}</p>
-              <p class="exalumna-logro">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M8 1L10 5L14 6L11 9L12 14L8 11.5L4 14L5 9L2 6L6 5L8 1Z" />
-                </svg>
-                {{ exalumna.logro }}
-              </p>
+              @if (exalumna.profesion) {
+                <p class="exalumna-profesion">{{ exalumna.profesion }}</p>
+              }
+              @if (exalumna.logro) {
+                <p class="exalumna-logro">
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 1L10 5L14 6L11 9L12 14L8 11.5L4 14L5 9L2 6L6 5L8 1Z" />
+                  </svg>
+                  {{ exalumna.logro }}
+                </p>
+              }
               <blockquote class="exalumna-frase">
                 <svg
                   width="24"
@@ -395,13 +399,17 @@
           <span class="modal-badge-categoria">
             {{ selectedCard()!.promocion }}
           </span>
-          <span class="modal-badge-profesion">
-            {{ selectedCard()!.profesion }}
-          </span>
+          @if (selectedCard()!.profesion) {
+            <span class="modal-badge-profesion">
+              {{ selectedCard()!.profesion }}
+            </span>
+          }
         </div>
 
         <h2 class="modal-title">{{ selectedCard()!.nombre }}</h2>
-        <p class="modal-logro-sub">{{ selectedCard()!.logro }}</p>
+        @if (selectedCard()!.logro) {
+          <p class="modal-logro-sub">{{ selectedCard()!.logro }}</p>
+        }
 
         <div class="modal-divider"></div>
 
