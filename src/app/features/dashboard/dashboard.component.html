@@ -6,22 +6,10 @@
         Bienvenido,
         <span class="title-highlight">{{ currentUser()?.username }}</span>
       </h1>
-      <p class="dashboard-hero-subtitle">
-        <span class="role-badge">{{ getRoleLabel(currentUser()?.role) }}</span>
-        • Plataforma de Gestión Escolar Clorinda Matto de Turner
-      </p>
     </div>
-    <div class="dashboard-hero-decoration"></div>
   </div>
 
   <div class="clorinda-workspace mt-4">
-    <div class="dashboard-section-header mb-4 animate-fade-in">
-      <h4 class="section-title"><i class="bi bi-grid-fill me-2"></i>Panel de Control Principal</h4>
-      <p class="text-muted small">
-        Seleccione un módulo para comenzar a trabajar en la plataforma:
-      </p>
-    </div>
-
     <!-- Responsive Action Grid (Square Buttons Grouped Close Together) -->
     <div class="dashboard-action-pad animate-fade-in">
       @for (item of dashboardItems(); track item.route; let i = $index) {

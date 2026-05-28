@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -23,7 +23,7 @@ interface DashboardItem {
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 
@@ -84,25 +84,6 @@ export class DashboardComponent implements OnInit {
     }
     return this.allItems.filter((item) => item.roles.includes(user.role));
   });
-
-  ngOnInit(): void {
-    // Initial hook
-  }
-
-  /**
-   * Get role display name securely
-   */
-  getRoleLabel(role?: string): string {
-    if (!role) {
-      return 'Usuario';
-    }
-    const roles: Record<string, string> = {
-      ADMIN: 'Administrador del Sistema',
-      DIRECCION: 'Personal Directivo',
-      AUXILIAR: 'Auxiliar de Educación',
-    };
-    return roles[role] || role;
-  }
 
   /**
    * Navigate securely to path
