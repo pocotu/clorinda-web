@@ -70,6 +70,11 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
+        path: 'inicio',
+        loadComponent: () =>
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
+      },
+      {
         path: 'asistencia',
         canActivateChild: [authGuardChild],
         data: { roles: ['AUXILIAR', 'ADMIN', 'DIRECCION'] },

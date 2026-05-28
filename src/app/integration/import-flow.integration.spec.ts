@@ -287,6 +287,7 @@ describe('Import Flow Integration', () => {
       } as any;
 
       component.onFileSelected(event);
+      component.selectedShift = 'MANANA';
       component.uploadFiles();
 
       expect(component.uploading).toBe(true);
@@ -329,6 +330,7 @@ describe('Import Flow Integration', () => {
       } as any;
 
       component.onFileSelected(event);
+      component.selectedShift = 'MANANA';
       component.uploadFiles();
 
       const req = httpMock.expectOne(`${importBaseUrl}/upload`);
@@ -685,6 +687,7 @@ describe('Import Flow Integration', () => {
       } as any;
 
       component.onFileSelected(event);
+      component.selectedShift = 'MANANA';
       component.goNext();
 
       const uploadReq = httpMock.expectOne(`${importBaseUrl}/upload`);
@@ -747,6 +750,22 @@ describe('Import Flow Integration', () => {
       // Step 1 without files
       expect(component.canGoNext()).toBe(false);
 
+      // Step 1 with files but without shift
+      component.selectedFiles = [
+        {
+          file: new File([], 'test.xlsx'),
+          id: '1',
+          name: 'test.xlsx',
+          size: 100,
+          type: 'xlsx',
+        },
+      ];
+      expect(component.canGoNext()).toBe(false);
+
+      // Step 1 with files and shift
+      component.selectedShift = 'MANANA';
+      expect(component.canGoNext()).toBe(true);
+
       // Step 2 without validation
       component.currentStep = 2;
       expect(component.canGoNext()).toBe(false);
@@ -791,7 +810,7 @@ describe('Import Flow Integration', () => {
 
       component.onFileSelected(event);
       expect(component.selectedFiles.length).toBe(1);
-
+      component.selectedShift = 'MANANA';
       component.uploadFiles();
 
       const uploadReq = httpMock.expectOne(`${importBaseUrl}/upload`);

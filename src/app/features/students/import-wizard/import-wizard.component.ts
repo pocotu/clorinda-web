@@ -280,8 +280,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ==================== Step 3: Preview ====================
-
   /**
    * Prepare issues for preview with filtering
    */
@@ -293,7 +291,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     // Collect all issues from all files
     const allIssues: ImportIssue[] = [];
     for (const file of this.validationResult.files) {
-      allIssues.push(...file.issues);
+      const fileIssues = file.issues.map((issue) => ({
+        ...issue,
+        fileId: file.fileId,
+      }));
+      allIssues.push(...fileIssues);
     }
 
     this.filteredIssues = allIssues;
@@ -313,14 +315,21 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     // Collect issues from selected file or all files
     if (this.selectedFileFilter === 'ALL') {
       for (const file of this.validationResult.files) {
-        issues.push(...file.issues);
+        const fileIssues = file.issues.map((issue) => ({
+          ...issue,
+          fileId: file.fileId,
+        }));
+        issues.push(...fileIssues);
       }
     } else {
       const selectedFile = this.validationResult.files.find(
         (f) => f.fileId === this.selectedFileFilter
       );
       if (selectedFile) {
-        issues = [...selectedFile.issues];
+        issues = selectedFile.issues.map((issue) => ({
+          ...issue,
+          fileId: selectedFile.fileId,
+        }));
       }
     }
 

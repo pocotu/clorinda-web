@@ -104,7 +104,7 @@ describe('ImportService', () => {
       };
 
       const promise = new Promise((resolve, reject) => {
-        service.uploadFiles(files).subscribe({
+        service.uploadFiles(files, 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -132,7 +132,7 @@ describe('ImportService', () => {
       };
 
       const promise = new Promise((resolve, reject) => {
-        service.uploadFiles([file]).subscribe({
+        service.uploadFiles([file], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -151,7 +151,7 @@ describe('ImportService', () => {
       });
 
       const promise = new Promise((resolve, reject) => {
-        service.uploadFiles([file]).subscribe({
+        service.uploadFiles([file], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -172,7 +172,7 @@ describe('ImportService', () => {
       });
 
       const promise = new Promise((resolve, reject) => {
-        service.uploadFiles([file]).subscribe({
+        service.uploadFiles([file], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -458,7 +458,7 @@ describe('ImportService', () => {
 
       // Step 1: Upload
       const uploadPromise = new Promise((resolve, reject) => {
-        service.uploadFiles([file]).subscribe({
+        service.uploadFiles([file], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -534,7 +534,7 @@ describe('ImportService', () => {
       });
 
       const promise = new Promise((resolve, reject) => {
-        service.uploadFiles([file]).subscribe({
+        service.uploadFiles([file], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });

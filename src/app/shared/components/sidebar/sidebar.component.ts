@@ -40,6 +40,12 @@ export class SidebarComponent {
   // Menú completo con todos los items
   private allMenuItems: MenuItem[] = [
     {
+      label: 'Inicio',
+      icon: 'bi-house-door',
+      route: '/inicio',
+      roles: ['AUXILIAR', 'ADMIN', 'DIRECCION'],
+    },
+    {
       label: 'Asistencia',
       icon: 'bi-clipboard-check',
       route: '/asistencia/sesion',

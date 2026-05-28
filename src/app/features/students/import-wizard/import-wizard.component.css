@@ -95,150 +95,148 @@
    TURNO SELECTOR — Animated card-style shift picker
    ================================================================ */
 
-.turno-selector-section {
-  background: linear-gradient(135deg, #f8fbff 0%, #eef5fb 100%);
-  border: 1.5px solid #d0e4f5;
-  border-radius: 14px;
-  padding: 1.25rem 1.5rem;
-}
+/* ================================================================
+   TURNO SELECTOR — Minimalist Segmented Control Layout
+   ================================================================ */
 
-.turno-selector-label {
-  display: block;
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--color-primary);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.01em;
-}
-
-.turno-cards {
+.turno-selector-minimal {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 0.6rem 1.25rem;
   gap: 1rem;
-  flex-wrap: wrap;
+  box-shadow: 0 1px 3px rgba(0, 31, 63, 0.02);
+  transition: border-color 0.2s ease;
 }
 
-/* Individual turno card */
-.turno-card {
-  flex: 1;
-  min-width: 140px;
+.turno-selector-minimal:hover {
+  border-color: #cbd5e1;
+}
+
+.turno-info-minimal {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem 1.1rem;
-  border-radius: 12px;
-  border: 2px solid #dde8f5;
-  background: #fff;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
-  user-select: none;
-  box-shadow: 0 1px 4px rgba(0, 31, 63, 0.06);
 }
 
-.turno-card:hover {
-  border-color: var(--color-secondary-mid);
-  box-shadow: 0 4px 16px rgba(74, 158, 224, 0.18);
-  transform: translateY(-2px);
-}
-
-.turno-card:focus {
-  outline: 3px solid var(--color-secondary-light);
-  outline-offset: 2px;
-}
-
-/* Selected state */
-.turno-card--selected {
-  border-color: var(--color-secondary-mid) !important;
-  background: linear-gradient(135deg, #e8f4fc 0%, #d0eaf9 100%) !important;
-  box-shadow: 0 4px 20px rgba(74, 158, 224, 0.22) !important;
-  transform: translateY(-2px);
-}
-
-/* Icon area */
-.turno-card-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
-  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+.turno-label-minimal {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--color-primary);
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  color: #fff;
-  flex-shrink: 0;
-  transition: transform 0.2s ease;
-}
-
-.turno-card--selected .turno-card-icon {
-  transform: scale(1.08);
-}
-
-.turno-card-icon--tarde {
-  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
-}
-
-.turno-card-icon--noche {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
-}
-
-/* Text inside card */
-.turno-card-body {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.turno-card-name {
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--color-primary);
-  line-height: 1.2;
-}
-
-.turno-card-hours {
-  font-size: 0.76rem;
-  color: var(--color-text-secondary);
-  margin-top: 0.15rem;
-}
-
-/* Check badge */
-.turno-card-check {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  font-size: 1.2rem;
-  color: var(--color-secondary-mid);
-  background: white;
-  border-radius: 50%;
-  line-height: 1;
-  animation: checkPop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-@keyframes checkPop {
-  from {
-    transform: scale(0);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* Hint text */
-.turno-hint {
-  font-size: 0.82rem;
-  color: var(--color-text-secondary);
+  gap: 0.5rem;
   margin: 0;
 }
 
-/* Responsive turno cards */
-@media (max-width: 576px) {
-  .turno-cards {
+.turno-desc-minimal {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  border-left: 1px solid var(--color-border);
+  padding-left: 0.75rem;
+}
+
+.turno-controls-minimal {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.turno-segmented-control {
+  display: inline-flex;
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  padding: 3px;
+  border-radius: 8px;
+}
+
+.turno-segment {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  background: transparent;
+  padding: 0.35rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.turno-segment:hover:not(.turno-segment--selected) {
+  color: var(--color-primary);
+  background-color: rgba(148, 163, 184, 0.12);
+}
+
+.turno-segment:focus-visible {
+  outline: 2px solid var(--color-secondary-mid);
+  outline-offset: 1px;
+}
+
+.turno-segment--selected {
+  background-color: white;
+  color: var(--color-primary);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.icon-sun {
+  color: #d97706;
+}
+
+.icon-sunset {
+  color: #ea580c;
+}
+
+.icon-moon {
+  color: #6366f1;
+}
+
+.turno-hint-minimal {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-danger);
+  display: inline-flex;
+  align-items: center;
+  background-color: #fef2f2;
+  border: 1px solid #fee2e2;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+  .turno-selector-minimal {
     flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
   }
 
-  .turno-card {
-    min-width: unset;
+  .turno-controls-minimal {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+
+  .turno-segmented-control {
+    width: 100%;
+  }
+
+  .turno-segment {
+    flex: 1;
+    justify-content: center;
+    padding: 0.45rem;
+  }
+
+  .turno-hint-minimal {
+    justify-content: center;
+    width: 100%;
   }
 }

@@ -56,104 +56,75 @@
               la nómina institucional.
             </p>
 
-            <!-- Turno Selector -->
-            <div class="turno-selector-section mb-4">
-              <label class="turno-selector-label">
-                <i class="bi bi-clock-fill me-2 text-secondary-mid"></i>
-                Turno de los estudiantes
-                <span class="text-danger ms-1">*</span>
-              </label>
-              <p class="text-muted small mb-3">
-                Seleccione el turno al que pertenecen los estudiantes de este lote de importación.
-              </p>
-              <div class="turno-cards">
-                <!-- Mañana -->
-                <div
-                  class="turno-card"
-                  [class.turno-card--selected]="selectedShift === 'MANANA'"
-                  (click)="selectedShift = 'MANANA'"
-                  role="button"
-                  tabindex="0"
-                  id="turno-manana"
-                  (keydown.enter)="selectedShift = 'MANANA'"
-                  (keydown.space)="selectedShift = 'MANANA'"
-                  aria-pressed="selectedShift === 'MANANA'"
-                  title="Turno Mañana"
+            <!-- Minimalist Turno Selector (Segmented Control Layout) -->
+            <div class="turno-selector-minimal mb-4">
+              <div class="turno-info-minimal">
+                <label class="turno-label-minimal">
+                  <i class="bi bi-clock-fill text-secondary-mid"></i>
+                  Turno de Estudiantes <span class="text-danger">*</span>
+                </label>
+                <span class="turno-desc-minimal d-none d-md-inline"
+                  >Seleccione el turno asignado a esta nómina</span
                 >
-                  <div class="turno-card-icon">
-                    <i class="bi bi-sunrise-fill"></i>
-                  </div>
-                  <div class="turno-card-body">
-                    <span class="turno-card-name">Mañana</span>
-                    <span class="turno-card-hours">6:00 - 12:00</span>
-                  </div>
-                  @if (selectedShift === 'MANANA') {
-                    <div class="turno-card-check">
-                      <i class="bi bi-check-circle-fill"></i>
-                    </div>
-                  }
-                </div>
-
-                <!-- Tarde -->
-                <div
-                  class="turno-card"
-                  [class.turno-card--selected]="selectedShift === 'TARDE'"
-                  (click)="selectedShift = 'TARDE'"
-                  role="button"
-                  tabindex="0"
-                  id="turno-tarde"
-                  (keydown.enter)="selectedShift = 'TARDE'"
-                  (keydown.space)="selectedShift = 'TARDE'"
-                  aria-pressed="selectedShift === 'TARDE'"
-                  title="Turno Tarde"
-                >
-                  <div class="turno-card-icon turno-card-icon--tarde">
-                    <i class="bi bi-sunset-fill"></i>
-                  </div>
-                  <div class="turno-card-body">
-                    <span class="turno-card-name">Tarde</span>
-                    <span class="turno-card-hours">12:00 - 18:00</span>
-                  </div>
-                  @if (selectedShift === 'TARDE') {
-                    <div class="turno-card-check">
-                      <i class="bi bi-check-circle-fill"></i>
-                    </div>
-                  }
-                </div>
-
-                <!-- Noche -->
-                <div
-                  class="turno-card"
-                  [class.turno-card--selected]="selectedShift === 'NOCHE'"
-                  (click)="selectedShift = 'NOCHE'"
-                  role="button"
-                  tabindex="0"
-                  id="turno-noche"
-                  (keydown.enter)="selectedShift = 'NOCHE'"
-                  (keydown.space)="selectedShift = 'NOCHE'"
-                  aria-pressed="selectedShift === 'NOCHE'"
-                  title="Turno Noche"
-                >
-                  <div class="turno-card-icon turno-card-icon--noche">
-                    <i class="bi bi-moon-stars-fill"></i>
-                  </div>
-                  <div class="turno-card-body">
-                    <span class="turno-card-name">Noche</span>
-                    <span class="turno-card-hours">18:00 - 23:00</span>
-                  </div>
-                  @if (selectedShift === 'NOCHE') {
-                    <div class="turno-card-check">
-                      <i class="bi bi-check-circle-fill"></i>
-                    </div>
-                  }
-                </div>
               </div>
-              @if (!selectedShift) {
-                <p class="turno-hint mt-2">
-                  <i class="bi bi-info-circle me-1"></i>
-                  Seleccione un turno para continuar
-                </p>
-              }
+
+              <div class="turno-controls-minimal">
+                <div
+                  class="turno-segmented-control"
+                  role="radiogroup"
+                  aria-label="Turno de estudiantes"
+                >
+                  <!-- Mañana -->
+                  <button
+                    type="button"
+                    class="turno-segment"
+                    [class.turno-segment--selected]="selectedShift === 'MANANA'"
+                    (click)="selectedShift = 'MANANA'"
+                    id="turno-manana"
+                    title="Turno Mañana (6:00 - 12:00)"
+                    role="radio"
+                    [attr.aria-checked]="selectedShift === 'MANANA'"
+                  >
+                    <i class="bi bi-sunrise-fill icon-sun"></i>
+                    <span>Mañana</span>
+                  </button>
+
+                  <!-- Tarde -->
+                  <button
+                    type="button"
+                    class="turno-segment"
+                    [class.turno-segment--selected]="selectedShift === 'TARDE'"
+                    (click)="selectedShift = 'TARDE'"
+                    id="turno-tarde"
+                    title="Turno Tarde (12:00 - 18:00)"
+                    role="radio"
+                    [attr.aria-checked]="selectedShift === 'TARDE'"
+                  >
+                    <i class="bi bi-sunset-fill icon-sunset"></i>
+                    <span>Tarde</span>
+                  </button>
+
+                  <!-- Noche -->
+                  <button
+                    type="button"
+                    class="turno-segment"
+                    [class.turno-segment--selected]="selectedShift === 'NOCHE'"
+                    (click)="selectedShift = 'NOCHE'"
+                    id="turno-noche"
+                    title="Turno Noche (18:00 - 23:00)"
+                    role="radio"
+                    [attr.aria-checked]="selectedShift === 'NOCHE'"
+                  >
+                    <i class="bi bi-moon-stars-fill icon-moon"></i>
+                    <span>Noche</span>
+                  </button>
+                </div>
+                @if (!selectedShift) {
+                  <span class="turno-hint-minimal animate-fade-in">
+                    <i class="bi bi-exclamation-circle-fill me-1"></i>Requerido
+                  </span>
+                }
+              </div>
             </div>
 
             <!-- Drag & Drop Zone -->
@@ -500,11 +471,7 @@
                         <tr class="issue-row">
                           <td style="max-width: 250px" class="text-truncate-mobile">
                             <span class="fw-semibold text-primary-inst">{{
-                              getFileName(
-                                selectedFileFilter === 'ALL'
-                                  ? validationResult.files[0]?.fileId || ''
-                                  : selectedFileFilter
-                              )
+                              getFileName(issue.fileId || '')
                             }}</span>
                           </td>
                           <td>

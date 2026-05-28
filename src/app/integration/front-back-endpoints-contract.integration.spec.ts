@@ -39,7 +39,7 @@ describe('Front-Back Endpoints Contract', () => {
 
   it('usa /api/internal/students/import en ImportService', () => {
     const mockFile = new File(['a,b'], 'students.csv', { type: 'text/csv' });
-    importService.uploadFiles([mockFile]).subscribe();
+    importService.uploadFiles([mockFile], 'MANANA').subscribe();
     const req = httpMock.expectOne(`${environment.apiUrl}/internal/students/import/upload`);
     expect(req.request.method).toBe('POST');
     req.flush({ data: { jobId: 'job-1', uploadedFiles: [] }, meta: {} });

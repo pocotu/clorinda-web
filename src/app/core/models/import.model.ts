@@ -75,6 +75,7 @@ export interface ImportIssue {
   code: string;
   message: string;
   payload?: Record<string, unknown>;
+  fileId?: string;
 }
 
 /**

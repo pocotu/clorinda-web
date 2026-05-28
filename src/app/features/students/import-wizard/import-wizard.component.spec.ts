@@ -118,6 +118,7 @@ describe('ImportWizardComponent', () => {
         type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       });
       component['addFiles']([validFile]);
+      component.selectedShift = 'MANANA';
       component.uploadFiles();
 
       expect(mockImportService.uploadFiles).toHaveBeenCalled();
@@ -233,6 +234,7 @@ describe('ImportWizardComponent', () => {
           },
         ];
         component.uploading = false;
+        component.selectedShift = 'MANANA';
 
         expect(component.canGoNext()).toBe(true);
       });
@@ -249,6 +251,7 @@ describe('ImportWizardComponent', () => {
           },
         ];
         component.uploading = true;
+        component.selectedShift = 'MANANA';
 
         expect(component.canGoNext()).toBe(false);
       });
@@ -380,6 +383,7 @@ describe('ImportWizardComponent', () => {
             type: 'xlsx',
           },
         ];
+        component.selectedShift = 'MANANA';
         spyOn(component, 'uploadFiles');
 
         component.goNext();

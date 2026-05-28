@@ -1,0 +1,247 @@
+/* ================================================================
+   DASHBOARD COMPONENT — Sleek & Responsive Segmented Action Cards
+   Adheres to: SOLID, #frontend-design and institutional variables
+   ================================================================ */
+
+.dashboard-hero {
+  position: relative;
+  background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 100%);
+  border-radius: 16px;
+  padding: 2.25rem 2.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dashboard-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+}
+
+.dashboard-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.title-highlight {
+  color: var(--color-secondary);
+  font-weight: 800;
+  text-shadow: 0 2px 10px rgba(74, 158, 224, 0.2);
+}
+
+.dashboard-hero-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-primary-xlight);
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0;
+}
+
+.role-badge {
+  background-color: rgba(74, 158, 224, 0.2);
+  color: var(--color-secondary-light);
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(74, 158, 224, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dashboard-hero-decoration {
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(74, 158, 224, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Section Header */
+.dashboard-section-header {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 0.75rem;
+}
+
+.section-title {
+  font-weight: 800;
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  font-size: 1.25rem;
+}
+
+/* Responsive Action Cards */
+.dashboard-grid {
+  margin-top: 1rem;
+}
+
+/* Dashboard Action Pad: cohesive grouped grid of square buttons */
+.dashboard-action-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 140px); /* Exactly 3 columns of compact buttons */
+  gap: 1.25rem; /* Elegant compact gap grouping them close together */
+  justify-content: center; /* Centered layout */
+  margin: 2rem auto 0 auto;
+  max-width: fit-content;
+}
+
+/* Card Button: Square Tile Design */
+.dashboard-card-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1rem 0.5rem;
+  width: 140px;
+  height: 140px; /* EXACTLY SQUARE */
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 31, 63, 0.015);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover and active micro-animations */
+.dashboard-card-btn:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-secondary-mid);
+  box-shadow: 0 8px 16px rgba(0, 31, 63, 0.05);
+}
+
+.dashboard-card-btn:active {
+  transform: translateY(-1px);
+}
+
+.dashboard-card-btn:focus-visible {
+  outline: 3px solid var(--color-secondary-light);
+  outline-offset: 2px;
+}
+
+.dashboard-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+/* Uniform Single-Color Icons (Institutional Navy Deep Blue) */
+.dashboard-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: var(--color-primary-xlight);
+  color: var(--color-primary); /* SINGLE CONSISTENT ICON COLOR */
+  transition: all 0.2s ease;
+}
+
+.dashboard-icon {
+  font-size: 1.35rem;
+}
+
+.dashboard-card-btn:hover .dashboard-icon-wrapper {
+  background-color: var(--color-primary);
+  color: white; /* Contrast transition on hover */
+  transform: scale(1.05);
+}
+
+.dashboard-card-label {
+  font-weight: 700;
+  color: var(--color-primary);
+  font-size: 0.82rem; /* Compact clean typography */
+  text-align: center;
+  line-height: 1.3;
+  margin: 0;
+  transition: color 0.2s ease;
+  width: 100%;
+  padding: 0 4px;
+  word-wrap: break-word;
+}
+
+.dashboard-card-btn:hover .dashboard-card-label {
+  color: var(--color-primary-light);
+}
+
+/* Animations */
+.animate-fade-in {
+  animation: fadeIn 0.45s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .dashboard-hero {
+    padding: 1.5rem 1.75rem;
+  }
+
+  .dashboard-hero-title {
+    font-size: 1.6rem;
+  }
+
+  .dashboard-hero-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .dashboard-action-pad {
+    grid-template-columns: repeat(2, 120px); /* 2 columns on mobile for perfect spacing */
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+  }
+
+  .dashboard-card-btn {
+    width: 120px;
+    height: 120px; /* EXACTLY SQUARE on mobile */
+    border-radius: 12px;
+    padding: 0.75rem 0.4rem;
+  }
+
+  .dashboard-card-content {
+    gap: 0.5rem;
+  }
+
+  .dashboard-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .dashboard-icon {
+    font-size: 1.15rem;
+  }
+
+  .dashboard-card-label {
+    font-size: 0.75rem;
+  }
+}
