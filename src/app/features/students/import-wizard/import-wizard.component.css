@@ -90,3 +90,155 @@
     text-align: left;
   }
 }
+
+/* ================================================================
+   TURNO SELECTOR — Animated card-style shift picker
+   ================================================================ */
+
+.turno-selector-section {
+  background: linear-gradient(135deg, #f8fbff 0%, #eef5fb 100%);
+  border: 1.5px solid #d0e4f5;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+}
+
+.turno-selector-label {
+  display: block;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+.turno-cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Individual turno card */
+.turno-card {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-radius: 12px;
+  border: 2px solid #dde8f5;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  box-shadow: 0 1px 4px rgba(0, 31, 63, 0.06);
+}
+
+.turno-card:hover {
+  border-color: var(--color-secondary-mid);
+  box-shadow: 0 4px 16px rgba(74, 158, 224, 0.18);
+  transform: translateY(-2px);
+}
+
+.turno-card:focus {
+  outline: 3px solid var(--color-secondary-light);
+  outline-offset: 2px;
+}
+
+/* Selected state */
+.turno-card--selected {
+  border-color: var(--color-secondary-mid) !important;
+  background: linear-gradient(135deg, #e8f4fc 0%, #d0eaf9 100%) !important;
+  box-shadow: 0 4px 20px rgba(74, 158, 224, 0.22) !important;
+  transform: translateY(-2px);
+}
+
+/* Icon area */
+.turno-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  color: #fff;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.turno-card--selected .turno-card-icon {
+  transform: scale(1.08);
+}
+
+.turno-card-icon--tarde {
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+}
+
+.turno-card-icon--noche {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+}
+
+/* Text inside card */
+.turno-card-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.turno-card-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--color-primary);
+  line-height: 1.2;
+}
+
+.turno-card-hours {
+  font-size: 0.76rem;
+  color: var(--color-text-secondary);
+  margin-top: 0.15rem;
+}
+
+/* Check badge */
+.turno-card-check {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 1.2rem;
+  color: var(--color-secondary-mid);
+  background: white;
+  border-radius: 50%;
+  line-height: 1;
+  animation: checkPop 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes checkPop {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Hint text */
+.turno-hint {
+  font-size: 0.82rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* Responsive turno cards */
+@media (max-width: 576px) {
+  .turno-cards {
+    flex-direction: column;
+  }
+
+  .turno-card {
+    min-width: unset;
+  }
+}

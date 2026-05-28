@@ -43,6 +43,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
   isDragging = false;
   uploadError: string | null = null;
   uploading = false;
+  /** Turno seleccionado para todos los estudiantes del lote */
+  selectedShift: 'MANANA' | 'TARDE' | 'NOCHE' | null = null;
 
   // Step 2: Validate
   validating = false;
@@ -186,7 +188,13 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
     const files = this.selectedFiles.map((sf) => sf.file);
 
-    const uploadRequest$ = this.importService.uploadFiles(files);
+    if (!this.selectedShift) {
+      this.uploadError = 'Debe seleccionar el turno antes de continuar';
+      this.uploading = false;
+      return;
+    }
+
+    const uploadRequest$ = this.importService.uploadFiles(files, this.selectedShift);
     if (!uploadRequest$) {
       this.uploading = false;
       this.uploadError = 'Error al subir archivos';
@@ -513,6 +521,7 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     this.selectedSeverityFilter = 'ALL';
     this.selectedFileFilter = 'ALL';
     this.currentPage = 1;
+    this.selectedShift = null;
   }
 
   /**
@@ -576,8 +585,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
   canGoNext(): boolean {
     switch (this.currentStep) {
       case 1:
-        // Step 1: Must have files selected and not uploading
-        return this.selectedFiles.length > 0 && !this.uploading;
+        // Step 1: Must have files selected, shift selected and not uploading
+        return this.selectedFiles.length > 0 && this.selectedShift !== null && !this.uploading;
       case 2:
         // Step 2: Validation must be complete
         return this.validationResult !== null && !this.validating;

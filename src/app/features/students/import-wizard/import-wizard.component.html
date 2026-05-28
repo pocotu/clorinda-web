@@ -56,6 +56,106 @@
               la nómina institucional.
             </p>
 
+            <!-- Turno Selector -->
+            <div class="turno-selector-section mb-4">
+              <label class="turno-selector-label">
+                <i class="bi bi-clock-fill me-2 text-secondary-mid"></i>
+                Turno de los estudiantes
+                <span class="text-danger ms-1">*</span>
+              </label>
+              <p class="text-muted small mb-3">
+                Seleccione el turno al que pertenecen los estudiantes de este lote de importación.
+              </p>
+              <div class="turno-cards">
+                <!-- Mañana -->
+                <div
+                  class="turno-card"
+                  [class.turno-card--selected]="selectedShift === 'MANANA'"
+                  (click)="selectedShift = 'MANANA'"
+                  role="button"
+                  tabindex="0"
+                  id="turno-manana"
+                  (keydown.enter)="selectedShift = 'MANANA'"
+                  (keydown.space)="selectedShift = 'MANANA'"
+                  aria-pressed="selectedShift === 'MANANA'"
+                  title="Turno Mañana"
+                >
+                  <div class="turno-card-icon">
+                    <i class="bi bi-sunrise-fill"></i>
+                  </div>
+                  <div class="turno-card-body">
+                    <span class="turno-card-name">Mañana</span>
+                    <span class="turno-card-hours">6:00 - 12:00</span>
+                  </div>
+                  @if (selectedShift === 'MANANA') {
+                    <div class="turno-card-check">
+                      <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                  }
+                </div>
+
+                <!-- Tarde -->
+                <div
+                  class="turno-card"
+                  [class.turno-card--selected]="selectedShift === 'TARDE'"
+                  (click)="selectedShift = 'TARDE'"
+                  role="button"
+                  tabindex="0"
+                  id="turno-tarde"
+                  (keydown.enter)="selectedShift = 'TARDE'"
+                  (keydown.space)="selectedShift = 'TARDE'"
+                  aria-pressed="selectedShift === 'TARDE'"
+                  title="Turno Tarde"
+                >
+                  <div class="turno-card-icon turno-card-icon--tarde">
+                    <i class="bi bi-sunset-fill"></i>
+                  </div>
+                  <div class="turno-card-body">
+                    <span class="turno-card-name">Tarde</span>
+                    <span class="turno-card-hours">12:00 - 18:00</span>
+                  </div>
+                  @if (selectedShift === 'TARDE') {
+                    <div class="turno-card-check">
+                      <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                  }
+                </div>
+
+                <!-- Noche -->
+                <div
+                  class="turno-card"
+                  [class.turno-card--selected]="selectedShift === 'NOCHE'"
+                  (click)="selectedShift = 'NOCHE'"
+                  role="button"
+                  tabindex="0"
+                  id="turno-noche"
+                  (keydown.enter)="selectedShift = 'NOCHE'"
+                  (keydown.space)="selectedShift = 'NOCHE'"
+                  aria-pressed="selectedShift === 'NOCHE'"
+                  title="Turno Noche"
+                >
+                  <div class="turno-card-icon turno-card-icon--noche">
+                    <i class="bi bi-moon-stars-fill"></i>
+                  </div>
+                  <div class="turno-card-body">
+                    <span class="turno-card-name">Noche</span>
+                    <span class="turno-card-hours">18:00 - 23:00</span>
+                  </div>
+                  @if (selectedShift === 'NOCHE') {
+                    <div class="turno-card-check">
+                      <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                  }
+                </div>
+              </div>
+              @if (!selectedShift) {
+                <p class="turno-hint mt-2">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Seleccione un turno para continuar
+                </p>
+              }
+            </div>
+
             <!-- Drag & Drop Zone -->
             <div
               class="drop-zone mb-4"

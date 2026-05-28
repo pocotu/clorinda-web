@@ -26,11 +26,15 @@ export class ImportService {
    * Upload import files and create job
    * Requirement 4.1, 4.2
    */
-  uploadFiles(files: File[]): Observable<ApiResponse<UploadResult>> {
+  uploadFiles(
+    files: File[],
+    shift: 'MANANA' | 'TARDE' | 'NOCHE'
+  ): Observable<ApiResponse<UploadResult>> {
     const formData = new FormData();
     files.forEach((file) => {
       formData.append('files', file);
     });
+    formData.append('shift', shift);
 
     return this.http.post<ApiResponse<UploadResult>>(`${this.apiUrl}/upload`, formData);
   }
