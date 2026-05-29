@@ -292,7 +292,8 @@ describe('ImportService', () => {
 
       const req = httpMock.expectOne(`${apiUrl}/job-123/confirm`);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({});
+      // confirmImport always sends FormData (with shift field) for stateless fallback support
+      expect(req.request.body instanceof FormData).toBe(true);
       req.flush(mockResponse);
 
       const response: any = await promise;

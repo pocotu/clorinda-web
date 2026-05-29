@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SeoService } from '../../core/services';
 
 interface Comite {
   id: string;
@@ -18,6 +19,8 @@ interface Comite {
   styleUrl: './comites-gestion.component.css',
 })
 export class ComitesGestionComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
   comites: Comite[] = [
     {
       id: '1',
@@ -134,6 +137,15 @@ export class ComitesGestionComponent implements OnInit {
   comiteSeleccionado: Comite | null = null;
 
   ngOnInit() {
+    this.seo.setPage({
+      title: 'Comités de Gestión | IE Emblemática Clorinda Matto de Turner | Cusco',
+      description:
+        'Conoce los Comités de Gestión Escolar de la IE Emblemática Clorinda Matto de Turner: Comité de Condiciones Operativas, Gestión Pedagógica y Bienestar. Transparencia institucional en Cusco, Perú.',
+      keywords:
+        'comités gestión escolar Cusco, CONEI Clorinda Matto, gestión pedagógica colegio Cusco, bienestar escolar Cusco, MINEDU comités IE, organización escolar Perú',
+      canonicalPath: '/comites-gestion',
+    });
+
     // Seleccionar el primer comité por defecto
     if (this.comites.length > 0) {
       this.comiteSeleccionado = this.comites[0];

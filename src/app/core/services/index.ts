@@ -7,3 +7,4 @@ export * from './landing.service';
 export * from './public-query.service';
 export * from './exalumnas.service';
 export * from './users.service';
+export * from './seo.service';

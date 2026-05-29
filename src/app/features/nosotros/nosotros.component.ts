@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { SeoService } from '../../core/services';
 
 @Component({
   selector: 'app-nosotros',
@@ -7,7 +8,20 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   templateUrl: './nosotros.component.html',
   styleUrl: './nosotros.component.css',
 })
-export class NosotrosComponent {
+export class NosotrosComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.setPage({
+      title: 'Nosotros | IE Emblemática Clorinda Matto de Turner | Cusco',
+      description:
+        'Conoce la historia, misión, visión y valores de la IE Emblemática Clorinda Matto de Turner en Cusco, Perú. Más de 50 años de excelencia educativa formando ciudadanas íntegras y competentes.',
+      keywords:
+        'historia Clorinda Matto de Turner, misión visión colegio Cusco, valores institucionales IE Clorinda, educación integral Cusco, institución educativa emblemática historia',
+      canonicalPath: '/nosotros',
+    });
+  }
+
   readonly sliderImages: string[] = [
     'assets/images/img-nosotros/WhatsApp Image 2026-04-18 at 4.27.42 PM.jpeg',
     'assets/images/img-nosotros/WhatsApp Image 2026-04-18 at 4.27.42 PM (1).jpeg',

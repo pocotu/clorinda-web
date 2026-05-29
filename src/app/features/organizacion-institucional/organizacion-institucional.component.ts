@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SeoService } from '../../core/services';
 
 interface Directivo {
   cargo: string;
@@ -22,6 +23,8 @@ interface Comite {
   styleUrl: './organizacion-institucional.component.css',
 })
 export class OrganizacionInstitucionalComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
   titulo = 'Organización Estructural de la Institución Educativa Clorinda';
   descripcion =
     'Nuestra estructura organizacional refleja el compromiso con la excelencia educativa y el trabajo colaborativo. Cada órgano y equipo cumple un rol fundamental en la formación integral de nuestras estudiantes, garantizando una gestión educativa de calidad alineada con los lineamientos del Ministerio de Educación.';
@@ -148,6 +151,15 @@ export class OrganizacionInstitucionalComponent implements OnInit {
   comiteSeleccionado: Comite | null = null;
 
   ngOnInit() {
+    this.seo.setPage({
+      title: 'Organización Institucional | IE Emblemática Clorinda Matto de Turner | Cusco',
+      description:
+        'Estructura organizacional de la IE Emblemática Clorinda Matto de Turner en Cusco: directivos, comités de gestión y equipo administrativo. Gestión educativa alineada al MINEDU y CNEB.',
+      keywords:
+        'organización institucional Clorinda Matto, directivos colegio Cusco, estructura educativa Cusco, APAFA Clorinda, CONEI Cusco, comités educativos Perú',
+      canonicalPath: '/organizacion-institucional',
+    });
+
     if (this.comites.length > 0) {
       this.comiteSeleccionado = this.comites[0];
     }

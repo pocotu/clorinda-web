@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { PublicQueryService } from '../../../core/services';
+import { PublicQueryService, SeoService } from '../../../core/services';
 import { PublicAttendanceResult } from '../../../core/models';
 import { studentCodeValidator } from '../../../shared/validators';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
@@ -33,6 +33,7 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
   private readonly publicQueryService = inject(PublicQueryService);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
+  private readonly seo = inject(SeoService);
 
   // Chart reference
   @ViewChild('attendanceChart') chartCanvas?: ElementRef<HTMLCanvasElement>;
@@ -70,6 +71,15 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    this.seo.setPage({
+      title: 'Consulta de Asistencia Escolar | IE Emblemática Clorinda Matto de Turner | Cusco',
+      description:
+        'Consulta en línea la asistencia de tu hija o estudiante en la IE Emblemática Clorinda Matto de Turner, Cusco. Ingresa el código de estudiante para ver el historial mensual.',
+      keywords:
+        'consulta asistencia escolar Cusco, asistencia estudiante Clorinda Matto, control asistencia colegio Cusco, historial asistencia perú, asistencia online colegio',
+      canonicalPath: '/consulta-asistencia',
+    });
+
     if (!this.isBrowser()) {
       return;
     }

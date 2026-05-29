@@ -147,7 +147,8 @@ describe('ImportWizardComponent', () => {
       component.jobId = 'job-123';
       component['startValidation']();
 
-      expect(mockImportService.validateJob).toHaveBeenCalledWith('job-123');
+      // validateJob is called with jobId plus an array of raw File objects (stateless fallback)
+      expect(mockImportService.validateJob).toHaveBeenCalledWith('job-123', jasmine.any(Array));
     });
 
     it('should handle validation error', () => {
@@ -179,9 +180,16 @@ describe('ImportWizardComponent', () => {
       );
 
       component.jobId = 'job-123';
+      // selectedShift must be set; startImport() guards against null shift
+      component.selectedShift = 'MANANA';
       component['startImport']();
 
-      expect(mockImportService.confirmImport).toHaveBeenCalledWith('job-123', [], 'MANANA');
+      // confirmImport is called with jobId, an array of raw File objects, and the shift
+      expect(mockImportService.confirmImport).toHaveBeenCalledWith(
+        'job-123',
+        jasmine.any(Array),
+        'MANANA'
+      );
     });
   });
 

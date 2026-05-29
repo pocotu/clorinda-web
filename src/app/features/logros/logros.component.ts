@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SeoService } from '../../core/services';
 
 @Component({
   selector: 'app-logros',
@@ -8,7 +9,20 @@ import { CommonModule } from '@angular/common';
   templateUrl: './logros.component.html',
   styleUrl: './logros.component.css',
 })
-export class LogrosComponent {
+export class LogrosComponent implements OnInit {
+  private readonly seo = inject(SeoService);
+
+  ngOnInit(): void {
+    this.seo.setPage({
+      title: 'Logros y Reconocimientos | IE Emblemática Clorinda Matto de Turner | Cusco',
+      description:
+        'Descubre los logros académicos, deportivos, culturales e institucionales de la IE Emblemática Clorinda Matto de Turner en Cusco. Primer lugar en olimpiadas, campeonatos regionales y premios del MINEDU.',
+      keywords:
+        'logros Clorinda Matto de Turner, olimpiadas matemática Cusco, campeón deportivo colegio Cusco, premios educación Cusco, festival danzas Cusco, excelencia educativa Perú',
+      canonicalPath: '/logros',
+    });
+  }
+
   logros = [
     {
       anio: '2025',

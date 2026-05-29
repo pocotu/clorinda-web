@@ -1,0 +1,25 @@
+# Robots.txt — IE Emblemática Clorinda Matto de Turner
+# https://clorindamattodeturner.edu.pe
+
+# Permitir a todos los crawlers las páginas públicas
+User-agent: *
+Allow: /
+Allow: /nosotros
+Allow: /organizacion-institucional
+Allow: /comites-gestion
+Allow: /logros
+Allow: /consulta-asistencia
+
+# Bloquear rutas privadas / panel administrativo
+Disallow: /inicio
+Disallow: /asistencia/
+Disallow: /estudiantes/
+Disallow: /admin/
+Disallow: /login
+Disallow: /unauthorized
+
+# Crawl-delay para no saturar el servidor
+Crawl-delay: 2
+
+# Sitemap
+Sitemap: https://clorindamattodeturner.edu.pe/sitemap.xml
