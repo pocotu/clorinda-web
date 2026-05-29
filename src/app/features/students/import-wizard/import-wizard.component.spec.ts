@@ -181,7 +181,7 @@ describe('ImportWizardComponent', () => {
       component.jobId = 'job-123';
       component['startImport']();
 
-      expect(mockImportService.confirmImport).toHaveBeenCalledWith('job-123');
+      expect(mockImportService.confirmImport).toHaveBeenCalledWith('job-123', [], 'MANANA');
     });
   });
 

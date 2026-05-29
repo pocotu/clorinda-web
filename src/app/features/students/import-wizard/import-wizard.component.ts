@@ -451,19 +451,15 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
    * Requirement 4.5, 4.7, 4.8
    */
   private startImport(): void {
-    if (!this.jobId) {
+    if (!this.jobId || !this.selectedShift) {
       return;
     }
 
     this.confirming = true;
     this.confirmError = null;
 
-    const confirmRequest$ = this.importService.confirmImport(this.jobId);
-    if (!confirmRequest$) {
-      this.confirming = false;
-      this.confirmError = 'Error al confirmar importación';
-      return;
-    }
+    const files = this.selectedFiles.map((sf) => sf.file);
+    const confirmRequest$ = this.importService.confirmImport(this.jobId, files, this.selectedShift);
 
     confirmRequest$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (response) => {

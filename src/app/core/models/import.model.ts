@@ -87,6 +87,7 @@ export interface ImportResult {
   summary: {
     totalRows: number;
     inserted: number;
+    updated?: number;
     rejected: number;
     durationMs: number;
   };

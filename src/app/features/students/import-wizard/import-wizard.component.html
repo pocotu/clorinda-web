@@ -621,7 +621,7 @@
               </div>
 
               <div class="row g-3 mb-5">
-                <div class="col-12 col-md-4">
+                <div class="col-6 col-md-3">
                   <div class="card p-3 bg-light border text-center rounded-3">
                     <h3 class="mb-0 fw-bold text-primary-inst">
                       {{ importResult.summary.totalRows }}
@@ -633,7 +633,7 @@
                     >
                   </div>
                 </div>
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-3">
                   <div
                     class="card p-3 text-white text-center rounded-3"
                     style="background-color: var(--color-success)"
@@ -642,11 +642,24 @@
                     <small
                       class="uppercase fw-bold"
                       style="font-size: 0.75rem; letter-spacing: 0.5px"
-                      >ESTUDIANTES GUARDADOS</small
+                      >GUARDADOS</small
                     >
                   </div>
                 </div>
-                <div class="col-6 col-md-4">
+                <div class="col-6 col-md-3">
+                  <div
+                    class="card p-3 text-dark text-center rounded-3"
+                    style="background-color: var(--color-gold-light)"
+                  >
+                    <h3 class="mb-0 fw-bold">{{ importResult.summary.updated }}</h3>
+                    <small
+                      class="uppercase fw-bold"
+                      style="font-size: 0.75rem; letter-spacing: 0.5px"
+                      >ACTUALIZADOS</small
+                    >
+                  </div>
+                </div>
+                <div class="col-6 col-md-3">
                   <div
                     class="card p-3 text-white text-center rounded-3"
                     style="background-color: var(--color-danger)"
@@ -655,7 +668,7 @@
                     <small
                       class="uppercase fw-bold"
                       style="font-size: 0.75rem; letter-spacing: 0.5px"
-                      >FILAS RECHAZADAS</small
+                      >RECHAZADAS</small
                     >
                   </div>
                 </div>

@@ -284,7 +284,7 @@ describe('ImportService', () => {
       };
 
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123').subscribe({
+        service.confirmImport('job-123', [], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -314,7 +314,7 @@ describe('ImportService', () => {
       };
 
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123').subscribe({
+        service.confirmImport('job-123', [], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -330,7 +330,7 @@ describe('ImportService', () => {
 
     it('should handle confirm before validation error', async () => {
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123').subscribe({
+        service.confirmImport('job-123', [], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -347,7 +347,7 @@ describe('ImportService', () => {
 
     it('should handle confirm with validation errors', async () => {
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123').subscribe({
+        service.confirmImport('job-123', [], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });
@@ -493,7 +493,7 @@ describe('ImportService', () => {
 
       // Step 3: Confirm
       const confirmPromise = new Promise((resolve, reject) => {
-        service.confirmImport(jobId).subscribe({
+        service.confirmImport(jobId, [], 'MANANA').subscribe({
           next: resolve,
           error: reject,
         });

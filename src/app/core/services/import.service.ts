@@ -48,34 +48,46 @@ export class ImportService {
   }
 
   /**
-   * Confirm and execute import
+   * Confirm and execute import.
+   * Files are sent again as a FormData fallback so the backend can recover
+   * when its in-memory buffer store was cleared by a server restart (e.g. Render).
    * Requirement 4.5, 4.7, 4.8
    */
-  confirmImport(jobId: string): Observable<ApiResponse<ImportResult>> {
-    return this.http.post<ApiResponse<ImportResult>>(`${this.apiUrl}/${jobId}/confirm`, {}).pipe(
-      (source) =>
-        new Observable<ApiResponse<ImportResult>>((subscriber) =>
-          source.subscribe({
-            next: (response) => {
-              const summary = response.data?.summary;
-              if (summary) {
-                const inserted = summary.inserted ?? 0;
-                const rejected = summary.rejected ?? 0;
-                const totalRows = summary.totalRows ?? inserted + rejected;
-                const updated = Math.max(0, totalRows - inserted - rejected);
+  confirmImport(
+    jobId: string,
+    files: File[],
+    shift: 'MANANA' | 'TARDE' | 'NOCHE'
+  ): Observable<ApiResponse<ImportResult>> {
+    const formData = new FormData();
+    files.forEach((file) => formData.append('files', file));
+    formData.append('shift', shift);
 
-                (response.data as ImportResult & { inserted?: number }).inserted = inserted;
-                (response.data as ImportResult & { rejected?: number }).rejected = rejected;
-                (response.data as ImportResult & { updated?: number }).updated = updated;
-              }
+    return this.http
+      .post<ApiResponse<ImportResult>>(`${this.apiUrl}/${jobId}/confirm`, formData)
+      .pipe(
+        (source) =>
+          new Observable<ApiResponse<ImportResult>>((subscriber) =>
+            source.subscribe({
+              next: (response) => {
+                const summary = response.data?.summary;
+                if (summary) {
+                  const inserted = summary.inserted ?? 0;
+                  const rejected = summary.rejected ?? 0;
+                  const totalRows = summary.totalRows ?? inserted + rejected;
+                  const updated = Math.max(0, totalRows - inserted - rejected);
 
-              subscriber.next(response);
-              subscriber.complete();
-            },
-            error: (error) => subscriber.error(error),
-          })
-        )
-    );
+                  (response.data as ImportResult & { inserted?: number }).inserted = inserted;
+                  (response.data as ImportResult & { rejected?: number }).rejected = rejected;
+                  (response.data as ImportResult & { updated?: number }).updated = updated;
+                }
+
+                subscriber.next(response);
+                subscriber.complete();
+              },
+              error: (error) => subscriber.error(error),
+            })
+          )
+      );
   }
 
   /**
