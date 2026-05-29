@@ -40,10 +40,20 @@ export class ImportService {
   }
 
   /**
-   * Validate import job and detect errors
+   * Validate import job and detect errors.
+   * Files can be sent again as a FormData fallback so the backend can recover
+   * when its in-memory buffer store was cleared by a server restart (e.g. Render).
    * Requirement 4.2, 4.3
    */
-  validateJob(jobId: string): Observable<ApiResponse<ValidationResult>> {
+  validateJob(jobId: string, files?: File[]): Observable<ApiResponse<ValidationResult>> {
+    if (files && files.length > 0) {
+      const formData = new FormData();
+      files.forEach((file) => formData.append('files', file));
+      return this.http.post<ApiResponse<ValidationResult>>(
+        `${this.apiUrl}/${jobId}/validate`,
+        formData
+      );
+    }
     return this.http.post<ApiResponse<ValidationResult>>(`${this.apiUrl}/${jobId}/validate`, {});
   }
 

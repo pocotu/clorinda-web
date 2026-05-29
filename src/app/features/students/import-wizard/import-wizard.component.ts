@@ -243,7 +243,8 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     this.validating = true;
     this.validationError = null;
 
-    const validationRequest$ = this.importService.validateJob(this.jobId);
+    const files = this.selectedFiles.map((sf) => sf.file);
+    const validationRequest$ = this.importService.validateJob(this.jobId, files);
     if (!validationRequest$) {
       this.validating = false;
       this.validationError = 'Error al validar archivos';

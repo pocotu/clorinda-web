@@ -574,6 +574,7 @@ describe('Import Flow Integration', () => {
 
       component.jobId = mockJobId;
       component.validationResult = mockValidationResult;
+      component.selectedShift = 'MANANA';
       component.currentStep = 3;
 
       component.goToConfirm();
@@ -602,6 +603,7 @@ describe('Import Flow Integration', () => {
 
       component.jobId = mockJobId;
       component.validationResult = mockValidationResult;
+      component.selectedShift = 'MANANA';
       component.currentStep = 3;
 
       component.goToConfirm();
