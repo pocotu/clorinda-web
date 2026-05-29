@@ -298,9 +298,9 @@ describe('ImportService', () => {
       const response: any = await promise;
       expect(response).toEqual(mockResponse);
       expect(response.data.status).toBe('COMPLETED');
-      expect(response.data.inserted).toBe(95);
-      expect(response.data.updated).toBe(5);
-      expect(response.data.rejected).toBe(0);
+      expect(response.data.summary.inserted).toBe(95);
+      expect(response.data.summary.updated).toBe(5);
+      expect(response.data.summary.rejected).toBe(0);
     });
 
     it('should handle import with rejections', async () => {

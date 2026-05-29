@@ -86,9 +86,9 @@ export class ImportService {
                   const totalRows = summary.totalRows ?? inserted + rejected;
                   const updated = Math.max(0, totalRows - inserted - rejected);
 
-                  (response.data as ImportResult & { inserted?: number }).inserted = inserted;
-                  (response.data as ImportResult & { rejected?: number }).rejected = rejected;
-                  (response.data as ImportResult & { updated?: number }).updated = updated;
+                  response.data.summary.inserted = inserted;
+                  response.data.summary.rejected = rejected;
+                  response.data.summary.updated = updated;
                 }
 
                 subscriber.next(response);
