@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AttendanceService } from '../../../core/services/attendance.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { AttendanceSession } from '../../../core/models/attendance.model';
+import { AttendanceSession, Shift } from '../../../core/models/attendance.model';
 
 /**
  * AttendanceHistoryComponent
@@ -39,6 +39,7 @@ export class AttendanceHistoryComponent implements OnInit {
   // Filter signals
   selectedGrade = signal<number | undefined>(undefined);
   selectedSection = signal<string>('');
+  selectedShift = signal<string>('');
   selectedMonth = signal<number | undefined>(undefined);
   selectedYear = signal<number>(new Date().getFullYear());
   currentPage = signal<number>(1);
@@ -62,6 +63,8 @@ export class AttendanceHistoryComponent implements OnInit {
   // Available options
   grades: number[] = [];
   sections: string[] = [];
+  readonly Shift = Shift;
+  shifts = Object.values(Shift);
   readonly months = [
     { value: 1, label: 'Enero' },
     { value: 2, label: 'Febrero' },
@@ -126,6 +129,10 @@ export class AttendanceHistoryComponent implements OnInit {
       filters.section = this.selectedSection();
     }
 
+    if (this.selectedShift()) {
+      filters.shift = this.selectedShift();
+    }
+
     if (this.selectedMonth()) {
       filters.month = this.selectedMonth();
     }
@@ -164,6 +171,7 @@ export class AttendanceHistoryComponent implements OnInit {
   clearFilters(): void {
     this.selectedGrade.set(undefined);
     this.selectedSection.set('');
+    this.selectedShift.set('');
     this.selectedMonth.set(undefined);
     this.selectedYear.set(new Date().getFullYear());
     this.currentPage.set(1);

@@ -110,12 +110,14 @@ describe('AttendanceHistoryComponent', () => {
     attendanceService.getHistory.calls.reset();
 
     component.selectedSection.set('A');
+    component.selectedShift.set('MANANA');
     component.selectedMonth.set(5);
     component.selectedYear.set(2026);
     component.applyFilters();
 
     expect(attendanceService.getHistory).toHaveBeenCalledWith({
       section: 'A',
+      shift: 'MANANA',
       month: 5,
       year: 2026,
       page: 1,
@@ -125,6 +127,7 @@ describe('AttendanceHistoryComponent', () => {
 
   it('should clear filters', () => {
     component.selectedSection.set('A');
+    component.selectedShift.set('MANANA');
     component.selectedMonth.set(5);
     component.selectedYear.set(2025);
     component.currentPage.set(2);
@@ -132,6 +135,7 @@ describe('AttendanceHistoryComponent', () => {
     component.clearFilters();
 
     expect(component.selectedSection()).toBe('');
+    expect(component.selectedShift()).toBe('');
     expect(component.selectedMonth()).toBeUndefined();
     expect(component.selectedYear()).toBe(new Date().getFullYear());
     expect(component.currentPage()).toBe(1);

@@ -93,6 +93,27 @@
           </div>
         </div>
 
+        <!-- Shift Filter -->
+        <div class="clorinda-form-group">
+          <label for="shiftFilter" class="clorinda-form-label">
+            <i class="bi bi-clock-fill"></i>
+            Turno
+          </label>
+          <div class="clorinda-input-group">
+            <select
+              id="shiftFilter"
+              class="clorinda-form-select"
+              [(ngModel)]="selectedShift"
+              (change)="applyFilters()"
+            >
+              <option value="">Todos</option>
+              <option *ngFor="let shift of shifts" [value]="shift">
+                {{ formatShift(shift) }}
+              </option>
+            </select>
+          </div>
+        </div>
+
         <!-- Month Filter -->
         <div class="clorinda-form-group">
           <label for="monthFilter" class="clorinda-form-label">

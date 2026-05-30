@@ -117,6 +117,7 @@ export class AttendanceService {
   getHistory(filters?: {
     grade?: number;
     section?: string;
+    shift?: string;
     month?: number;
     year?: number;
     page?: number;

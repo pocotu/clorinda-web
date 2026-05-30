@@ -442,6 +442,7 @@ describe('AttendanceService', () => {
     it('should get history with filters', async () => {
       const filters = {
         section: '1A',
+        shift: 'MANANA',
         month: 1,
         year: 2024,
         page: 1,
@@ -468,6 +469,7 @@ describe('AttendanceService', () => {
         return (
           request.url === `${apiUrl}/history` &&
           request.params.get('section') === '1A' &&
+          request.params.get('shift') === 'MANANA' &&
           request.params.get('month') === '1' &&
           request.params.get('year') === '2024' &&
           request.params.get('page') === '1' &&
