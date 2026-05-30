@@ -89,6 +89,15 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
     }
     // Load reCAPTCHA script
     this.loadRecaptchaScript();
+
+    // Listen to form status changes to fetch captcha token for reCAPTCHA v3
+    this.queryForm.statusChanges.subscribe((status) => {
+      if (status === 'VALID') {
+        this.fetchCaptchaToken();
+      } else {
+        this.captchaToken.set(null);
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -96,7 +105,33 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Load Google reCAPTCHA v2 script dynamically
+   * Fetch Google reCAPTCHA v3 token programmatically
+   */
+  private fetchCaptchaToken(): void {
+    if (!this.isBrowser()) {
+      return;
+    }
+    const win = this.getWindow();
+    const grecaptcha = win ? (win as any).grecaptcha : null;
+    if (!grecaptcha) {
+      console.warn('reCAPTCHA not loaded yet');
+      return;
+    }
+    grecaptcha.ready(() => {
+      grecaptcha
+        .execute(this.captchaSiteKey, { action: 'attendance_query' })
+        .then((token: string) => {
+          this.captchaToken.set(token);
+        })
+        .catch((error: any) => {
+          console.error('Error executing reCAPTCHA v3:', error);
+          this.captchaToken.set(null);
+        });
+    });
+  }
+
+  /**
+   * Load Google reCAPTCHA v3 script dynamically
    */
   private loadRecaptchaScript(): void {
     if (!this.isBrowser()) {
@@ -108,113 +143,36 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
     }
     // Check if script already loaded
     if (this.document.getElementById('recaptcha-script')) {
-      this.initRecaptcha();
+      this.captchaReady.set(true);
+      if (this.queryForm.valid) {
+        this.fetchCaptchaToken();
+      }
       return;
     }
 
     const script = this.document.createElement('script');
     script.id = 'recaptcha-script';
-    script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit';
+    script.src = `https://www.google.com/recaptcha/api.js?render=${this.captchaSiteKey}`;
     script.async = true;
     script.defer = true;
 
-    // Set up callback for when script loads
-    (win as any).onRecaptchaLoad = () => {
-      this.initRecaptcha();
+    script.onload = () => {
+      this.captchaReady.set(true);
+      if (this.queryForm.valid) {
+        this.fetchCaptchaToken();
+      }
     };
 
     this.document.head.appendChild(script);
   }
 
   /**
-   * Initialize reCAPTCHA widget
-   */
-  private initRecaptcha(): void {
-    if (!this.isBrowser()) {
-      return;
-    }
-    const win = this.getWindow();
-    const grecaptcha = win ? (win as any).grecaptcha : null;
-
-    if (!grecaptcha) {
-      console.error('reCAPTCHA not loaded');
-      return;
-    }
-
-    // Wait for DOM to be ready
-    setTimeout(() => {
-      const container = this.document.getElementById('recaptcha-container');
-
-      if (!container) {
-        console.error('reCAPTCHA container not found');
-        return;
-      }
-
-      try {
-        grecaptcha.render('recaptcha-container', {
-          sitekey: this.captchaSiteKey,
-          callback: (token: string) => this.onCaptchaSuccess(token),
-          'expired-callback': () => this.onCaptchaExpired(),
-          'error-callback': () => this.onCaptchaError(),
-        });
-
-        this.captchaReady.set(true);
-
-        // Add aria-label to the dynamically generated reCAPTCHA textarea for accessibility
-        setTimeout(() => {
-          const textarea = this.document.getElementById('g-recaptcha-response');
-          if (textarea) {
-            textarea.setAttribute('aria-label', 'Verificación CAPTCHA');
-          }
-        }, 150);
-      } catch (error) {
-        console.error('Error rendering reCAPTCHA:', error);
-      }
-    }, 100);
-  }
-
-  /**
-   * Handle successful CAPTCHA verification
-   * @param token - CAPTCHA token
-   */
-  private onCaptchaSuccess(token: string): void {
-    this.captchaToken.set(token);
-    this.errorMessage.set(null);
-  }
-
-  /**
-   * Handle CAPTCHA expiration
-   */
-  private onCaptchaExpired(): void {
-    this.captchaToken.set(null);
-    this.errorMessage.set('La verificación CAPTCHA ha expirado. Por favor, complétala nuevamente.');
-  }
-
-  /**
-   * Handle CAPTCHA error
-   */
-  private onCaptchaError(): void {
-    this.captchaToken.set(null);
-    this.errorMessage.set('Error al cargar CAPTCHA. Por favor, recarga la página.');
-  }
-
-  /**
-   * Reset CAPTCHA widget
+   * Reset CAPTCHA token and fetch a new one if needed
    */
   private resetCaptcha(): void {
-    if (!this.isBrowser()) {
-      return;
-    }
-    const win = this.getWindow();
-    const grecaptcha = win ? (win as any).grecaptcha : null;
-
-    if (grecaptcha) {
-      try {
-        grecaptcha.reset();
-        this.captchaToken.set(null);
-      } catch (error) {
-        console.error('Error resetting reCAPTCHA:', error);
-      }
+    this.captchaToken.set(null);
+    if (this.isBrowser() && this.queryForm.valid) {
+      this.fetchCaptchaToken();
     }
   }
 
@@ -353,6 +311,37 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Get status class for today's attendance glow card
+   * @param status - Attendance status
+   * @returns string
+   */
+  getTodayStatusGlowClass(status: string): string {
+    const classes: Record<string, string> = {
+      PRESENTE: 'status-presente',
+      TARDANZA: 'status-tardanza',
+      FALTA: 'status-falta',
+      CON_PERMISO: 'status-permiso',
+      FERIADO: 'status-feriado',
+    };
+    return classes[status] || 'status-feriado';
+  }
+
+  /**
+   * Get icon class for today's attendance status
+   * @param status - Attendance status
+   * @returns string
+   */
+  getTodayStatusIconClass(status: string): string {
+    const icons: Record<string, string> = {
+      PRESENTE: 'bi bi-check-circle-fill',
+      TARDANZA: 'bi bi-clock-fill',
+      FALTA: 'bi bi-x-circle-fill',
+      CON_PERMISO: 'bi bi-file-earmark-text-fill',
+      FERIADO: 'bi bi-calendar-event-fill',
+    };
+    return icons[status] || 'bi bi-calendar-event-fill';
+  }
+  /**
    * Reset form and results
    */
   reset(): void {
@@ -390,18 +379,20 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
             label: 'Días',
             data: [summary.presentes, summary.tardanzas, summary.faltas, summary.conPermiso],
             backgroundColor: [
-              'rgba(25, 135, 84, 0.8)', // Success green
-              'rgba(255, 193, 7, 0.8)', // Warning yellow
-              'rgba(220, 53, 69, 0.8)', // Danger red
-              'rgba(13, 202, 240, 0.8)', // Info cyan
+              'rgba(22, 163, 74, 0.8)', // Success green (#16a34a)
+              'rgba(217, 119, 6, 0.8)', // Warning orange (#d97706)
+              'rgba(220, 38, 38, 0.8)', // Danger red (#dc2626)
+              'rgba(74, 158, 224, 0.8)', // Info secondary/blue (#4a9ee0)
             ],
             borderColor: [
-              'rgb(25, 135, 84)',
-              'rgb(255, 193, 7)',
-              'rgb(220, 53, 69)',
-              'rgb(13, 202, 240)',
+              'rgb(22, 163, 74)',
+              'rgb(217, 119, 6)',
+              'rgb(220, 38, 38)',
+              'rgb(74, 158, 224)',
             ],
             borderWidth: 2,
+            borderRadius: 6,
+            borderSkipped: false,
           },
         ],
       },
@@ -416,11 +407,23 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
             display: true,
             text: 'Resumen de Asistencia Mensual',
             font: {
-              size: 16,
+              family: "'Inter', 'Barlow', sans-serif",
+              size: 15,
               weight: 'bold',
             },
+            color: '#001f3f',
           },
           tooltip: {
+            backgroundColor: '#001f3f',
+            titleFont: {
+              family: "'Inter', 'Barlow', sans-serif",
+              weight: 'bold',
+            },
+            bodyFont: {
+              family: "'Inter', 'Barlow', sans-serif",
+            },
+            padding: 10,
+            cornerRadius: 8,
             callbacks: {
               label: (context) => {
                 const label = context.label || '';
@@ -436,19 +439,50 @@ export class PublicAttendanceQueryComponent implements OnInit, AfterViewInit {
         scales: {
           y: {
             beginAtZero: true,
+            grid: {
+              color: 'rgba(226, 232, 240, 0.6)',
+            },
             ticks: {
               stepSize: 1,
               precision: 0,
+              font: {
+                family: "'Inter', 'Barlow', sans-serif",
+                size: 11,
+              },
+              color: '#475569',
             },
             title: {
               display: true,
               text: 'Número de Días',
+              font: {
+                family: "'Inter', 'Barlow', sans-serif",
+                size: 12,
+                weight: 'bold',
+              },
+              color: '#001f3f',
             },
           },
           x: {
+            grid: {
+              display: false,
+            },
+            ticks: {
+              font: {
+                family: "'Inter', 'Barlow', sans-serif",
+                size: 11,
+                weight: 'bold',
+              },
+              color: '#475569',
+            },
             title: {
               display: true,
               text: 'Estado de Asistencia',
+              font: {
+                family: "'Inter', 'Barlow', sans-serif",
+                size: 12,
+                weight: 'bold',
+              },
+              color: '#001f3f',
             },
           },
         },

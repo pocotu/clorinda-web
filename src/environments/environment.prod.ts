@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
   apiUrl: '/api',
-  recaptchaSiteKey: '', // Set production reCAPTCHA site key here
+  recaptchaSiteKey: '6LccjgMtAAAAAOMXyC7mqUQpRSMkkbe-3xnZxIIT',
   authStorage: 'session',
 };

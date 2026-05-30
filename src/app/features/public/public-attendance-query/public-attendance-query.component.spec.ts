@@ -85,6 +85,23 @@ describe('PublicAttendanceQueryComponent', () => {
     expect(component.formatPercentage(75.123)).toBe('75.1');
   });
 
+  it('should get correct today status glow class', () => {
+    expect(component.getTodayStatusGlowClass('PRESENTE')).toBe('status-presente');
+    expect(component.getTodayStatusGlowClass('TARDANZA')).toBe('status-tardanza');
+    expect(component.getTodayStatusGlowClass('FALTA')).toBe('status-falta');
+    expect(component.getTodayStatusGlowClass('CON_PERMISO')).toBe('status-permiso');
+    expect(component.getTodayStatusGlowClass('FERIADO')).toBe('status-feriado');
+    expect(component.getTodayStatusGlowClass('UNKNOWN')).toBe('status-feriado');
+  });
+
+  it('should get correct today status icon class', () => {
+    expect(component.getTodayStatusIconClass('PRESENTE')).toBe('bi bi-check-circle-fill');
+    expect(component.getTodayStatusIconClass('TARDANZA')).toBe('bi bi-clock-fill');
+    expect(component.getTodayStatusIconClass('FALTA')).toBe('bi bi-x-circle-fill');
+    expect(component.getTodayStatusIconClass('CON_PERMISO')).toBe('bi bi-file-earmark-text-fill');
+    expect(component.getTodayStatusIconClass('FERIADO')).toBe('bi bi-calendar-event-fill');
+    expect(component.getTodayStatusIconClass('UNKNOWN')).toBe('bi bi-calendar-event-fill');
+  });
   it('should reset form and results', () => {
     component.queryForm.get('studentCode')?.setValue('20240001');
     component.result.set({
