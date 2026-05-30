@@ -236,7 +236,7 @@ describe('Public Query Flow Integration', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      expect(component.captchaToken()).toBeNull(); // Should be reset
+      expect(component.captchaToken()).toBe('mock-captcha-token'); // Should be refreshed since form is still valid
     });
 
     it('should prevent submission without CAPTCHA', () => {

@@ -94,7 +94,7 @@ describe('InternalNavbarComponent', () => {
   });
 
   it('should navigate to login even on logout error', () => {
-    mockAuthService.logout.and.returnValue(throwError(() => new Error('Logout failed')));
+    mockAuthService.logout.and.returnValue(throwError(() => 'Logout failed'));
 
     component.logout();
 
