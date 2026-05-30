@@ -62,7 +62,7 @@ describe('Attendance Flow Integration', () => {
       middleName: 'Carlos',
       lastName: 'Perez',
       secondLastName: 'Garcia',
-      thirdLastName: undefined,
+      thirdName: undefined,
       isActive: true,
     },
     {
@@ -73,7 +73,7 @@ describe('Attendance Flow Integration', () => {
       middleName: undefined,
       lastName: 'Lopez',
       secondLastName: 'Martinez',
-      thirdLastName: undefined,
+      thirdName: undefined,
       isActive: true,
     },
   ];

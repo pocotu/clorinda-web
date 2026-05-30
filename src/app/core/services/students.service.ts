@@ -60,6 +60,9 @@ export class StudentsService {
     if (filters.enrollmentStatus) {
       params = params.set('enrollmentStatus', filters.enrollmentStatus);
     }
+    if (filters.shift) {
+      params = params.set('shift', filters.shift);
+    }
 
     return this.http.get<ApiResponse<Student[]>>(this.apiUrl, { params });
   }

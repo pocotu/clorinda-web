@@ -69,7 +69,7 @@ describe('AttendanceService', () => {
     middleName: undefined,
     lastName: 'Pérez',
     secondLastName: 'García',
-    thirdLastName: undefined,
+    thirdName: undefined,
     isActive: true,
   };
 

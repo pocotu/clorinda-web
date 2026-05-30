@@ -191,7 +191,7 @@ describe('AttendanceSessionComponent', () => {
     const student = {
       ...mockStudent,
       middleName: 'Carlos',
-      thirdLastName: 'López',
+      thirdName: 'López',
     };
 
     const fullName = component.getStudentFullName(student);

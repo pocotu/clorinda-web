@@ -19,7 +19,7 @@ describe('StudentFormComponent', () => {
     middleName: 'Carlos',
     lastName: 'Pérez',
     secondLastName: 'García',
-    thirdLastName: 'López',
+    thirdName: 'López',
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
@@ -30,6 +30,7 @@ describe('StudentFormComponent', () => {
         schoolYear: 2024,
         grade: 3,
         section: 'A',
+        shift: 'TARDE' as any,
         status: 'ACTIVE' as any,
         createdAt: '2024-01-01T00:00:00Z',
         updatedAt: '2024-01-01T00:00:00Z',
@@ -87,9 +88,10 @@ describe('StudentFormComponent', () => {
       expect(component.studentForm.get('middleName')?.value).toBe('Carlos');
       expect(component.studentForm.get('lastName')?.value).toBe('Pérez');
       expect(component.studentForm.get('secondLastName')?.value).toBe('García');
-      expect(component.studentForm.get('thirdLastName')?.value).toBe('López');
+      expect(component.studentForm.get('thirdName')?.value).toBe('López');
       expect(component.studentForm.get('grade')?.value).toBe(3);
       expect(component.studentForm.get('section')?.value).toBe('A');
+      expect(component.studentForm.get('shift')?.value).toBe('TARDE');
       expect(component.studentForm.get('schoolYear')?.value).toBe(2024);
     });
   });

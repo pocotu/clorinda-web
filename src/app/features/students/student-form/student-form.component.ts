@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { StudentsService } from '../../../core/services/students.service';
 import { Student, CreateStudentDto, UpdateStudentDto } from '../../../core/models/student.model';
+import { Shift } from '../../../core/models/attendance.model';
 import { Observable, of, timer } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 
@@ -46,6 +47,8 @@ export class StudentFormComponent implements OnInit {
   sections = ['A', 'B', 'C', 'D', 'E', 'F'];
   currentYear = new Date().getFullYear();
   schoolYears = Array.from({ length: 5 }, (_, i) => this.currentYear - i);
+  readonly Shift = Shift;
+  shifts = Object.values(Shift);
 
   ngOnInit(): void {
     this.isEditMode = !!this.student;
@@ -72,12 +75,13 @@ export class StudentFormComponent implements OnInit {
         this.student?.secondLastName || '',
         [Validators.required, Validators.minLength(1)],
       ],
-      thirdLastName: [this.student?.thirdLastName || ''],
+      thirdName: [this.student?.thirdName || ''],
       grade: [
         this.student?.enrollments?.[0]?.grade || null,
         [Validators.required, Validators.min(1), Validators.max(5)],
       ],
       section: [this.student?.enrollments?.[0]?.section || '', Validators.required],
+      shift: [this.student?.enrollments?.[0]?.shift || Shift.MANANA, Validators.required],
       schoolYear: [
         this.student?.enrollments?.[0]?.schoolYear || this.currentYear,
         [Validators.required, Validators.min(2000), Validators.max(2100)],
@@ -285,10 +289,11 @@ export class StudentFormComponent implements OnInit {
         middleName: formValue.middleName || undefined,
         lastName: formValue.lastName,
         secondLastName: formValue.secondLastName,
-        thirdLastName: formValue.thirdLastName || undefined,
+        thirdName: formValue.thirdName || undefined,
         grade: formValue.grade ? Number(formValue.grade) : undefined,
         section: formValue.section || undefined,
         schoolYear: formValue.schoolYear ? Number(formValue.schoolYear) : undefined,
+        shift: formValue.shift || undefined,
       };
 
       this.studentsService.updateStudent(this.student.id, updateDto).subscribe({
@@ -310,10 +315,11 @@ export class StudentFormComponent implements OnInit {
         middleName: formValue.middleName || undefined,
         lastName: formValue.lastName,
         secondLastName: formValue.secondLastName,
-        thirdLastName: formValue.thirdLastName || undefined,
+        thirdName: formValue.thirdName || undefined,
         grade: formValue.grade ? Number(formValue.grade) : undefined,
         section: formValue.section || undefined,
         schoolYear: formValue.schoolYear ? Number(formValue.schoolYear) : undefined,
+        shift: formValue.shift || undefined,
       };
 
       this.studentsService.createStudent(createDto).subscribe({

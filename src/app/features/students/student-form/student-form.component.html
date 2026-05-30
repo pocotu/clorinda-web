@@ -79,7 +79,7 @@
 
         <!-- Nombres -->
         <div class="row">
-          <div class="col-md-6 mb-3">
+          <div class="col-md-4 mb-3">
             <label for="firstName" class="form-label">
               Primer Nombre <span class="text-danger">*</span>
             </label>
@@ -95,15 +95,20 @@
             </div>
           </div>
 
-          <div class="col-md-6 mb-3">
+          <div class="col-md-4 mb-3">
             <label for="middleName" class="form-label">Segundo Nombre (opcional)</label>
             <input type="text" class="form-control" id="middleName" formControlName="middleName" />
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label for="thirdName" class="form-label">Tercer Nombre (opcional)</label>
+            <input type="text" class="form-control" id="thirdName" formControlName="thirdName" />
           </div>
         </div>
 
         <!-- Apellidos -->
         <div class="row">
-          <div class="col-md-4 mb-3">
+          <div class="col-md-6 mb-3">
             <label for="lastName" class="form-label">
               Apellido Paterno <span class="text-danger">*</span>
             </label>
@@ -119,7 +124,7 @@
             </div>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-6 mb-3">
             <label for="secondLastName" class="form-label">
               Apellido Materno <span class="text-danger">*</span>
             </label>
@@ -134,21 +139,11 @@
               {{ getErrorMessage('secondLastName') }}
             </div>
           </div>
-
-          <div class="col-md-4 mb-3">
-            <label for="thirdLastName" class="form-label">Tercer Apellido (opcional)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="thirdLastName"
-              formControlName="thirdLastName"
-            />
-          </div>
         </div>
 
-        <!-- Grado, Sección, Año Escolar -->
+        <!-- Grado, Sección, Turno, Año Escolar -->
         <div class="row">
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <label for="grade" class="form-label"> Grado <span class="text-danger">*</span> </label>
             <select
               class="form-select"
@@ -164,7 +159,7 @@
             </div>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
             <label for="section" class="form-label">
               Sección <span class="text-danger">*</span>
             </label>
@@ -182,7 +177,25 @@
             </div>
           </div>
 
-          <div class="col-md-4 mb-3">
+          <div class="col-md-3 mb-3">
+            <label for="shift" class="form-label"> Turno <span class="text-danger">*</span> </label>
+            <select
+              class="form-select"
+              id="shift"
+              formControlName="shift"
+              [class.is-invalid]="hasError('shift')"
+            >
+              <option value="" disabled>Seleccione un turno</option>
+              <option value="MANANA">Mañana</option>
+              <option value="TARDE">Tarde</option>
+              <option value="NOCHE">Noche</option>
+            </select>
+            <div *ngIf="hasError('shift')" class="invalid-feedback">
+              {{ getErrorMessage('shift') }}
+            </div>
+          </div>
+
+          <div class="col-md-3 mb-3">
             <label for="schoolYear" class="form-label">
               Año Escolar <span class="text-danger">*</span>
             </label>

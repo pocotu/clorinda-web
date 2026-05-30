@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Subject, debounceTime, distinctUntilChanged, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { StudentsService } from '../../../core/services/students.service';
 import {
   Student,
@@ -10,6 +10,7 @@ import {
   PaginationMeta,
 } from '../../../core/models/student.model';
 import { StudentFormComponent } from '../student-form/student-form.component';
+import { Shift } from '../../../core/models/attendance.model';
 
 /**
  * StudentListComponent
@@ -27,7 +28,6 @@ export class StudentListComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
   private readonly studentsService = inject(StudentsService);
   private readonly destroy$ = new Subject<void>();
-  private readonly filterChanges$ = new Subject<void>();
 
   // Expose Math for template
   protected readonly Math = Math;
@@ -62,10 +62,8 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initFilterForm();
-    this.setupFilterDebounce();
     this.loadMetadata();
-    this.hasSearched = true;
-    this.loadStudents();
+    this.hasSearched = false;
   }
 
   /**
@@ -98,38 +96,17 @@ export class StudentListComponent implements OnInit, OnDestroy {
       section: [''],
       isActive: [''],
       enrollmentStatus: [''],
+      shift: [''],
     });
   }
 
   /**
-   * Setup filter debounce for all fields
+   * Explicitly search students based on current filters (requested by user)
    */
-  private setupFilterDebounce(): void {
-    this.filterForm.valueChanges
-      .pipe(
-        debounceTime(300),
-        distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-        takeUntil(this.destroy$)
-      )
-      .subscribe((val) => {
-        const hasFilters = !!(
-          val.search ||
-          val.grade ||
-          val.section ||
-          val.isActive !== '' ||
-          val.enrollmentStatus
-        );
-        if (hasFilters) {
-          this.hasSearched = true;
-          this.pagination.page = 1;
-          this.loadStudents();
-        } else {
-          this.hasSearched = false;
-          this.students = [];
-          this.pagination.total = 0;
-          this.pagination.totalPages = 0;
-        }
-      });
+  searchStudents(): void {
+    this.hasSearched = true;
+    this.pagination.page = 1;
+    this.loadStudents();
   }
 
   /**
@@ -214,6 +191,11 @@ export class StudentListComponent implements OnInit, OnDestroy {
       filters.enrollmentStatus = formValue.enrollmentStatus;
     }
 
+    if (formValue.shift) {
+      filters.shift = formValue.shift;
+      filters.schoolYear = new Date().getFullYear();
+    }
+
     return filters;
   }
 
@@ -224,9 +206,9 @@ export class StudentListComponent implements OnInit, OnDestroy {
     const names = [
       student.firstName,
       student.middleName,
+      student.thirdName,
       student.lastName,
       student.secondLastName,
-      student.thirdLastName,
     ]
       .filter(Boolean)
       .join(' ');
@@ -236,7 +218,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   /**
    * Get current enrollment for student
    */
-  getCurrentEnrollment(student: Student): { grade: number; section: string } | null {
+  getCurrentEnrollment(student: Student): { grade: number; section: string; shift?: Shift } | null {
     if (!student.enrollments || student.enrollments.length === 0) {
       return null;
     }
@@ -251,6 +233,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
       return {
         grade: currentEnrollment.grade,
         section: currentEnrollment.section,
+        shift: currentEnrollment.shift,
       };
     }
 
@@ -259,10 +242,26 @@ export class StudentListComponent implements OnInit, OnDestroy {
       return {
         grade: latestEnrollment.grade,
         section: latestEnrollment.section,
+        shift: latestEnrollment.shift,
       };
     }
 
     return null;
+  }
+
+  /**
+   * Get display label for shift
+   */
+  getShiftLabel(shift?: Shift): string {
+    if (!shift) {
+      return '—';
+    }
+    const labels: Record<Shift, string> = {
+      [Shift.MANANA]: 'Mañana',
+      [Shift.TARDE]: 'Tarde',
+      [Shift.NOCHE]: 'Noche',
+    };
+    return labels[shift] || shift;
   }
 
   /**
@@ -408,22 +407,48 @@ export class StudentListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const headers = ['Código', 'DNI', 'Nombre Completo', 'Grado', 'Sección', 'Estado'];
-    const rows = this.students.map((student) => {
+    const headers = ['N°', 'Código', 'DNI', 'Nombre Completo', 'Grado', 'Sección', 'Estado'];
+    const rows = this.students.map((student, i) => {
       const enrollment = this.getCurrentEnrollment(student);
+      const rowNum = (this.pagination.page - 1) * this.pagination.pageSize + i + 1;
       return [
+        rowNum.toString(),
         student.studentCode,
         student.dni || '',
         this.getStudentFullName(student),
-        enrollment?.grade || '',
+        enrollment?.grade ? `${enrollment.grade}°` : '',
         enrollment?.section || '',
         student.isActive ? 'ACTIVO' : 'INACTIVO',
       ];
     });
 
-    const csvContent = [headers, ...rows].map((row) => row.join(',')).join('\n');
+    // Helper to sanitize fields and prevent CSV Injection (Formula Injection)
+    const sanitizeCsvField = (value: string): string => {
+      if (!value) {
+        return '';
+      }
+      // Neutralize formulas (Excel/Sheets auto-execution) by prepending a single quote
+      if (/^[=+\-@]/.test(value)) {
+        return `'${value}`;
+      }
+      return value;
+    };
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    // Construct CSV content safely. Wrap cells in quotes and escape internal quotes to handle names with commas.
+    const csvContent = [headers, ...rows]
+      .map((row) =>
+        row
+          .map((cell) => {
+            const sanitized = sanitizeCsvField(String(cell));
+            return `"${sanitized.replace(/"/g, '""')}"`;
+          })
+          .join(',')
+      )
+      .join('\n');
+
+    // Add UTF-8 BOM for proper encoding detection in Excel (accents and special characters)
+    const BOM = '\uFEFF';
+    const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     const url = URL.createObjectURL(blob);
 
@@ -447,6 +472,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
         section: '',
         isActive: '',
         enrollmentStatus: '',
+        shift: '',
       },
       { emitEvent: false }
     );

@@ -22,7 +22,7 @@
     <div class="clorinda-card animate-fade-in">
       <div class="clorinda-card-body p-4">
         <!-- Stepper -->
-        <div class="clorinda-stepper mb-5">
+        <div class="clorinda-stepper mb-4">
           @for (step of [1, 2, 3, 4]; track step) {
             <div
               class="clorinda-stepper-item flex-fill"
@@ -149,12 +149,14 @@
                   class="d-none"
                   multiple
                   accept=".xlsx,.csv"
+                  (click)="onInputClick($event)"
                   (change)="onFileSelected($event)"
                 />
                 <label
                   for="fileInput"
                   class="btn btn-primary px-4 py-2"
                   style="border-radius: 30px; font-weight: 600"
+                  (click)="onLabelClick($event)"
                 >
                   <i class="bi bi-folder2-open me-2"></i>
                   Seleccionar Archivos
@@ -275,55 +277,35 @@
             @if (validationResult && !validating) {
               <div class="validation-summary">
                 <div class="row g-3 mb-4">
+                  <!-- Total Filas -->
                   <div class="col-6 col-md-3">
-                    <div class="card p-3 bg-light border text-center rounded-3">
-                      <h3 class="mb-0 fw-bold text-primary-inst">
-                        {{ validationResult.summary.totalRows }}
-                      </h3>
-                      <small
-                        class="text-muted uppercase fw-bold"
-                        style="font-size: 0.75rem; letter-spacing: 0.5px"
-                        >TOTAL FILAS</small
-                      >
+                    <div class="stats-card-compact stats-card-total">
+                      <span class="stats-num">{{ validationResult.summary.totalRows }}</span>
+                      <span class="stats-label">Total Filas</span>
                     </div>
                   </div>
+
+                  <!-- Válidas -->
                   <div class="col-6 col-md-3">
-                    <div
-                      class="card p-3 text-white text-center rounded-3"
-                      style="background-color: var(--color-success)"
-                    >
-                      <h3 class="mb-0 fw-bold">{{ validationResult.summary.validRows }}</h3>
-                      <small
-                        class="uppercase fw-bold"
-                        style="font-size: 0.75rem; letter-spacing: 0.5px"
-                        >VÁLIDAS</small
-                      >
+                    <div class="stats-card-compact stats-card-success">
+                      <span class="stats-num">{{ validationResult.summary.validRows }}</span>
+                      <span class="stats-label">Válidas</span>
                     </div>
                   </div>
+
+                  <!-- Advertencias -->
                   <div class="col-6 col-md-3">
-                    <div
-                      class="card p-3 text-dark text-center rounded-3"
-                      style="background-color: var(--color-gold-light)"
-                    >
-                      <h3 class="mb-0 fw-bold">{{ validationResult.summary.warnings }}</h3>
-                      <small
-                        class="uppercase fw-bold"
-                        style="font-size: 0.75rem; letter-spacing: 0.5px"
-                        >ADVERTENCIAS</small
-                      >
+                    <div class="stats-card-compact stats-card-warning">
+                      <span class="stats-num">{{ validationResult.summary.warnings }}</span>
+                      <span class="stats-label">Advertencias</span>
                     </div>
                   </div>
+
+                  <!-- Errores Críticos -->
                   <div class="col-6 col-md-3">
-                    <div
-                      class="card p-3 text-white text-center rounded-3"
-                      style="background-color: var(--color-danger)"
-                    >
-                      <h3 class="mb-0 fw-bold">{{ validationResult.summary.errors }}</h3>
-                      <small
-                        class="uppercase fw-bold"
-                        style="font-size: 0.75rem; letter-spacing: 0.5px"
-                        >ERRORES CRÍTICOS</small
-                      >
+                    <div class="stats-card-compact stats-card-danger">
+                      <span class="stats-num">{{ validationResult.summary.errors }}</span>
+                      <span class="stats-label">Errores Críticos</span>
                     </div>
                   </div>
                 </div>
@@ -620,56 +602,36 @@
                 </div>
               </div>
 
-              <div class="row g-3 mb-5">
+              <div class="row g-3 mb-4">
+                <!-- Filas Leídas -->
                 <div class="col-6 col-md-3">
-                  <div class="card p-3 bg-light border text-center rounded-3">
-                    <h3 class="mb-0 fw-bold text-primary-inst">
-                      {{ importResult.summary.totalRows }}
-                    </h3>
-                    <small
-                      class="text-muted uppercase fw-bold"
-                      style="font-size: 0.75rem; letter-spacing: 0.5px"
-                      >FILAS LEÍDAS</small
-                    >
+                  <div class="stats-card-compact stats-card-total">
+                    <span class="stats-num">{{ importResult.summary.totalRows }}</span>
+                    <span class="stats-label">Filas Leídas</span>
                   </div>
                 </div>
+
+                <!-- Guardados -->
                 <div class="col-6 col-md-3">
-                  <div
-                    class="card p-3 text-white text-center rounded-3"
-                    style="background-color: var(--color-success)"
-                  >
-                    <h3 class="mb-0 fw-bold">{{ importResult.summary.inserted }}</h3>
-                    <small
-                      class="uppercase fw-bold"
-                      style="font-size: 0.75rem; letter-spacing: 0.5px"
-                      >GUARDADOS</small
-                    >
+                  <div class="stats-card-compact stats-card-success">
+                    <span class="stats-num">{{ importResult.summary.inserted }}</span>
+                    <span class="stats-label">Guardados</span>
                   </div>
                 </div>
+
+                <!-- Actualizados -->
                 <div class="col-6 col-md-3">
-                  <div
-                    class="card p-3 text-dark text-center rounded-3"
-                    style="background-color: var(--color-gold-light)"
-                  >
-                    <h3 class="mb-0 fw-bold">{{ importResult.summary.updated }}</h3>
-                    <small
-                      class="uppercase fw-bold"
-                      style="font-size: 0.75rem; letter-spacing: 0.5px"
-                      >ACTUALIZADOS</small
-                    >
+                  <div class="stats-card-compact stats-card-warning">
+                    <span class="stats-num">{{ importResult.summary.updated }}</span>
+                    <span class="stats-label">Actualizados</span>
                   </div>
                 </div>
+
+                <!-- Rechazadas -->
                 <div class="col-6 col-md-3">
-                  <div
-                    class="card p-3 text-white text-center rounded-3"
-                    style="background-color: var(--color-danger)"
-                  >
-                    <h3 class="mb-0 fw-bold">{{ importResult.summary.rejected }}</h3>
-                    <small
-                      class="uppercase fw-bold"
-                      style="font-size: 0.75rem; letter-spacing: 0.5px"
-                      >RECHAZADAS</small
-                    >
+                  <div class="stats-card-compact stats-card-danger">
+                    <span class="stats-num">{{ importResult.summary.rejected }}</span>
+                    <span class="stats-label">Rechazadas</span>
                   </div>
                 </div>
               </div>

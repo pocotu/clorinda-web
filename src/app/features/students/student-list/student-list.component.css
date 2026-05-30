@@ -57,3 +57,35 @@
   font-weight: 600;
   font-size: 0.85rem;
 }
+
+.clorinda-btn-filter-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--gradient-brand, linear-gradient(135deg, #001f3f 0%, #003d7a 100%));
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.375rem 1rem;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 31, 63, 0.15);
+  transition: all 0.2s ease;
+}
+
+.clorinda-btn-filter-search:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 31, 63, 0.25);
+  filter: brightness(1.1);
+}
+
+.shift-badge {
+  background-color: #eff6ff;
+  color: #1e40af;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #bfdbfe;
+}

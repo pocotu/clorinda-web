@@ -51,6 +51,7 @@ describe('ImportWizardComponent', () => {
 
     fixture = TestBed.createComponent(ImportWizardComponent);
     component = fixture.componentInstance;
+    component.selectedShift = 'MANANA';
     fixture.detectChanges();
   });
 
@@ -122,6 +123,51 @@ describe('ImportWizardComponent', () => {
       component.uploadFiles();
 
       expect(mockImportService.uploadFiles).toHaveBeenCalled();
+    });
+
+    it('should show error when trying to click file input without selecting shift', () => {
+      const event = jasmine.createSpyObj('Event', ['preventDefault']);
+      component.selectedShift = null;
+      component.uploadError = null;
+
+      component.onInputClick(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.uploadError).toContain('Debe seleccionar el turno');
+    });
+
+    it('should not show error when clicking file input with shift selected', () => {
+      const event = jasmine.createSpyObj('Event', ['preventDefault']);
+      component.selectedShift = 'MANANA';
+      component.uploadError = null;
+
+      component.onInputClick(event);
+
+      expect(event.preventDefault).not.toHaveBeenCalled();
+      expect(component.uploadError).toBeNull();
+    });
+
+    it('should show error when trying to click file selection label without selecting shift', () => {
+      const event = jasmine.createSpyObj('Event', ['preventDefault']);
+      component.selectedShift = null;
+      component.uploadError = null;
+
+      component.onLabelClick(event);
+
+      expect(event.preventDefault).toHaveBeenCalled();
+      expect(component.uploadError).toContain('Debe seleccionar el turno');
+    });
+
+    it('should show error when dropping files without selecting shift', () => {
+      const dragEvent = jasmine.createSpyObj('DragEvent', ['preventDefault', 'stopPropagation']);
+      component.selectedShift = null;
+      component.uploadError = null;
+
+      component.onDrop(dragEvent);
+
+      expect(dragEvent.preventDefault).toHaveBeenCalled();
+      expect(component.uploadError).toContain('Debe seleccionar el turno');
+      expect(component.selectedFiles.length).toBe(0);
     });
   });
 

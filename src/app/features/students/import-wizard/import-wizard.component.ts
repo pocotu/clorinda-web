@@ -81,6 +81,26 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
   // ==================== Step 1: Upload ====================
 
   /**
+   * Handle click on file input to intercept file selection if shift is not selected
+   */
+  onInputClick(event: Event): void {
+    if (!this.selectedShift) {
+      event.preventDefault();
+      this.uploadError = 'Debe seleccionar el turno de estudiantes antes de cargar los archivos.';
+    }
+  }
+
+  /**
+   * Handle click on file selection label/button to intercept if shift is not selected
+   */
+  onLabelClick(event: Event): void {
+    if (!this.selectedShift) {
+      event.preventDefault();
+      this.uploadError = 'Debe seleccionar el turno de estudiantes antes de cargar los archivos.';
+    }
+  }
+
+  /**
    * Handle file selection from input
    */
   onFileSelected(event: Event): void {
@@ -115,6 +135,11 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     event.preventDefault();
     event.stopPropagation();
     this.isDragging = false;
+
+    if (!this.selectedShift) {
+      this.uploadError = 'Debe seleccionar el turno de estudiantes antes de cargar los archivos.';
+      return;
+    }
 
     if (event.dataTransfer?.files) {
       this.addFiles(Array.from(event.dataTransfer.files));

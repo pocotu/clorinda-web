@@ -32,13 +32,19 @@
           <i class="bi bi-funnel-fill text-primary-inst"></i>
           <span>Filtros de Búsqueda</span>
         </div>
-        <button type="button" class="clorinda-btn-filter-clear" (click)="clearFilters()">
-          <i class="bi bi-arrow-counterclockwise"></i>
-          <span>Limpiar</span>
-        </button>
+        <div class="d-flex gap-2">
+          <button type="submit" class="clorinda-btn-filter-search" (click)="searchStudents()">
+            <i class="bi bi-search"></i>
+            <span>Buscar</span>
+          </button>
+          <button type="button" class="clorinda-btn-filter-clear" (click)="clearFilters()">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            <span>Limpiar</span>
+          </button>
+        </div>
       </div>
 
-      <form [formGroup]="filterForm" class="clorinda-filters-grid">
+      <form [formGroup]="filterForm" (ngSubmit)="searchStudents()" class="clorinda-filters-grid">
         <div class="clorinda-form-group">
           <label for="search" class="clorinda-form-label">
             <i class="bi bi-search"></i>
@@ -96,6 +102,21 @@
             </select>
           </div>
         </div>
+
+        <div class="clorinda-form-group">
+          <label for="shift" class="clorinda-form-label">
+            <i class="bi bi-clock-fill"></i>
+            Turno
+          </label>
+          <div class="clorinda-input-group">
+            <select class="clorinda-form-select" id="shift" formControlName="shift">
+              <option value="">Todos los turnos</option>
+              <option value="MANANA">Mañana</option>
+              <option value="TARDE">Tarde</option>
+              <option value="NOCHE">Noche</option>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
 
@@ -111,6 +132,20 @@
       <button type="button" class="clorinda-alert-close" (click)="error = null">
         <i class="bi bi-x-lg"></i>
       </button>
+    </div>
+
+    <!-- Initial State Placeholder -->
+    <div class="clorinda-card animate-fade-in" *ngIf="!hasSearched">
+      <div class="clorinda-state-empty py-5">
+        <div class="clorinda-empty-icon mb-3">
+          <i class="bi bi-search text-primary-inst" style="font-size: 3rem; opacity: 0.8"></i>
+        </div>
+        <h4 class="clorinda-empty-title">Búsqueda de Estudiantes</h4>
+        <p class="clorinda-empty-text" style="max-width: 480px; margin: 0 auto">
+          Seleccione los filtros deseados o ingrese un término de búsqueda en los campos superiores
+          y presione el botón <strong>Buscar</strong> para cargar la lista de estudiantes.
+        </p>
+      </div>
     </div>
 
     <!-- Results Card -->
@@ -158,17 +193,24 @@
           <table class="clorinda-table">
             <thead>
               <tr>
+                <th style="width: 60px; text-align: center">N°</th>
                 <th>Código</th>
                 <th>DNI</th>
                 <th>Nombre Completo</th>
                 <th>Grado</th>
                 <th>Sección</th>
+                <th>Turno</th>
                 <th>Estado</th>
                 <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let student of students" class="student-row">
+              <tr *ngFor="let student of students; let i = index" class="student-row">
+                <td
+                  style="font-weight: 700; color: var(--color-text-secondary); text-align: center"
+                >
+                  {{ (pagination.page - 1) * pagination.pageSize + i + 1 }}
+                </td>
                 <td>
                   <span class="clorinda-table-badge-code">{{ student.studentCode }}</span>
                 </td>
@@ -194,6 +236,14 @@
                     {{ enrollment.section }}
                   </span>
                   <span *ngIf="!getCurrentEnrollment(student)" class="section-empty text-muted"
+                    >—</span
+                  >
+                </td>
+                <td>
+                  <span *ngIf="getCurrentEnrollment(student) as enrollment" class="shift-badge">
+                    {{ getShiftLabel(enrollment.shift) }}
+                  </span>
+                  <span *ngIf="!getCurrentEnrollment(student)" class="shift-empty text-muted"
                     >—</span
                   >
                 </td>

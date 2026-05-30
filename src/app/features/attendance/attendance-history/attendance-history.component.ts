@@ -354,9 +354,9 @@ export class AttendanceHistoryComponent implements OnInit {
     const names = [
       student.firstName,
       student.middleName,
+      student.thirdName,
       student.lastName,
       student.secondLastName,
-      student.thirdLastName,
     ]
       .filter(Boolean)
       .join(' ');

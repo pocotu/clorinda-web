@@ -71,7 +71,7 @@ export interface Student {
   middleName?: string;
   lastName: string;
   secondLastName: string;
-  thirdLastName?: string;
+  thirdName?: string;
   isActive: boolean;
   enrollments?: Enrollment[];
 }

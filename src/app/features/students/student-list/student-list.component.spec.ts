@@ -20,7 +20,7 @@ describe('StudentListComponent', () => {
       middleName: 'Carlos',
       lastName: 'Pérez',
       secondLastName: 'García',
-      thirdLastName: undefined,
+      thirdName: undefined,
       isActive: true,
       createdAt: '2024-01-01T00:00:00Z',
       updatedAt: '2024-01-01T00:00:00Z',
@@ -45,7 +45,7 @@ describe('StudentListComponent', () => {
       middleName: undefined,
       lastName: 'López',
       secondLastName: 'Martínez',
-      thirdLastName: undefined,
+      thirdName: undefined,
       isActive: false,
       createdAt: '2024-01-01T00:00:00Z',
       updatedAt: '2024-01-01T00:00:00Z',
@@ -106,7 +106,7 @@ describe('StudentListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should load students on init', () => {
+  it('should not load students on init', () => {
     studentsService.getStudents.and.returnValue(of(mockApiResponse));
 
     studentsService.getAvailableGradesAndSections.and.returnValue(
@@ -114,9 +114,9 @@ describe('StudentListComponent', () => {
     );
     fixture.detectChanges();
 
-    expect(studentsService.getStudents).toHaveBeenCalled();
-    expect(component.students).toEqual(mockStudents);
-    expect(component.pagination.total).toBe(2);
+    expect(studentsService.getStudents).not.toHaveBeenCalled();
+    expect(component.students).toEqual([]);
+    expect(component.hasSearched).toBe(false);
   });
 
   it('should handle error when loading students', () => {
@@ -135,6 +135,9 @@ describe('StudentListComponent', () => {
     );
     fixture.detectChanges();
 
+    // Trigger search explicitly to request database load
+    component.searchStudents();
+
     expect(component.error).toBe('Error al cargar estudiantes');
     expect(component.loading).toBe(false);
   });
@@ -150,7 +153,7 @@ describe('StudentListComponent', () => {
     const student = mockStudents[0];
     const enrollment = component.getCurrentEnrollment(student);
 
-    expect(enrollment).toEqual({ grade: 3, section: 'A' });
+    expect(enrollment).toEqual({ grade: 3, section: 'A', shift: undefined });
   });
 
   it('should return null for student without enrollment', () => {
@@ -359,6 +362,7 @@ describe('StudentListComponent', () => {
     expect(component.filterForm.value.grade).toBe('');
     expect(component.filterForm.value.section).toBe('');
     expect(component.filterForm.value.isActive).toBe('');
+    expect(component.filterForm.value.shift).toBe('');
   });
 
   it('should export to CSV', () => {

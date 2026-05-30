@@ -34,7 +34,7 @@ describe('StudentsService', () => {
     middleName: 'CARLOS',
     lastName: 'PÉREZ',
     secondLastName: 'GARCÍA',
-    thirdLastName: undefined,
+    thirdName: undefined,
     isActive: true,
     createdAt: '2024-01-01T00:00:00Z',
     updatedAt: '2024-01-01T00:00:00Z',
@@ -222,7 +222,7 @@ describe('StudentsService', () => {
         middleName: 'CARLOS',
         lastName: 'PÉREZ',
         secondLastName: 'GARCÍA',
-        thirdLastName: undefined,
+        thirdName: undefined,
       };
       const mockResponse: ApiResponse<Student> = {
         data: mockStudent,

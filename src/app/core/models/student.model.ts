@@ -1,3 +1,5 @@
+import { Shift } from './attendance.model';
+
 /**
  * Student models and types
  * Aligned with backend API types
@@ -11,7 +13,7 @@ export interface Student {
   middleName?: string;
   lastName: string;
   secondLastName: string;
-  thirdLastName?: string;
+  thirdName?: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;
@@ -24,6 +26,7 @@ export interface Enrollment {
   schoolYear: number;
   grade: number;
   section: string;
+  shift?: Shift;
   status: EnrollmentStatus;
   createdAt: string;
   updatedAt: string;
@@ -45,6 +48,7 @@ export interface StudentFilters {
   schoolYear?: number;
   grade?: number;
   section?: string;
+  shift?: Shift;
   enrollmentStatus?: EnrollmentStatus;
 }
 
@@ -55,10 +59,11 @@ export interface CreateStudentDto {
   middleName?: string;
   lastName: string;
   secondLastName: string;
-  thirdLastName?: string;
+  thirdName?: string;
   grade?: number;
   section?: string;
   schoolYear?: number;
+  shift?: Shift;
 }
 
 export interface UpdateStudentDto {
@@ -67,11 +72,12 @@ export interface UpdateStudentDto {
   middleName?: string;
   lastName?: string;
   secondLastName?: string;
-  thirdLastName?: string;
+  thirdName?: string;
   isActive?: boolean;
   grade?: number;
   section?: string;
   schoolYear?: number;
+  shift?: Shift;
 }
 
 export interface PaginationMeta {
