@@ -161,7 +161,7 @@ export class LoginComponent implements OnInit {
           type: 'standard',
           theme: 'outline',
           size: 'large',
-          text: 'signin_with',
+          text: 'continue_with',
           shape: 'rectangular',
           logo_alignment: 'left',
           width: btnElement.clientWidth || 320,
