@@ -67,8 +67,7 @@ export const authInterceptor: HttpInterceptorFn = (
  * @returns boolean - true if auth endpoint
  */
 function isAuthEndpoint(url: string): boolean {
-  const authEndpoints = ['/api/auth/login', '/api/auth/refresh', '/api/auth/logout'];
-  return authEndpoints.some((endpoint) => url.includes(endpoint));
+  return url.includes('/api/auth/');
 }
 
 function isPublicEndpoint(url: string): boolean {
