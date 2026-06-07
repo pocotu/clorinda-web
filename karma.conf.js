@@ -19,7 +19,15 @@ module.exports = function (config) {
       reporters: [{ type: 'html' }, { type: 'text-summary' }],
     },
     reporters: ['progress', 'kjhtml'],
+    // Default browser for local development
     browsers: ['ChromeHeadless'],
+    // Custom launcher for CI (GitHub Actions on Ubuntu requires --no-sandbox)
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-gpu', '--disable-dev-shm-usage'],
+      },
+    },
     restartOnFileChange: true,
   });
 };

@@ -28,6 +28,11 @@ describe('LoginComponent', () => {
   beforeEach(async () => {
     authService = {
       login: jasmine.createSpy('login'),
+      // ngOnInit calls checkLoginMethod('') to prefetch the support email.
+      // Must be present in the mock or the component throws during creation.
+      checkLoginMethod: jasmine
+        .createSpy('checkLoginMethod')
+        .and.returnValue(of({ method: 'password', supportEmail: 'admin@clorinda.edu.pe' })),
     };
 
     router = {
@@ -203,7 +208,7 @@ describe('LoginComponent', () => {
       component.onSubmit();
 
       expect(component.errorMessage()).toBe(
-        'Credenciales inválidas. Por favor, verifica tu usuario y contraseña.'
+        'Credenciales inválidas o usuario no afiliado. Por favor, verifica tus datos.'
       );
     });
 
@@ -281,7 +286,7 @@ describe('LoginComponent', () => {
       component.onSubmit();
 
       expect(component.errorMessage()).toBe(
-        'Ocurrió un error al iniciar sesión. Por favor, intenta nuevamente.'
+        'Ocurrió un error en el servidor. Por favor, intenta nuevamente.'
       );
     });
 
@@ -370,17 +375,22 @@ describe('LoginComponent', () => {
 
   describe('UI State', () => {
     it('should disable form fields when loading', () => {
+      // #password only exists in the 'password' step
+      component.loginStep.set('password');
       component.isLoading.set(true);
       fixture.detectChanges();
 
       const usernameInput = fixture.nativeElement.querySelector('#username');
       const passwordInput = fixture.nativeElement.querySelector('#password');
 
-      expect(usernameInput.disabled).toBe(true);
+      // username is in the identifier step, not rendered here — form itself is disabled
       expect(passwordInput.disabled).toBe(true);
+      expect(component.loginForm.disabled).toBe(true);
     });
 
     it('should disable submit button when loading', () => {
+      // button[type="submit"] only exists in the 'password' step
+      component.loginStep.set('password');
       component.isLoading.set(true);
       fixture.detectChanges();
 
