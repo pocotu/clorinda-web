@@ -299,12 +299,26 @@ describe('AttendanceHistoryComponent', () => {
 
   it('should export to CSV', () => {
     component.sessions.set(mockSessions);
-    spyOn(document, 'createElement').and.callThrough();
-    spyOn(URL, 'createObjectURL').and.returnValue('blob:mock-url');
+
+    const mockLink = {
+      setAttribute: jasmine.createSpy('setAttribute'),
+      click: jasmine.createSpy('click'),
+      style: { visibility: '' },
+    } as any;
+
+    const createElementSpy = spyOn(document, 'createElement').and.returnValue(mockLink);
+    const appendChildSpy = spyOn(document.body, 'appendChild').and.callFake(() => mockLink);
+    const removeChildSpy = spyOn(document.body, 'removeChild').and.callFake(() => mockLink);
+    const createObjectURLSpy = spyOn(URL, 'createObjectURL').and.returnValue('blob:mock-url');
 
     component.exportToCSV();
 
-    expect(document.createElement).toHaveBeenCalledWith('a');
+    expect(createElementSpy).toHaveBeenCalledWith('a');
+    expect(mockLink.setAttribute).toHaveBeenCalledWith('href', 'blob:mock-url');
+    expect(mockLink.click).toHaveBeenCalled();
+    expect(appendChildSpy).toHaveBeenCalled();
+    expect(removeChildSpy).toHaveBeenCalled();
+    expect(createObjectURLSpy).toHaveBeenCalled();
   });
 
   it('should not export empty data', () => {

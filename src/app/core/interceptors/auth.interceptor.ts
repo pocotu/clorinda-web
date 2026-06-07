@@ -11,14 +11,6 @@ import { AuthService } from '../services/auth.service';
 
 /**
  * HTTP Interceptor for JWT Authentication
- *
- * Responsibilities:
- * - Add Authorization header with Bearer token to all requests
- * - Handle 401 (Unauthorized) responses by attempting token refresh
- * - Handle 403 (Forbidden) responses with appropriate error messages
- * - Redirect to login on authentication failures
- *
- * Requirements: 1.1, 1.4, 2.4
  */
 export const authInterceptor: HttpInterceptorFn = (
   req: HttpRequest<unknown>,
