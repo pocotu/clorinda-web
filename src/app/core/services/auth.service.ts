@@ -67,6 +67,42 @@ export class AuthService {
   }
 
   /**
+   * Check login preference (google or password) for identifier
+   * @param identifier - Username or email
+   */
+  checkLoginMethod(
+    identifier: string
+  ): Observable<{ method: 'google' | 'password'; supportEmail?: string }> {
+    return this.http
+      .post<{
+        data: { method: 'google' | 'password'; supportEmail?: string };
+        meta: unknown;
+      }>(`${this.API_URL}/check-method`, { identifier })
+      .pipe(
+        map((envelope) => envelope.data),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
+   * Login user with Google OAuth ID Token
+   * @param idToken - Google's idToken string
+   */
+  loginWithGoogle(idToken: string): Observable<AuthResponse> {
+    return this.http
+      .post<{ data: AuthResponse; meta: unknown }>(`${this.API_URL}/google`, { idToken })
+      .pipe(
+        map((envelope) => envelope.data),
+        tap((response) => {
+          this.storeAuthData(response);
+          this.userSignal.set(response.user);
+          this.currentUserSubject.next(response.user);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  /**
    * Logout current user
    * Calls POST /api/auth/logout
    * @returns Observable<void>

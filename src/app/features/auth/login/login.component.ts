@@ -1,9 +1,10 @@
-import { Component, inject, signal, effect } from '@angular/core';
+import { Component, inject, signal, effect, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -24,6 +25,8 @@ export class LoginComponent {
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
   showPassword = signal(false);
+  loginStep = signal<'identifier' | 'password' | 'google' | 'recovery'>('identifier');
+  supportEmail = signal<string>(environment.supportEmail);
 
   constructor() {
     // Initialize form with validators
@@ -42,10 +45,63 @@ export class LoginComponent {
   }
 
   /**
-   * Handle form submission
+   * Prefetch support email dynamically on component load
+   */
+  ngOnInit(): void {
+    this.authService.checkLoginMethod('').subscribe({
+      next: (res) => {
+        if (res.supportEmail) {
+          this.supportEmail.set(res.supportEmail);
+        }
+      },
+      error: () => {
+        // Silent fallback to default value
+      },
+    });
+  }
+
+  /**
+   * Handle first step: check login method
+   */
+  onContinue(): void {
+    this.errorMessage.set(null);
+
+    const usernameField = this.loginForm.get('username');
+    if (!usernameField || usernameField.invalid) {
+      usernameField?.markAsTouched();
+      return;
+    }
+
+    this.isLoading.set(true);
+    const username = usernameField.value;
+
+    this.authService.checkLoginMethod(username).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        if (res.supportEmail) {
+          this.supportEmail.set(res.supportEmail);
+        }
+        if (res.method === 'google') {
+          this.loginStep.set('google');
+        } else {
+          this.loginStep.set('password');
+        }
+      },
+      error: (error: Error | HttpErrorResponse) => {
+        this.isLoading.set(false);
+        if (error instanceof HttpErrorResponse) {
+          this.handleHttpError(error);
+        } else {
+          this.errorMessage.set(error.message || 'Error al verificar usuario');
+        }
+      },
+    });
+  }
+
+  /**
+   * Handle traditional password form submission
    */
   onSubmit(): void {
-    // Clear previous error
     this.errorMessage.set(null);
 
     // Validate form
@@ -54,22 +110,16 @@ export class LoginComponent {
       return;
     }
 
-    // Set loading state
     this.isLoading.set(true);
-
     const { username, password } = this.loginForm.value;
 
     this.authService.login(username, password).subscribe({
       next: (response) => {
         this.isLoading.set(false);
-
-        // Redirect based on user role
         this.redirectByRole(response.user.role);
       },
       error: (error: Error | HttpErrorResponse) => {
         this.isLoading.set(false);
-
-        // Handle different error types
         if (error instanceof HttpErrorResponse) {
           this.handleHttpError(error);
         } else {
@@ -80,11 +130,53 @@ export class LoginComponent {
   }
 
   /**
+   * Handle Google Login
+   */
+  onGoogleLogin(): void {
+    this.errorMessage.set(null);
+    this.isLoading.set(true);
+
+    const username = this.loginForm.get('username')?.value || '';
+    // Simulated/mock token includes typed username to retrieve the matching email dynamically
+    const mockToken = `google-oauth-mock-token-admin:${username}`;
+
+    this.authService.loginWithGoogle(mockToken).subscribe({
+      next: (response) => {
+        this.isLoading.set(false);
+        this.redirectByRole(response.user.role);
+      },
+      error: (error: Error | HttpErrorResponse) => {
+        this.isLoading.set(false);
+        if (error instanceof HttpErrorResponse) {
+          this.handleHttpError(error);
+        } else {
+          this.errorMessage.set(error.message || 'Error al iniciar sesión con Google');
+        }
+      },
+    });
+  }
+
+  /**
+   * Navigate back to first step
+   */
+  goBack(): void {
+    this.errorMessage.set(null);
+    this.loginStep.set('identifier');
+    this.loginForm.get('password')?.setValue('');
+  }
+
+  /**
+   * Show recovery instruction screen
+   */
+  showRecovery(): void {
+    this.errorMessage.set(null);
+    this.loginStep.set('recovery');
+  }
+
+  /**
    * Redirect user based on their role, respecting returnUrl if present
-   * @param role - User role
    */
   private redirectByRole(role: 'AUXILIAR' | 'ADMIN' | 'DIRECCION'): void {
-    // 1. Check if there's a returnUrl in query parameters
     const urlTree = this.router.parseUrl(this.router.url);
     const returnUrl = urlTree.queryParams['returnUrl'];
 
@@ -93,7 +185,6 @@ export class LoginComponent {
       return;
     }
 
-    // 2. Fallback routes if no returnUrl is present
     const roleRoutes: Record<'AUXILIAR' | 'ADMIN' | 'DIRECCION', string> = {
       AUXILIAR: '/asistencia/sesion',
       ADMIN: '/inicio',
@@ -106,13 +197,12 @@ export class LoginComponent {
 
   /**
    * Handle HTTP errors with user-friendly messages
-   * @param error - HttpErrorResponse
    */
   private handleHttpError(error: HttpErrorResponse): void {
     switch (error.status) {
       case 401:
         this.errorMessage.set(
-          'Credenciales inválidas. Por favor, verifica tu usuario y contraseña.'
+          'Credenciales inválidas o usuario no afiliado. Por favor, verifica tus datos.'
         );
         break;
       case 403:
@@ -133,15 +223,13 @@ export class LoginComponent {
       default:
         this.errorMessage.set(
           error.error?.error?.message ||
-            'Ocurrió un error al iniciar sesión. Por favor, intenta nuevamente.'
+            'Ocurrió un error en el servidor. Por favor, intenta nuevamente.'
         );
     }
   }
 
   /**
    * Check if a form field has errors and has been touched
-   * @param fieldName - Name of the form field
-   * @returns boolean
    */
   hasError(fieldName: string): boolean {
     const field = this.loginForm.get(fieldName);
@@ -150,8 +238,6 @@ export class LoginComponent {
 
   /**
    * Get error message for a specific field
-   * @param fieldName - Name of the form field
-   * @returns string | null
    */
   getFieldError(fieldName: string): string | null {
     const field = this.loginForm.get(fieldName);

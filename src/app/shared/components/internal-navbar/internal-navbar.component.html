@@ -45,6 +45,15 @@
               <small class="text-muted">{{ roleName }}</small>
             </div>
           </li>
+          @if (currentUser?.role === 'ADMIN') {
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <button class="dropdown-item" type="button" (click)="openChangeEmailModal()">
+                <i class="bi bi-envelope-at me-2"></i>
+                Configurar Google Email
+              </button>
+            </li>
+          }
           <li><hr class="dropdown-divider" /></li>
           <li>
             <button class="dropdown-item" type="button" (click)="logout()">
@@ -57,3 +66,87 @@
     </div>
   </div>
 </nav>
+
+<!-- Modal de Edición de Correo -->
+<div class="custom-modal-overlay" *ngIf="isModalOpen()">
+  <div class="custom-modal-content">
+    <div class="custom-modal-header">
+      <h5 class="custom-modal-title">Configurar Correo de Google</h5>
+      <button
+        type="button"
+        class="btn-close-custom"
+        (click)="closeChangeEmailModal()"
+        [disabled]="isSaving()"
+      >
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div class="custom-modal-body">
+      <p class="custom-modal-desc text-muted">
+        Ingresa la dirección de correo electrónico de Google asociada a este administrador para
+        permitir el inicio de sesión seguro con Google.
+      </p>
+
+      <div class="mb-3">
+        <label for="adminEmail" class="form-label fw-semibold">Correo de Google</label>
+        <div class="input-group-custom">
+          <i class="bi bi-envelope-fill input-icon"></i>
+          <input
+            type="email"
+            id="adminEmail"
+            class="form-control-custom"
+            placeholder="ejemplo@gmail.com"
+            [value]="emailValue()"
+            (input)="onEmailInput($event)"
+            [disabled]="isSaving()"
+          />
+        </div>
+        <div class="error-msg small mt-1 text-danger" *ngIf="emailError()">
+          {{ emailError() }}
+        </div>
+      </div>
+
+      <div
+        class="alert alert-danger py-2 px-3 small mb-0 d-flex align-items-center"
+        *ngIf="modalErrorMessage()"
+      >
+        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+        <span>{{ modalErrorMessage() }}</span>
+      </div>
+
+      <div
+        class="alert alert-success py-2 px-3 small mb-0 d-flex align-items-center"
+        *ngIf="modalSuccessMessage()"
+      >
+        <i class="bi bi-check-circle-fill me-2"></i>
+        <span>{{ modalSuccessMessage() }}</span>
+      </div>
+    </div>
+
+    <div class="custom-modal-footer">
+      <button
+        type="button"
+        class="btn-custom-secondary"
+        (click)="closeChangeEmailModal()"
+        [disabled]="isSaving()"
+      >
+        Cancelar
+      </button>
+      <button
+        type="button"
+        class="btn-custom-primary ms-2"
+        (click)="saveEmail()"
+        [disabled]="isSaving() || !!emailError() || !emailValue().trim()"
+      >
+        <span
+          class="spinner-border spinner-border-sm me-1"
+          role="status"
+          aria-hidden="true"
+          *ngIf="isSaving()"
+        ></span>
+        <span>{{ isSaving() ? 'Guardando...' : 'Guardar Cambios' }}</span>
+      </button>
+    </div>
+  </div>
+</div>

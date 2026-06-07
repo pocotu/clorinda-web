@@ -222,3 +222,96 @@ a.text-decoration-none:hover {
     padding: 1.5rem 0;
   }
 }
+
+/* Button & Step Styles for dynamic Identifier-First login */
+.btn-google {
+  background-color: white;
+  color: #3c4043 !important;
+  border: 1px solid #dadce0;
+  font-weight: 600;
+  padding: 0.875rem 1.25rem;
+  transition: all 0.25s ease;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+.btn-google:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #d2d4d9;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.btn-google i {
+  font-size: 1.15rem;
+  color: #4285f4; /* Google Blue */
+}
+
+.btn-back {
+  background: transparent;
+  border: 1px solid #d0d5dd;
+  color: var(--color-text-secondary, #4a5568) !important;
+  font-weight: 600;
+  padding: 0.875rem 1.25rem;
+  transition: all 0.25s ease;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-back:hover:not(:disabled) {
+  background-color: #f9fafb;
+  border-color: #b0b5bd;
+  color: var(--color-primary, #001f3f) !important;
+}
+
+.identifier-badge {
+  background-color: #f3f6fa;
+  border: 1px solid #e7f0fd;
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  color: var(--color-primary, #001f3f);
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.recovery-box {
+  background-color: rgba(74, 158, 224, 0.06);
+  border-left: 4px solid var(--color-secondary, #4a9ee0);
+  border-radius: 8px;
+  padding: 1.25rem;
+  color: var(--color-primary, #001f3f);
+  line-height: 1.6;
+}
+
+.support-email-link {
+  transition: all 0.2s ease;
+  position: relative;
+  display: inline-block;
+}
+
+.support-email-link::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--color-secondary, #4a9ee0);
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+.support-email-link:hover {
+  color: var(--color-secondary, #4a9ee0) !important;
+  text-shadow: 0 0 1px rgba(74, 158, 224, 0.2);
+}
+
+.support-email-link:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
+}

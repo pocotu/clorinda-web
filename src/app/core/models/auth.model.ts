@@ -14,6 +14,7 @@ export interface User {
   id: string;
   username: string;
   role: 'AUXILIAR' | 'ADMIN' | 'DIRECCION';
+  email?: string | null;
 }
 
 export interface TokenPayload {

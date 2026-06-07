@@ -153,15 +153,17 @@
                           </div>
                         } @else {
                           <div class="clorinda-action-buttons">
-                            <!-- Change password button (enabled for self so admin can manage their own password) -->
-                            <button
-                              type="button"
-                              class="clorinda-btn-action btn-key"
-                              (click)="openPasswordModal(user)"
-                              title="Cambiar contraseña"
-                            >
-                              <i class="bi bi-key-fill"></i>
-                            </button>
+                            <!-- Change password button (only for non-admin users) -->
+                            @if (user.role !== 'ADMIN') {
+                              <button
+                                type="button"
+                                class="clorinda-btn-action btn-key"
+                                (click)="openPasswordModal(user)"
+                                title="Cambiar contraseña"
+                              >
+                                <i class="bi bi-key-fill"></i>
+                              </button>
+                            }
 
                             <!-- Toggle Active/Inactive (disabled for self) -->
                             <button
