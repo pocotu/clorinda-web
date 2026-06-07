@@ -231,7 +231,7 @@
                   <!-- Container where Google Identity Services SDK will render the official button -->
                   <div id="googleBtnContainer" class="d-flex justify-content-center w-100"></div>
 
-                  @if (!isGoogleLoaded() && !environment.production) {
+                  @if (!environment.production) {
                     <!-- Fallback Mock Google button for offline development -->
                     <button
                       type="button"
@@ -248,7 +248,7 @@
                         <span>Accediendo...</span>
                       } @else {
                         <i class="bi bi-google"></i>
-                        <span>[MOCK] Continuar con Google</span>
+                        <span>Continuar con Google</span>
                       }
                     </button>
                   }
