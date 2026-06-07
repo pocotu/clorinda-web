@@ -6,6 +6,8 @@ import { AuthService } from '../../../core/services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 
+declare const google: any;
+
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -27,6 +29,8 @@ export class LoginComponent implements OnInit {
   showPassword = signal(false);
   loginStep = signal<'identifier' | 'password' | 'google' | 'recovery'>('identifier');
   supportEmail = signal<string>(environment.supportEmail);
+  isGoogleLoaded = signal(true);
+  readonly environment = environment;
 
   constructor() {
     // Initialize form with validators
@@ -40,6 +44,15 @@ export class LoginComponent implements OnInit {
         this.loginForm.disable();
       } else {
         this.loginForm.enable();
+      }
+    });
+
+    effect(() => {
+      if (this.loginStep() === 'google') {
+        // Wait for DOM layout so container element is rendered
+        setTimeout(() => {
+          this.initGoogleSignIn();
+        }, 0);
       }
     });
   }
@@ -130,7 +143,66 @@ export class LoginComponent implements OnInit {
   }
 
   /**
-   * Handle Google Login
+   * Initialize Google Identity Services SDK button dynamically
+   */
+  private initGoogleSignIn(): void {
+    if (typeof google !== 'undefined') {
+      this.isGoogleLoaded.set(true);
+      google.accounts.id.initialize({
+        client_id: environment.googleClientId,
+        callback: (response: any) => this.handleGoogleCredential(response),
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+
+      const btnElement = document.getElementById('googleBtnContainer');
+      if (btnElement) {
+        google.accounts.id.renderButton(btnElement, {
+          type: 'standard',
+          theme: 'outline',
+          size: 'large',
+          text: 'signin_with',
+          shape: 'rectangular',
+          logo_alignment: 'left',
+          width: btnElement.clientWidth || 320,
+        });
+      }
+    } else {
+      console.warn('Google SDK not loaded/offline');
+      this.isGoogleLoaded.set(false);
+    }
+  }
+
+  /**
+   * Handle credential returned by Google Identity Services SDK
+   */
+  private handleGoogleCredential(response: any): void {
+    if (!response || !response.credential) {
+      this.errorMessage.set('No se recibió la credencial de Google.');
+      return;
+    }
+
+    this.errorMessage.set(null);
+    this.isLoading.set(true);
+
+    this.authService.loginWithGoogle(response.credential).subscribe({
+      next: (res) => {
+        this.isLoading.set(false);
+        this.redirectByRole(res.user.role);
+      },
+      error: (error: Error | HttpErrorResponse) => {
+        this.isLoading.set(false);
+        if (error instanceof HttpErrorResponse) {
+          this.handleHttpError(error);
+        } else {
+          this.errorMessage.set(error.message || 'Error al iniciar sesión con Google');
+        }
+      },
+    });
+  }
+
+  /**
+   * Handle Google Login (Mock fallback for local offline development only)
    */
   onGoogleLogin(): void {
     this.errorMessage.set(null);

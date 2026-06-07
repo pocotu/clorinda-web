@@ -238,24 +238,31 @@
 
                 <!-- Google Button and Back Button -->
                 <div class="d-grid gap-2 mt-4">
-                  <button
-                    type="button"
-                    (click)="onGoogleLogin()"
-                    class="btn btn-google py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
-                    [disabled]="isLoading()"
-                  >
-                    @if (isLoading()) {
-                      <span
-                        class="spinner-border spinner-border-sm"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      <span>Accediendo...</span>
-                    } @else {
-                      <i class="bi bi-google"></i>
-                      <span>Continuar con Google</span>
-                    }
-                  </button>
+                  <!-- Container where Google Identity Services SDK will render the official button -->
+                  <div id="googleBtnContainer" class="d-flex justify-content-center w-100"></div>
+
+                  @if (!isGoogleLoaded() && !environment.production) {
+                    <!-- Fallback Mock Google button for offline development -->
+                    <button
+                      type="button"
+                      (click)="onGoogleLogin()"
+                      class="btn btn-google py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
+                      [disabled]="isLoading()"
+                    >
+                      @if (isLoading()) {
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        <span>Accediendo...</span>
+                      } @else {
+                        <i class="bi bi-google"></i>
+                        <span>[MOCK] Continuar con Google</span>
+                      }
+                    </button>
+                  }
+
                   <button
                     type="button"
                     (click)="goBack()"
