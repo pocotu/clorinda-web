@@ -1,5 +1,5 @@
-import { Component, inject, signal, effect, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, inject, signal, effect, OnInit, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -19,6 +19,7 @@ export class LoginComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
+  private readonly platformId = inject(PLATFORM_ID);
 
   // Reactive form
   loginForm: FormGroup;
@@ -30,9 +31,14 @@ export class LoginComponent implements OnInit {
   loginStep = signal<'identifier' | 'password' | 'google' | 'recovery'>('identifier');
   supportEmail = signal<string>(environment.supportEmail);
   isGoogleLoaded = signal(true);
+  isLocalhost = false;
   readonly environment = environment;
 
   constructor() {
+    this.isLocalhost =
+      isPlatformBrowser(this.platformId) &&
+      (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
     // Initialize form with validators
     this.loginForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
@@ -205,6 +211,9 @@ export class LoginComponent implements OnInit {
    * Handle Google Login (Mock fallback for local offline development only)
    */
   onGoogleLogin(): void {
+    if (environment.production) {
+      return;
+    }
     this.errorMessage.set(null);
     this.isLoading.set(true);
 
