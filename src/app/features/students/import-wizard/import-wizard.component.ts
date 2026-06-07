@@ -17,8 +17,6 @@ import {
 /**
  * ImportWizardComponent
  * 4-step wizard for student import: Upload → Validate → Preview → Confirm
- * Requirements: 4.1, 4.2, 4.3, 4.5, 4.7, 4.8
- * Task 17.4.3: Stepper with guided navigation
  */
 @Component({
   selector: 'app-import-wizard',
@@ -148,7 +146,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
   /**
    * Add files to selection with validation
-   * Requirement 4.1: Validate extension and size
    */
   private addFiles(files: File[]): void {
     this.uploadError = null;
@@ -200,7 +197,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
   /**
    * Upload files to server
-   * Requirement 4.1, 4.2
    */
   uploadFiles(): void {
     if (this.selectedFiles.length === 0) {
@@ -258,7 +254,6 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
   /**
    * Start validation process
-   * Requirement 4.2, 4.3
    */
   private startValidation(): void {
     if (!this.jobId) {
@@ -268,26 +263,21 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     this.validating = true;
     this.validationError = null;
 
-    const files = this.selectedFiles.map((sf) => sf.file);
-    const validationRequest$ = this.importService.validateJob(this.jobId, files);
-    if (!validationRequest$) {
-      this.validating = false;
-      this.validationError = 'Error al validar archivos';
-      return;
-    }
-
-    validationRequest$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (response) => {
-        this.validationResult = response.data;
-        this.validating = false;
-        // Prepare issues for preview
-        this.prepareIssuesForPreview();
-      },
-      error: (error) => {
-        this.validating = false;
-        this.validationError = error.error?.error?.message || 'Error al validar archivos';
-      },
-    });
+    // No files sent — backend recovers buffers from DB
+    this.importService
+      .validateJob(this.jobId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.validationResult = response.data;
+          this.validating = false;
+          this.prepareIssuesForPreview();
+        },
+        error: (error) => {
+          this.validating = false;
+          this.validationError = error.error?.error?.message || 'Error al validar archivos';
+        },
+      });
   }
 
   /**
@@ -477,26 +467,27 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
    * Requirement 4.5, 4.7, 4.8
    */
   private startImport(): void {
-    if (!this.jobId || !this.selectedShift) {
+    if (!this.jobId) {
       return;
     }
 
     this.confirming = true;
     this.confirmError = null;
 
-    const files = this.selectedFiles.map((sf) => sf.file);
-    const confirmRequest$ = this.importService.confirmImport(this.jobId, files, this.selectedShift);
-
-    confirmRequest$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (response) => {
-        this.importResult = response.data;
-        this.confirming = false;
-      },
-      error: (error) => {
-        this.confirming = false;
-        this.confirmError = error.error?.error?.message || 'Error al confirmar importación';
-      },
-    });
+    // No files or shift sent — backend recovers both from DB
+    this.importService
+      .confirmImport(this.jobId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => {
+          this.importResult = response.data;
+          this.confirming = false;
+        },
+        error: (error) => {
+          this.confirming = false;
+          this.confirmError = error.error?.error?.message || 'Error al confirmar importación';
+        },
+      });
   }
 
   /**

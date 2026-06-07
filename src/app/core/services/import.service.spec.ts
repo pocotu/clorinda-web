@@ -284,7 +284,7 @@ describe('ImportService', () => {
       };
 
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123', [], 'MANANA').subscribe({
+        service.confirmImport('job-123').subscribe({
           next: resolve,
           error: reject,
         });
@@ -292,8 +292,8 @@ describe('ImportService', () => {
 
       const req = httpMock.expectOne(`${apiUrl}/job-123/confirm`);
       expect(req.request.method).toBe('POST');
-      // confirmImport always sends FormData (with shift field) for stateless fallback support
-      expect(req.request.body instanceof FormData).toBe(true);
+      // confirmImport sends a plain JSON body (shift + buffers recovered from DB)
+      expect(req.request.body).toEqual({});
       req.flush(mockResponse);
 
       const response: any = await promise;
@@ -315,7 +315,7 @@ describe('ImportService', () => {
       };
 
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123', [], 'MANANA').subscribe({
+        service.confirmImport('job-123').subscribe({
           next: resolve,
           error: reject,
         });
@@ -331,7 +331,7 @@ describe('ImportService', () => {
 
     it('should handle confirm before validation error', async () => {
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123', [], 'MANANA').subscribe({
+        service.confirmImport('job-123').subscribe({
           next: resolve,
           error: reject,
         });
@@ -348,7 +348,7 @@ describe('ImportService', () => {
 
     it('should handle confirm with validation errors', async () => {
       const promise = new Promise((resolve, reject) => {
-        service.confirmImport('job-123', [], 'MANANA').subscribe({
+        service.confirmImport('job-123').subscribe({
           next: resolve,
           error: reject,
         });
@@ -494,7 +494,7 @@ describe('ImportService', () => {
 
       // Step 3: Confirm
       const confirmPromise = new Promise((resolve, reject) => {
-        service.confirmImport(jobId, [], 'MANANA').subscribe({
+        service.confirmImport(jobId).subscribe({
           next: resolve,
           error: reject,
         });

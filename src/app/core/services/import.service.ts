@@ -12,8 +12,11 @@ import { environment } from '../../../environments/environment';
 
 /**
  * ImportService
- * Handles all student import-related API calls
- * Requirements: 4.1, 4.2, 4.3, 4.5, 4.7, 4.8
+ *
+ * Design Note: Only uploadFiles sends files (multipart). The validateJob and
+ * confirmImport methods send simple JSON payloads — the backend recovers the
+ * file buffers from the database, making the flow fully stateless and safe
+ * against server restarts on platforms like Render.
  */
 @Injectable({
   providedIn: 'root',
@@ -23,7 +26,7 @@ export class ImportService {
   private readonly apiUrl = `${environment.apiUrl}/internal/students/import`;
 
   /**
-   * Upload import files and create job
+   * Upload import files and create job (also persists buffers + shift to DB)
    * Requirement 4.1, 4.2
    */
   uploadFiles(
@@ -31,73 +34,50 @@ export class ImportService {
     shift: 'MANANA' | 'TARDE' | 'NOCHE'
   ): Observable<ApiResponse<UploadResult>> {
     const formData = new FormData();
-    files.forEach((file) => {
-      formData.append('files', file);
-    });
+    files.forEach((file) => formData.append('files', file));
     formData.append('shift', shift);
-
     return this.http.post<ApiResponse<UploadResult>>(`${this.apiUrl}/upload`, formData);
   }
 
   /**
-   * Validate import job and detect errors.
-   * Files can be sent again as a FormData fallback so the backend can recover
-   * when its in-memory buffer store was cleared by a server restart (e.g. Render).
+   * Trigger validation of an existing upload job.
+   * No files are sent — the backend reconstructs them from the database.
    * Requirement 4.2, 4.3
    */
-  validateJob(jobId: string, files?: File[]): Observable<ApiResponse<ValidationResult>> {
-    if (files && files.length > 0) {
-      const formData = new FormData();
-      files.forEach((file) => formData.append('files', file));
-      return this.http.post<ApiResponse<ValidationResult>>(
-        `${this.apiUrl}/${jobId}/validate`,
-        formData
-      );
-    }
+  validateJob(jobId: string): Observable<ApiResponse<ValidationResult>> {
     return this.http.post<ApiResponse<ValidationResult>>(`${this.apiUrl}/${jobId}/validate`, {});
   }
 
   /**
-   * Confirm and execute import.
-   * Files are sent again as a FormData fallback so the backend can recover
-   * when its in-memory buffer store was cleared by a server restart (e.g. Render).
+   * Confirm and execute the import.
+   * No files are sent — the backend reconstructs them and the shift from the database.
    * Requirement 4.5, 4.7, 4.8
    */
-  confirmImport(
-    jobId: string,
-    files: File[],
-    shift: 'MANANA' | 'TARDE' | 'NOCHE'
-  ): Observable<ApiResponse<ImportResult>> {
-    const formData = new FormData();
-    files.forEach((file) => formData.append('files', file));
-    formData.append('shift', shift);
+  confirmImport(jobId: string): Observable<ApiResponse<ImportResult>> {
+    return this.http.post<ApiResponse<ImportResult>>(`${this.apiUrl}/${jobId}/confirm`, {}).pipe(
+      (source) =>
+        new Observable<ApiResponse<ImportResult>>((subscriber) =>
+          source.subscribe({
+            next: (response) => {
+              const summary = response.data?.summary;
+              if (summary) {
+                const inserted = summary.inserted ?? 0;
+                const rejected = summary.rejected ?? 0;
+                const totalRows = summary.totalRows ?? inserted + rejected;
+                const updated = Math.max(0, totalRows - inserted - rejected);
 
-    return this.http
-      .post<ApiResponse<ImportResult>>(`${this.apiUrl}/${jobId}/confirm`, formData)
-      .pipe(
-        (source) =>
-          new Observable<ApiResponse<ImportResult>>((subscriber) =>
-            source.subscribe({
-              next: (response) => {
-                const summary = response.data?.summary;
-                if (summary) {
-                  const inserted = summary.inserted ?? 0;
-                  const rejected = summary.rejected ?? 0;
-                  const totalRows = summary.totalRows ?? inserted + rejected;
-                  const updated = Math.max(0, totalRows - inserted - rejected);
+                response.data.summary.inserted = inserted;
+                response.data.summary.rejected = rejected;
+                response.data.summary.updated = updated;
+              }
 
-                  response.data.summary.inserted = inserted;
-                  response.data.summary.rejected = rejected;
-                  response.data.summary.updated = updated;
-                }
-
-                subscriber.next(response);
-                subscriber.complete();
-              },
-              error: (error) => subscriber.error(error),
-            })
-          )
-      );
+              subscriber.next(response);
+              subscriber.complete();
+            },
+            error: (error) => subscriber.error(error),
+          })
+        )
+    );
   }
 
   /**
