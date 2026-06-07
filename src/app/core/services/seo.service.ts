@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Title, Meta } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 /** SEO metadata contract — every public page provides this. */
 export interface PageSeoConfig {
@@ -17,7 +18,7 @@ export interface PageSeoConfig {
 }
 
 /** Base URL used for Open Graph and canonical tags. */
-const BASE_URL = 'https://clorindamattodeturner.edu.pe';
+const BASE_URL = environment.siteUrl;
 
 /** Default Open Graph image for social sharing. */
 const OG_IMAGE = `${BASE_URL}/assets/images/logo.png`;

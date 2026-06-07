@@ -46,4 +46,13 @@ export class UsersService {
       isActive,
     });
   }
+
+  /**
+   * Update a user's email
+   */
+  updateEmail(userId: string, email: string | null): Observable<ApiResponse<UserListItem>> {
+    return this.http.patch<ApiResponse<UserListItem>>(`${this.apiUrl}/${userId}/email`, {
+      email,
+    });
+  }
 }

@@ -3,6 +3,7 @@ export interface UserListItem {
   username: string;
   role: 'ADMIN' | 'AUXILIAR' | 'DIRECCION';
   isActive: boolean;
+  email?: string | null;
   createdAt: string;
 }
 

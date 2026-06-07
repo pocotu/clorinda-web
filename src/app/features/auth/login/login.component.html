@@ -11,7 +11,28 @@
           <div class="card-body p-4 p-md-5">
             <!-- Sleek Header Title -->
             <div class="text-center mb-4">
-              <h2 class="fw-bold login-title text-dark">Acceso Administrativo</h2>
+              @switch (loginStep()) {
+                @case ('identifier') {
+                  <h2 class="fw-bold login-title text-dark">Acceso Administrativo</h2>
+                  <p class="text-muted small mb-0">
+                    Ingresa tus datos para ingresar al portal educativo
+                  </p>
+                }
+                @case ('password') {
+                  <h2 class="fw-bold login-title text-dark">Ingresa tu contraseña</h2>
+                  <p class="text-muted small mb-0">Verifica tu identidad para continuar</p>
+                }
+                @case ('google') {
+                  <h2 class="fw-bold login-title text-dark">Acceso con Google</h2>
+                  <p class="text-muted small mb-0">Usa tu cuenta institucional de Google</p>
+                }
+                @case ('recovery') {
+                  <h2 class="fw-bold login-title text-dark">Recuperar Acceso</h2>
+                  <p class="text-muted small mb-0">
+                    Sigue las instrucciones para restablecer tu clave
+                  </p>
+                }
+              }
             </div>
 
             <!-- Error Alert -->
@@ -34,97 +55,250 @@
             }
 
             <!-- Login Form -->
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-              <!-- Username Field -->
-              <div class="form-group mb-4">
-                <label for="username" class="form-label fw-bold small text-uppercase tracking-wide"
-                  >Usuario</label
-                >
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text">
-                    <i class="bi bi-person-fill"></i>
-                  </span>
-                  <input
-                    type="text"
-                    id="username"
-                    formControlName="username"
-                    class="form-control"
-                    [class.is-invalid]="hasError('username')"
-                    placeholder="Ingresa tu usuario"
-                    autocomplete="username"
-                  />
-                </div>
-                @if (hasError('username')) {
-                  <div class="invalid-feedback d-block mt-1">
-                    {{ getFieldError('username') }}
-                  </div>
-                }
-              </div>
-
-              <!-- Password Field -->
-              <div class="form-group mb-4">
-                <div class="d-flex justify-content-between align-items-center mb-1">
+            <form
+              [formGroup]="loginForm"
+              (ngSubmit)="loginStep() === 'identifier' ? onContinue() : onSubmit()"
+              novalidate
+            >
+              <!-- STEP 1: IDENTIFIER -->
+              @if (loginStep() === 'identifier') {
+                <div class="form-group mb-4">
                   <label
-                    for="password"
-                    class="form-label fw-bold small text-uppercase tracking-wide mb-0"
-                    >Contraseña</label
+                    for="username"
+                    class="form-label fw-bold small text-uppercase tracking-wide"
+                    >Usuario o Correo</label
                   >
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text">
+                      <i class="bi bi-person-fill"></i>
+                    </span>
+                    <input
+                      type="text"
+                      id="username"
+                      formControlName="username"
+                      class="form-control"
+                      [class.is-invalid]="hasError('username')"
+                      placeholder="Ingresa tu usuario o correo"
+                      autocomplete="username"
+                    />
+                  </div>
+                  @if (hasError('username')) {
+                    <div class="invalid-feedback d-block mt-1">
+                      {{ getFieldError('username') }}
+                    </div>
+                  }
                 </div>
-                <div class="input-group input-group-merge">
-                  <span class="input-group-text">
-                    <i class="bi bi-lock-fill"></i>
-                  </span>
-                  <input
-                    [type]="showPassword() ? 'text' : 'password'"
-                    id="password"
-                    formControlName="password"
-                    class="form-control"
-                    [class.is-invalid]="hasError('password')"
-                    placeholder="••••••••"
-                    autocomplete="current-password"
-                  />
-                  <!-- Toggle Show/Hide Password Eye Button -->
+
+                <!-- Continue Button -->
+                <div class="d-grid mt-4">
                   <button
                     type="button"
-                    class="btn border-0 bg-transparent text-muted px-3 d-flex align-items-center justify-content-center"
-                    (click)="showPassword.set(!showPassword())"
-                    [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
-                    style="font-size: 1.1rem; outline: none; box-shadow: none"
+                    (click)="onContinue()"
+                    class="btn btn-login py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
+                    [disabled]="isLoading()"
                   >
-                    <i
-                      class="bi"
-                      [class.bi-eye-fill]="!showPassword()"
-                      [class.bi-eye-slash-fill]="showPassword()"
-                    ></i>
+                    @if (isLoading()) {
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span>Verificando...</span>
+                    } @else {
+                      <span>Continuar</span>
+                      <i class="bi bi-arrow-right fs-5"></i>
+                    }
                   </button>
                 </div>
-                @if (hasError('password')) {
-                  <div class="invalid-feedback d-block mt-1">
-                    {{ getFieldError('password') }}
-                  </div>
-                }
-              </div>
+              }
 
-              <!-- Submit Button -->
-              <div class="d-grid mt-4">
-                <button
-                  type="submit"
-                  class="btn btn-login py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
-                  [disabled]="isLoading()"
-                >
-                  @if (isLoading()) {
-                    <span
-                      class="spinner-border spinner-border-sm"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                    <span>Accediendo...</span>
-                  } @else {
-                    <span>Ingresar al Sistema</span>
-                    <i class="bi bi-arrow-right fs-5"></i>
+              <!-- STEP 2: PASSWORD -->
+              @if (loginStep() === 'password') {
+                <!-- Username Badge -->
+                <div class="mb-4">
+                  <div class="identifier-badge">
+                    <span>
+                      <i class="bi bi-person-circle me-2 text-primary"></i>
+                      {{ loginForm.get('username')?.value }}
+                    </span>
+                    <button
+                      type="button"
+                      class="btn btn-sm text-primary fw-bold p-0 border-0 bg-transparent"
+                      (click)="goBack()"
+                      [disabled]="isLoading()"
+                    >
+                      Cambiar
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group mb-4">
+                  <div class="d-flex justify-content-between align-items-center mb-1">
+                    <label
+                      for="password"
+                      class="form-label fw-bold small text-uppercase tracking-wide mb-0"
+                      >Contraseña</label
+                    >
+                  </div>
+                  <div class="input-group input-group-merge">
+                    <span class="input-group-text">
+                      <i class="bi bi-lock-fill"></i>
+                    </span>
+                    <input
+                      [type]="showPassword() ? 'text' : 'password'"
+                      id="password"
+                      formControlName="password"
+                      class="form-control"
+                      [class.is-invalid]="hasError('password')"
+                      placeholder="••••••••"
+                      autocomplete="current-password"
+                    />
+                    <!-- Toggle Show/Hide Password Eye Button -->
+                    <button
+                      type="button"
+                      class="btn border-0 bg-transparent text-muted px-3 d-flex align-items-center justify-content-center"
+                      (click)="showPassword.set(!showPassword())"
+                      [title]="showPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                      style="font-size: 1.1rem; outline: none; box-shadow: none"
+                    >
+                      <i
+                        class="bi"
+                        [class.bi-eye-fill]="!showPassword()"
+                        [class.bi-eye-slash-fill]="showPassword()"
+                      ></i>
+                    </button>
+                  </div>
+                  @if (hasError('password')) {
+                    <div class="invalid-feedback d-block mt-1">
+                      {{ getFieldError('password') }}
+                    </div>
                   }
-                </button>
-              </div>
+                </div>
+
+                <!-- Submit and Back Buttons -->
+                <div class="d-grid gap-2 mt-4">
+                  <button
+                    type="submit"
+                    class="btn btn-login py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
+                    [disabled]="isLoading()"
+                  >
+                    @if (isLoading()) {
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span>Accediendo...</span>
+                    } @else {
+                      <span>Ingresar al Sistema</span>
+                      <i class="bi bi-box-arrow-in-right fs-5"></i>
+                    }
+                  </button>
+                  <button
+                    type="button"
+                    (click)="goBack()"
+                    class="btn btn-back py-3 rounded-3 fw-bold"
+                    [disabled]="isLoading()"
+                  >
+                    Volver
+                  </button>
+                </div>
+              }
+
+              <!-- STEP 2: GOOGLE -->
+              @if (loginStep() === 'google') {
+                <!-- Username Badge -->
+                <div class="mb-4">
+                  <div class="identifier-badge">
+                    <span>
+                      <i class="bi bi-person-circle me-2 text-primary"></i>
+                      {{ loginForm.get('username')?.value }}
+                    </span>
+                    <button
+                      type="button"
+                      class="btn btn-sm text-primary fw-bold p-0 border-0 bg-transparent"
+                      (click)="goBack()"
+                      [disabled]="isLoading()"
+                    >
+                      Cambiar
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="alert alert-info border-0 rounded-3 mb-4 py-3 px-3 d-flex align-items-start gap-2"
+                >
+                  <i class="bi bi-info-circle-fill text-primary fs-5 mt-1"></i>
+                  <div class="small text-dark-emphasis">
+                    Este usuario administrador está configurado para acceder de forma segura
+                    mediante su correo de Google.
+                  </div>
+                </div>
+
+                <!-- Google Button and Back Button -->
+                <div class="d-grid gap-2 mt-4">
+                  <button
+                    type="button"
+                    (click)="onGoogleLogin()"
+                    class="btn btn-google py-3 rounded-3 fw-bold d-inline-flex align-items-center justify-content-center gap-2"
+                    [disabled]="isLoading()"
+                  >
+                    @if (isLoading()) {
+                      <span
+                        class="spinner-border spinner-border-sm"
+                        role="status"
+                        aria-hidden="true"
+                      ></span>
+                      <span>Accediendo...</span>
+                    } @else {
+                      <i class="bi bi-google"></i>
+                      <span>Continuar con Google</span>
+                    }
+                  </button>
+                  <button
+                    type="button"
+                    (click)="goBack()"
+                    class="btn btn-back py-3 rounded-3 fw-bold"
+                    [disabled]="isLoading()"
+                  >
+                    Volver
+                  </button>
+                </div>
+              }
+
+              <!-- STEP: RECOVERY -->
+              @if (loginStep() === 'recovery') {
+                <div class="recovery-box mb-4">
+                  <i class="bi bi-envelope-check-fill fs-4 text-primary d-block mb-2"></i>
+                  <p class="mb-0 small">
+                    Si olvidaste tu contraseña de acceso, por favor envía un correo electrónico a:
+                  </p>
+                  <p class="my-2 fw-bold text-center fs-6">
+                    <a
+                      [href]="'mailto:' + supportEmail()"
+                      class="text-primary text-decoration-none support-email-link"
+                    >
+                      {{ supportEmail() }}
+                    </a>
+                  </p>
+                  <p class="mb-0 small text-muted">
+                    Incluye tus nombres completos y tu nombre de usuario. El administrador de la
+                    institución procesará tu solicitud y te enviará una contraseña temporal por el
+                    mismo medio.
+                  </p>
+                </div>
+
+                <div class="d-grid mt-4">
+                  <button
+                    type="button"
+                    (click)="goBack()"
+                    class="btn btn-back py-3 rounded-3 fw-bold"
+                  >
+                    Volver al inicio
+                  </button>
+                </div>
+              }
             </form>
           </div>
         </div>
@@ -133,7 +307,12 @@
         <div class="text-center mt-4">
           <p class="small text-muted mb-0">
             ¿Problemas para acceder?
-            <a href="#" class="text-decoration-none fw-bold ms-1">Contacta a soporte</a>
+            <a
+              href="javascript:void(0)"
+              (click)="showRecovery()"
+              class="text-decoration-none fw-bold ms-1"
+              >Contacta a soporte</a
+            >
           </p>
         </div>
       </div>

@@ -102,11 +102,25 @@ describe('Login → Dashboard Integration Flow', () => {
     sessionStorage.clear();
   });
 
+  /**
+   * The LoginComponent calls checkLoginMethod('') in ngOnInit to prefetch the
+   * support email. Every test that creates the component must flush this
+   * automatic request before proceeding, otherwise HttpTestingController.verify()
+   * complains about unexpected open requests.
+   */
+  function flushInitCheckMethod(): void {
+    const initReq = httpMock.expectOne(
+      (r) => r.url.includes('/api/auth/check-method') && r.body?.identifier === ''
+    );
+    initReq.flush({ data: { method: 'password', supportEmail: 'admin@clorinda.edu.pe' } });
+  }
+
   describe('AUXILIAR login flow', () => {
     it('should login as AUXILIAR and redirect to attendance session', async () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       // Fill login form
       component.loginForm.patchValue({
@@ -122,8 +136,8 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      // Mock successful login response
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      // Mock successful login response — only the login request remains
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual({
         username: 'auxiliar1',
@@ -155,6 +169,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'auxiliar1',
@@ -166,7 +181,7 @@ describe('Login → Dashboard Integration Flow', () => {
       component.onSubmit();
       expect(component.isLoading()).toBe(true);
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       req.flush({
         data: {
           accessToken: auxiliarToken,
@@ -186,6 +201,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'admin1',
@@ -197,7 +213,7 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       const authResponse: AuthResponse = {
         accessToken: adminToken,
         refreshToken: adminToken,
@@ -220,6 +236,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'direccion1',
@@ -231,7 +248,7 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       const authResponse: AuthResponse = {
         accessToken: dirToken,
         refreshToken: dirToken,
@@ -254,6 +271,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'wronguser',
@@ -265,7 +283,7 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       req.flush(
         { error: { message: 'Invalid credentials' } },
         { status: 401, statusText: 'Unauthorized' }
@@ -273,7 +291,7 @@ describe('Login → Dashboard Integration Flow', () => {
 
       await submitPromise;
 
-      expect(component.errorMessage()).toBeTruthy(); // mensaje de credenciales invalidas
+      expect(component.errorMessage()).toBeTruthy();
       expect(authService.isAuthenticatedSync()).toBe(false);
       expect(component.isLoading()).toBe(false);
     });
@@ -282,6 +300,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'user',
@@ -293,7 +312,7 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       req.error(new ProgressEvent('error'));
 
       await submitPromise;
@@ -306,6 +325,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'user',
@@ -317,7 +337,7 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       req.flush(
         { error: { message: 'Internal server error' } },
         { status: 500, statusText: 'Internal Server Error' }
@@ -325,7 +345,7 @@ describe('Login → Dashboard Integration Flow', () => {
 
       await submitPromise;
 
-      expect(component.errorMessage()).toBeTruthy(); // mensaje de servidor no disponible
+      expect(component.errorMessage()).toBeTruthy();
       expect(authService.isAuthenticatedSync()).toBe(false);
     });
   });
@@ -335,17 +355,19 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.onSubmit();
 
       expect(component.loginForm.invalid).toBe(true);
-      httpMock.expectNone((request) => request.url.includes('/api/'));
+      httpMock.expectNone((request) => request.url.includes('/api/auth/login'));
     });
 
     it('should validate minimum username length', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'ab',
@@ -360,6 +382,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'validuser',
@@ -376,6 +399,7 @@ describe('Login → Dashboard Integration Flow', () => {
       const fixture = TestBed.createComponent(LoginComponent);
       const component = fixture.componentInstance;
       fixture.detectChanges();
+      flushInitCheckMethod();
 
       component.loginForm.patchValue({
         username: 'admin1',
@@ -387,7 +411,7 @@ describe('Login → Dashboard Integration Flow', () => {
         setTimeout(resolve, 100);
       });
 
-      const req = httpMock.expectOne((request) => request.url.includes('/api/'));
+      const req = httpMock.expectOne((request) => request.url.includes('/api/auth/login'));
       req.flush({
         data: {
           accessToken: adminToken,
